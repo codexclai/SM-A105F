@@ -1,0 +1,130 @@
+From: SM-A105F Debian Project
+Subject: [PATCH] guard optional KernelSU filesystem and input hooks
+
+Eureka R24U unconditionally declares/calls five KernelSU hooks from generic
+input/filesystem paths. This prevents linking with CONFIG_KSU disabled. Guard
+the declarations and calls so the Debian-oriented candidate omits Android-
+specific root hooks.
+
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index b742cba4..5e2adec3 100755
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -383,7 +383,9 @@ static int input_get_disposition(struct input_dev *dev,
+ 	return disposition;
+ }
+ 
++#ifdef CONFIG_KSU
+ extern int ksu_handle_input_handle_event(unsigned int *type, unsigned int *code, int *value);
++#endif
+ 
+ static void input_handle_event(struct input_dev *dev,
+ 			       unsigned int type, unsigned int code, int value)
+@@ -392,7 +394,9 @@ static void input_handle_event(struct input_dev *dev,
+ 
+ 	disposition = input_get_disposition(dev, type, code, &value);
+ 
++#ifdef CONFIG_KSU
+ 	ksu_handle_input_handle_event(&type, &code, &value);
++#endif
+ 
+ 	if ((disposition & INPUT_PASS_TO_DEVICE) && dev->event)
+ 		dev->event(dev, type, code, value);
+diff --git a/fs/exec.c b/fs/exec.c
+index 9558ef74..fb6a0e92 100755
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1825,8 +1825,10 @@ static int exec_binprm(struct linux_binprm *bprm)
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_KSU
+ extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
+ 			void *envp, int *flags);
++#endif
+ 
+ /*
+  * sys_execve() executes a new program.
+@@ -1842,7 +1844,9 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	struct files_struct *displaced;
+ 	int retval;
+ 
++#ifdef CONFIG_KSU
+ 	ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
++#endif
+ 
+ 	if (IS_ERR(filename))
+ 		return PTR_ERR(filename);
+diff --git a/fs/open.c b/fs/open.c
+index a0543b96..85b77b0a 100755
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -342,8 +342,10 @@ SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
+ 	return error;
+ }
+ 
++#ifdef CONFIG_KSU
+ extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
+ 			 int *flags);
++#endif
+ 
+ /*
+  * access() needs to use the real uid/gid, not the effective uid/gid.
+@@ -360,7 +362,9 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
+ 	int res;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW;
+ 
++#ifdef CONFIG_KSU
+ 	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++#endif
+ 
+ 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+ 		return -EINVAL;
+diff --git a/fs/read_write.c b/fs/read_write.c
+index f8ae5e1b..6b17acf2 100755
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -443,15 +443,19 @@ ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
+ }
+ EXPORT_SYMBOL(__vfs_read);
+ 
++#ifdef CONFIG_KSU
+ extern bool ksu_vfs_read_hook __read_mostly;
+ extern int ksu_handle_vfs_read(struct file **file_ptr, char __user **buf_ptr,
+ 			size_t *count_ptr, loff_t **pos);
++#endif
+ 
+ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
+ {
+ 	ssize_t ret;
+ 
++#ifdef CONFIG_KSU
+ 	ksu_handle_vfs_read(&file, &buf, &count, &pos);
++#endif
+ 
+ 	if (!(file->f_mode & FMODE_READ))
+ 		return -EBADF;
+diff --git a/fs/stat.c b/fs/stat.c
+index aef47035..af96c83c 100755
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -87,7 +87,9 @@ int vfs_fstat(unsigned int fd, struct kstat *stat)
+ }
+ EXPORT_SYMBOL(vfs_fstat);
+ 
++#ifdef CONFIG_KSU
+ extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
++#endif
+ 
+ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
+ 		int flag)
+@@ -96,7 +98,9 @@ int vfs_fstatat(int dfd, const char __user *filename, struct kstat *stat,
+ 	int error = -EINVAL;
+ 	unsigned int lookup_flags = 0;
+ 
++#ifdef CONFIG_KSU
+ 	ksu_handle_stat(&dfd, &filename, &flag);
++#endif
+ 
+ 	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
+ 		      AT_EMPTY_PATH)) != 0)
