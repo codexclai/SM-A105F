@@ -60,3 +60,9 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 
 
 - Published the CLI cleanup to the existing private GitHub repository: GitHub `main` now points to `47c3c08d169c8f8c8eee45998fcca6336f4decc1`, tree `11ccbd9e2d864e956fb0cfff432a8bbc81a73d4f`, matching local commit `f886b029a3a822ebe55c524a177460b4582b1910`'s tree. Updated blobs matched their local Git blob IDs; the branch update was non-forced. Reread the remote ref, commit tree, private repository visibility and default branch.
+
+
+## 2026-09-25 — ChatGPT Project organization
+
+- After Google sign-in completed in the browser, created an account-owned ChatGPT Project named `SM-A105F`. Verified its project home in Chat mode and toggled the chat surface to Work; the same project stayed open and its composer remained labeled `New chat in SM-A105F`. This verifies creation of new chats in both surfaces from the project.
+- The Project currently has no chats. No existing conversations or other Projects were moved or deleted. The current ChatGPT account data cleanup remains unresolved; see the account-side confirmation request in the conversation.
