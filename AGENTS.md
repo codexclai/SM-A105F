@@ -15,3 +15,4 @@
 - Protect charging and thermal behavior. Do not assume other A10 variants match this model. Check kernel bitness and device tree against exact stock evidence before boot packaging.
 - Rootfs script syntax: `bash -n scripts/build-rootfs.sh`. Build preflight and requirements are in `docs/BUILD.md`; no rootfs build has succeeded yet. Current architecture and status are in `docs/ARCHITECTURE.md` and `docs/STATUS.md`.
 - Archive tool checks: `python3 -m unittest discover -s tests -v` and `python3 -m py_compile scripts/inventory-archive.py`. They do not verify a real stock archive.
+- Also read [`docs/WORK_SESSION_CONTINUATION.md`](docs/WORK_SESSION_CONTINUATION.md): the owner is the primary human authority, may work with this session directly, and does not need another ChatGPT conversation's approval. A relayed prompt applies when the owner presents/adopts it. Continue safe independent work autonomously without implying persistent work after the session ends.

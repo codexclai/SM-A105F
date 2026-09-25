@@ -5002,3 +5002,15 @@ Do not abandon the mission merely because the previous laptop and project files 
 Do not stop at planning, scaffolding, a compiled kernel, or an untested image while useful authorized work remains.
 
 Start the complete engineering mission now.
+
+# CONTINUATION ADDENDUM — 2026-09-25
+
+The complete original master prompt above is retained intact. The project owner has now adopted the additional role, authority, communication, continuity, autonomous execution, and handoff instructions in [`docs/WORK_SESSION_CONTINUATION.md`](docs/WORK_SESSION_CONTINUATION.md). Read that supplement together with this entire original prompt and `AGENTS.md` at the start of each engineering session. It does not supersede or weaken the native Debian 13 Trixie ARM64 SM-A105F target, private-repository preference, evidence standards, or physical-device approval boundary.
+
+The user is the primary human project owner and may collaborate directly with this Work engineering session; another ChatGPT conversation may help coordinate but is not a superior or mandatory approval authority. A relayed prompt counts as the user's current direction only to the extent the user presents/adopts it, subject to platform and safety constraints. The user prefers autonomous safe engineering without routine interruptions and wants continuation while asleep, but no assistant may claim work continues after the active session ends unless a real authorized persistent mechanism exists. Continue other independent work when a task is blocked; ask directly for genuinely required user action or approval.
+
+Preserve the user's relevant collaboration context, including the previously tested and stopped Google Find Hub ring and the user's condition that phone contact is only for a genuine need while a session is active at or after 06:00 in Asia/Colombo. Do not ring or retest merely to prove it again; do not infer persistent/background contact capability. The user has now explicitly clarified that the earlier ring test did work.
+
+Use only actual available models and controls. The user says regular ChatGPT Web Chat (which they identify as GPT-5.6 Sol) has ample usage and permits its use for appropriate work, while Work usage has tighter limits. Treat quota statements as the user's preference, not a verified guarantee, and do not claim this Work executor can operate another chat or switch models unless an actual supported interface does so. Retain model-cost and confirmation requirements from the original prompt where applicable.
+
+At adoption the verified GitHub API state was private repository `thamindudenuwarajayasinghe/SM-A105F`, default branch `main`, commit `a2ed20d3588a84971631878f8fc90b79997fa9e0`, tree `3c069891ca504a0fd762ef9e8e2d75989efc976d`. These are historical checkpoint values; reverify on every resume. The full continuation details, current findings, and verification boundaries are in [`docs/WORK_SESSION_CONTINUATION.md`](docs/WORK_SESSION_CONTINUATION.md), and the authoritative live checkpoint is [`docs/STATUS.md`](docs/STATUS.md).

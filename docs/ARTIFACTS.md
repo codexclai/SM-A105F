@@ -1,6 +1,6 @@
 # Artifact inventory
 
-No firmware input, source archive, kernel, rootfs or boot image has yet been acquired or built. Four recovery bundles were already present in the private Drive project folder; they were downloaded and verified during session resumption.
+No exact Samsung stock firmware or official source archive has been acquired. An experimental third-party-source kernel and DTB/DTBO host build now exists; no Debian rootfs, initramfs, boot image or phone image has been built. Several older recovery bundles remain in the private Drive project folder; see their historical entries below.
 
 | File | Purpose and scope | Size / SHA-256 | Provenance and verification | Location |
 | --- | --- | --- | --- | --- |
@@ -34,7 +34,9 @@ Experimental systemd-oriented kernel config `eureka-r24u-a10-systemd-config-48fd
 
 `SM-A105F-current-199011e-20260925.bundle`, local commit `199011e0e9537dbc45c53e394538aa6913f6845b` (`main`), 96,991 bytes, SHA-256 `a9b1d2c15596e371ed0fbe32d56d3ba5190d0a170a4c560818c41046a31aa399`. [Private Drive file](https://drive.google.com/file/d/1H9MphixrLS3x0EGMI5sxSO4o6-baJqO3/view?usp=drivesdk). Created after Kconfig/Codex workflow updates; `git bundle verify`, `list-heads`, fresh clone, prompt/config byte comparison, Drive fetch-back, byte comparison, and checksum all passed on 2026-09-25. Its tree exactly matches the verified private GitHub tree at remote commit `b135dfc7c963aca6a8943b14cfa213722c84e663`; local and remote commit ancestry differ. This recovery snapshot excludes later metadata that records the bundle itself; clone the authoritative remote for newer project documentation.
 
-For each future artifact record name, purpose, size, SHA-256, source revision/configuration, build command, verification evidence, location, access scope and retention class. Do not put private firmware or substantial images in Git history.
+| `SM-A105F-eureka-r24u-host-build-20260925.tar.gz` | Experimental host-built Eureka A10 ARM64 kernel `Image`, `.config`, `System.map`, generic Exynos7885 DTB, seven A10 overlays, build logs, 19 staged Ubuntu package checksums and build provenance. **Not for deployment**: source is third-party, Linux 4.4, `CONFIG_KSU=y`, no rootfs/initramfs/boot container/device validation. | 12,406,459 bytes; SHA-256 `78a90a90ac355a6caafe64ee32ca8c630f09bebab243a3449a26413b7b52fde0` | Source `eurekadevelopment/Eureka-Kernel` `e1b8464bb29ce5bcb9d52bfcfc71bc2563e12563`; KernelSU submodule `109442f8c4c7692af6562bdad6fd9f39dc1f935b`; Clang/LLVM 14.0.6, GNU AArch64 binutils 2.42 from signed Ubuntu Noble snapshot 2026-08-28. Inner file SHA list passed; Drive upload was downloaded again, byte-compared with local archive, same size/hash, and the package checksum list was read from downloaded archive. Drive metadata shows owner-only sharing. | [Private Drive artifact](https://drive.google.com/file/d/1dX6Yjqs3PrhJ8fJYui5miPLWOUb6gb60/view?usp=drivesdk) |
+
+For each future artifact record name, purpose, size, SHA-256, source revision/configuration, build command, verification evidence, location, access scope and retention class. Do not put private firmware or substantial images in Git history. Temporary compiler packages, object files, and logs under ignored `work/` are scratch-only and are not durable dependencies; the Drive tarball preserves a candidate Image and build evidence, not the complete ~1 GiB source checkout or a bootable phone system.
 
 
 The Codex CLI package used during the 2026-09-25 experiment was installed only in session scratch and removed at the user's direction. Its launcher and repository config were removed; no CLI binary, authentication state, or durable CLI artifact is retained for this project.
