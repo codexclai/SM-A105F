@@ -1,0 +1,11 @@
+# Architecture decision gate
+
+The intended stack is necessary Samsung boot components → compatible Linux kernel and exact device tree → minimal initramfs → persistent Debian 13 `arm64` rootfs → CLI administration. This is a target architecture, not a verified boot design.
+
+The immediate gate is kernel execution state. A 32-bit ARM kernel cannot directly run an AArch64 Debian userspace, even on a 64-bit capable SoC. A nearby recovery tree's `TARGET_ARCH=arm` is a userspace build declaration, not stock kernel evidence; Eureka's A105 build selects `ARCH=arm64`, but its compatibility with this stock firmware is unverified. Inspect the exact official Samsung release, stock boot image and device tree before choosing a kernel baseline or image format. If the stock path is ARM32, investigate a genuinely device-compatible ARM64 kernel and bootloader handoff; do not quietly switch the requested userspace to `armhf`.
+
+At public Eureka commit `e1b8464bb29ce5bcb9d52bfcfc71bc2563e12563`, the root Makefile identifies a 4.4.302-p6 tree. Its A10 defconfig includes `CONFIG_CGROUPS`, `CONFIG_NAMESPACES`, `CONFIG_BLK_DEV_INITRD`, `CONFIG_CHARGER_S2MU005` and `CONFIG_MACH_EXYNOS7885_A10_OPEN`; the build script uses an A10-specific defconfig and a prebuilt A10 DTBO for packaging. The device tree declares ARMv8 cores and Samsung Exynos7885. These observations narrow the source comparison but do not establish the exact SM-A105F bootloader handoff, DTBO identity, Debian init compatibility, power safety or physical function. Do not execute the third-party build script without auditing its network fetches, destructive cleanup and submodules.
+
+The custom A10 defconfig does not explicitly list every necessary feature, whereas the repository's `stock/a10_00_stock_defconfig` explicitly enables ELF execution, devtmpfs and ext4. This is not a comparison of generated `.config` files: Kconfig defaults and dependencies must be resolved in a complete checkout and the resulting config checked for Debian boot requirements before drawing conclusions about custom-kernel suitability.
+
+Avoid persistent storage placement and flash targets until the exact model's partition evidence, data-preservation needs and recovery path are known. Early boot must remain diagnosable without relying on Wi-Fi alone.

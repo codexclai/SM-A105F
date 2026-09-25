@@ -1,0 +1,26 @@
+# Immutable downloaded references and large outputs
+/reference/inputs/
+/work/
+/out/
+/logs/
+/cache/
+*.img
+*.img.gz
+*.tar
+*.tar.gz
+*.tar.xz
+*.zip
+*.deb
+*.dtb
+*.dtbo
+*.ko
+*.o
+*.cmd
+*.pyc
+__pycache__/
+*.key
+*.pem
+*.p12
+*.pfx
+*.env
+.env
