@@ -36,13 +36,23 @@ done
 
 mkdir -p -- "$output_dir"
 make -C "$source_dir" O="$output_dir" ARCH=arm64 exynos7885-a10_defconfig
-"$source_dir/scripts/config" --file "$output_dir/.config" -e DEVTMPFS -e DEVTMPFS_MOUNT
+"$source_dir/scripts/config" --file "$output_dir/.config" \
+    -e DEVTMPFS -e DEVTMPFS_MOUNT -e FHANDLE \
+    --set-str UEVENT_HELPER_PATH ''
 make -C "$source_dir" O="$output_dir" ARCH=arm64 olddefconfig
 
-for setting in CONFIG_64BIT CONFIG_BLK_DEV_INITRD CONFIG_BINFMT_ELF CONFIG_EXT4_FS CONFIG_DEVTMPFS CONFIG_DEVTMPFS_MOUNT; do
+for setting in CONFIG_64BIT CONFIG_BLK_DEV_INITRD CONFIG_BINFMT_ELF CONFIG_EXT4_FS CONFIG_DEVTMPFS CONFIG_DEVTMPFS_MOUNT CONFIG_FHANDLE CONFIG_CGROUPS CONFIG_INOTIFY_USER CONFIG_SIGNALFD CONFIG_TIMERFD CONFIG_EPOLL CONFIG_UNIX CONFIG_SYSFS CONFIG_PROC_FS; do
     if ! grep -qx "${setting}=y" "$output_dir/.config"; then
         printf 'Required setting missing after Kconfig resolution: %s\n' "$setting" >&2
         exit 1
     fi
 done
+grep -qx '# CONFIG_SYSFS_DEPRECATED is not set' "$output_dir/.config" || {
+    printf 'Deprecated sysfs layout is enabled\n' >&2
+    exit 1
+}
+grep -qx 'CONFIG_UEVENT_HELPER_PATH=""' "$output_dir/.config" || {
+    printf 'Legacy hotplug helper path remains configured\n' >&2
+    exit 1
+}
 sha256sum -- "$output_dir/.config"

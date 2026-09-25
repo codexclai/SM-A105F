@@ -12,4 +12,6 @@ Host Kconfig resolution of the pinned custom A10 defconfig on 2026-09-25 produce
 
 Debian 13 ships systemd 257. Its [upstream v257 README](https://github.com/systemd/systemd/blob/v257/README) gives Linux 3.15 as minimum and 5.4 as recommended baseline; Eureka's 4.4.302-p6 falls between them. Even with devtmpfs, investigate the kernel API and cgroup behavior needed by the selected Debian init before choosing this kernel for a deployed system. A generated configuration is not runtime compatibility evidence.
 
+The same pinned source has an `exynos7884B-a10_swa_open_00.dts` overlay whose `compatible` includes `samsung,A10 SWA OPEN 00`. The base `exynos7885.dts` declares `samsung,exynos7885`; the overlay's Exynos7884B naming is not a contradiction to resolve by guessing. Inspect the exact official Samsung source and stock DTBO/boot image to establish base/overlay relationship, revision selection and firmware correspondence. The SWA label alone cannot identify the user's current partition contents or authorize flashing.
+
 Avoid persistent storage placement and flash targets until the exact model's partition evidence, data-preservation needs and recovery path are known. Early boot must remain diagnosable without relying on Wi-Fi alone.
