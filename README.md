@@ -8,4 +8,4 @@ The first architecture gate is whether an exact-device kernel and boot chain can
 
 No project source-code license has been selected. Third-party materials retain their own licenses; do not redistribute firmware or vendor source without reviewing its terms.
 
-The latest user preference is a **private** `SM-A105F` repository. GitHub creation is not yet verified. No claim of production readiness or physical-device validation is made.
+The canonical [GitHub repository](https://github.com/thamindudenuwarajayasinghe/SM-A105F) is **private**. No claim of production readiness or physical-device validation is made.

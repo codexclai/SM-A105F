@@ -4,8 +4,8 @@ Updated: 2026-09-25 UTC, fresh-session reconciliation. Project identity: native 
 
 ## Identity and persistence
 
-- Requested repository: private `SM-A105F` under the connected GitHub account `thamindudenuwarajayasinghe`. Canonical URL, remote branch and verified synchronized GitHub commit: **not established**. Do not mistake the existing unrelated `AlternateCLI` repository or a Drive bundle's temporary local `origin` for this project's remote.
-- Current branch is `main`; use `git log -1 --format=%H` for exact local HEAD. Latest manifest-recorded private Drive recovery is commit `bee625d26da2821c867183f93574f368bff6e890`, bundle `SM-A105F-current-bee625d-20260925.bundle`, SHA-256 `d878b3169b972e666672923a51d235352edd07f630cdc277db1b3db200d93f05`; readback and fresh checkout of `main` passed. See `docs/ARTIFACTS.md` and the [SM-A105F Drive folder](https://drive.google.com/drive/folders/1azGQb-dRNXhy6fNAEKrwNOok4A2KiJYS). Verify whether a newer bundle exists before restoring.
+- Canonical private repository: [thamindudenuwarajayasinghe/SM-A105F](https://github.com/thamindudenuwarajayasinghe/SM-A105F), default branch `main`. Last verified remote snapshot commit at this writing: `93f13619ef1ba057e7661c53a86bd61f25393811`; GitHub connector confirmed owner, private visibility, branch ref and exact tree SHA `ab0b73b940fc1b8f9bc5e58586562aa229a9c932`. Its file tree matches the local historical commit `8cf147492a53553742c8b2b9ec6343f0c1afb679`; the two commit chains differ because connector Git-data writes created new commit metadata. Verify current remote commit anew before further edits.
+- Current local branch is `main`; use `git log -1 --format=%H` for exact local HEAD. Latest manifest-recorded private Drive history recovery is `8cf147492a53553742c8b2b9ec6343f0c1afb679`, bundle `SM-A105F-current-8cf1474-20260925.bundle`, SHA-256 `40663a9d804ff1f456730fcbdafa5f791f4973d8b969dad9087474e55979eeec`; readback and fresh checkout passed. See `docs/ARTIFACTS.md` and the [SM-A105F Drive folder](https://drive.google.com/drive/folders/1azGQb-dRNXhy6fNAEKrwNOok4A2KiJYS). Verify whether a newer bundle exists before restoring.
 - Root `Prompt.md` is an exact byte-for-byte copy of the supplied attachment, SHA-256 `136b903c10a5ea24e30fa94d05aab6903371208878f51ef0901dbba167b7cb15`.
 - User requests task-specific model selection: Luna with suitable effort as default, Sol for tasks needing its capability, Astra exceptionally. Current user-reported setting is GPT-6 Luna High; assistant text cannot change model selection.
 
@@ -21,8 +21,8 @@ Updated: 2026-09-25 UTC, fresh-session reconciliation. Project identity: native 
 
 ## Synchronization and approvals
 
-- The source is committed locally and a matching commit bundle is verified in Drive. GitHub synchronization remains unavailable because no project repository exists yet.
-- GitHub connector reads the authorized account and lists repositories but exposes no repository-creation operation. The only listed repository, private `AlternateCLI`, is an unrelated CLI-agent project and is not canonical for this task. GitHub browser sign-in is still needed for browser-based creation unless another authorized creation workflow becomes available.
+- The private project repository exists and its `main` contains all 15 tracked files from local historical commit `8cf1474` byte-for-byte, including `Prompt.md` blob `77c3893980c7c81d9f16439bc922d4024756675a`. The GitHub snapshot has a separate two-commit chain; local history remains complete in Drive. The local checkout's `origin` still points to an old recovery bundle, not GitHub, and shell Git has no credential. Neither a direct Git push nor an ancestry merge has been verified. Do not claim local SHA `8cf1474` exists on GitHub.
+- GitHub browser sign-in succeeded after user takeover. The connected GitHub API created a README seed commit then a full-tree import without a force update; the branch and privacy were verified. The unrelated private `AlternateCLI` repository is separate.
 - Drive connector access and readback of the new checkpoint bundle are verified. Its local and downloaded copies have identical size and SHA-256, and the bundle verifies and clones.
 - The unrelated Drive folders `Colab Notebooks` and `Google AI Studio` were permanently deleted with the user's specific authorization; root listing now shows only `SM-A105F`. The unrelated GitHub repository `AlternateCLI` still awaits an authenticated deletion workflow. Preserve the project folder.
 - User explicitly requests a private repository named `SM-A105F`. Public visibility is not selected; the user says it may be considered only if publication review finds project contents safe. No source license is selected.
@@ -31,7 +31,7 @@ Updated: 2026-09-25 UTC, fresh-session reconciliation. Project identity: native 
 ## Next exact actions
 
 1. Commit this continuity-test correction and upload/read back a fresh full Git bundle to the private project Drive folder; capture its actual SHA-256 and `main` ref.
-2. Through a supported authenticated GitHub workflow, create private `SM-A105F`, push and verify remote branch and commit. Delete `AlternateCLI` only through that authenticated workflow under the user's specific authorization; keep project bundles.
+2. Publish the updated checkpoint through connected GitHub Git-data writes, verify the new remote commit and tree, then reconcile the local historical branch with remote through authorized Git credentials when available. Delete `AlternateCLI` only after action-time confirmation required by browser deletion policy; keep project bundles.
 3. Acquire exact Samsung source and stock firmware through legitimate accessible sources and hash them; resolve actual kernel architecture, boot image, device tree and partitions before packaging.
 4. Provision an isolated host with QEMU/binfmt, signed Debian keyring and `mmdebstrap` to build/test an ARM64 rootfs; do not treat `chrootless` as a validated substitute.
 
