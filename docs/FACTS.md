@@ -8,6 +8,7 @@
 | Debian 13.7 released 2026-09-12; `arm64` supported | Published | [Debian news](https://www.debian.org/News/2026/20260912), [ARM64 installation guide](https://www.debian.org/releases/trixie/arm64/) |
 | Native Debian ARM64 can boot this exact phone | Unknown | Requires exact kernel/source and boot-chain analysis followed by physical testing |
 | Public Eureka `R24U` tree has an A10 ARM64 build path | Source inspected, not built or device tested | Pinned commit `e1b8464bb29ce5bcb9d52bfcfc71bc2563e12563`: `build.sh` selects `ARCH=arm64` and `exynos7885-a10_defconfig`, which includes cgroups, namespaces, initrd, `CONFIG_CHARGER_S2MU005`, and `CONFIG_MACH_EXYNOS7885_A10_OPEN`. Config symbols establish source intent, not enabled hardware or stock compatibility. |
+| Pinned Eureka custom A10 config resolves with devtmpfs disabled; experimental overlay enables it | Host Kconfig generation passed, kernel not built | Baseline `.config` SHA-256 `1430509fa924076c9b2ffe530da691e19a5df1a5c18c7635ca833ede0f5004cc`; two-option overlay SHA-256 `05ca40bcaddf5d4c44a1049ada4c7783bf1b17a316416f8f029fcdf5e0cd008a`. See [BUILD.md](BUILD.md) and [ARTIFACTS.md](ARTIFACTS.md). |
 | Partition map, image header, stock kernel bitness, verified-boot state | Unknown | Do not use nearby device tree values as flashing targets |
 
 Other user-supplied starting specifications (Exynos 7884B and 2 GB/32 GB) remain subject to source and device verification. The exact Wi-Fi chipset, charger, thermal stack, modem and firmware dependencies remain unknown.
