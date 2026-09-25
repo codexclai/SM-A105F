@@ -30,6 +30,22 @@ Static comparison of the tracked KSU-disabled config `configs/eureka-r24u-sm-a10
 
 This is a source/configuration audit only. No Debian userspace was installed, no systemd process ran under the candidate kernel, and no QEMU OS or phone boot was tested. Track the helper setting as a confirmed config defect; preserve the current artifact as historical evidence, then make and build a separate corrected config once the workspace/build environment is available. Evaluate `CONFIG_USER_NS` as a deliberate hardening choice, not an automatic toggle.
 
+## Mainline and newer-kernel source scan — 2026-09-25
+
+A bounded GitHub code search of upstream [torvalds/linux](https://github.com/torvalds/linux/tree/f14572c203d57492e1d4e5d7851a3b143e083b82) found Exynos7885 SoC support files including `arch/arm64/boot/dts/exynos/exynos7885.dtsi`, `exynos7885-pinctrl.dtsi`, the Exynos7885 clock driver, and a board file for the Galaxy A8 (2018), `exynos7885-jackpotlte.dts`. Searches in that indexed upstream tree for `A105F`, `samsung,A10`, and `exynos7884B` returned no matches. This is a scoped code-search result, not proof that no relevant support exists elsewhere or under different names; the upstream material is useful SoC context but is not an SM-A105F port.
+
+Several public Samsung universal7904 / Exynos7885 repository refs whose labels looked newer were checked by reading only the first ten lines of their `Makefile`:
+
+| Repository ref inspected | Reported kernel baseline |
+| --- | --- |
+| [SamarV-121/android_kernel_samsung_universal7904, `lineage-22.2`](https://github.com/SamarV-121/android_kernel_samsung_universal7904/tree/lineage-22.2) | 4.4.302 |
+| [LineageOS/android_kernel_samsung_universal7904, `lineage-18.1`](https://github.com/LineageOS/android_kernel_samsung_universal7904/tree/lineage-18.1) | 4.4.177 |
+| [minhker98/android_kernel_samsung_universal7904, `master`](https://github.com/minhker98/android_kernel_samsung_universal7904/tree/master) | 4.4.177 |
+| [exynos7885-dev/old_kernel_samsung_exynos7885, `lineage-18.1`](https://github.com/exynos7885-dev/old_kernel_samsung_exynos7885/tree/lineage-18.1) | 4.4.177 |
+| [muhammad23012009/android_kernel_samsung_exynos7885, `Eureka-QRS-Clang`](https://github.com/muhammad23012009/android_kernel_samsung_exynos7885/tree/Eureka-QRS-Clang) | 4.4.288 |
+
+These metadata checks do not review commits, licenses, device trees, patches, or boot compatibility. They show that the inspected branch names do not provide a newer Linux baseline. No newer exact-device kernel candidate is established by this scan. Continue pursuing a newer supportable baseline, but do not select a branch based on a LineageOS release label alone; exact SM-A105F integration and stock boot compatibility still require evidence.
+
 The same pinned source has an `exynos7884B-a10_swa_open_00.dts` overlay whose `compatible` includes `samsung,A10 SWA OPEN 00`. The base `exynos7885.dts` declares `samsung,exynos7885`; the overlay's Exynos7884B naming is not a contradiction to resolve by guessing. Inspect the exact official Samsung source and stock DTBO/boot image to establish base/overlay relationship, revision selection and firmware correspondence. The SWA label alone cannot identify the user's current partition contents or authorize flashing.
 
 Avoid persistent storage placement and flash targets until the exact model's partition evidence, data-preservation needs and recovery path are known. Early boot must remain diagnosable without relying on Wi-Fi alone.
