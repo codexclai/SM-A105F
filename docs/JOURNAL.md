@@ -262,3 +262,8 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 - To avoid an unproductive rebuild, probed four endpoints with short timeouts: Trixie `InRelease` at `deb.debian.org`, the same at `ftp.us.debian.org` and `ftp.de.debian.org`, and the official cloud-image host path on `cloud.debian.org`. Each failed with proxy CONNECT timeout, HTTP 000 and zero bytes. No apt indexes or image bytes were acquired; no rootfs build was started.
 - Official Debian release information confirms a Trixie GenericCloud image is published for arm64, giving a possible signed upstream disk input to evaluate later. It is not yet retrieved or verified and is not a phone image. Added the candidate and its adaptation/trust checks to [BUILD.md](BUILD.md). Rootfs construction remains blocked by this runner's outbound network route and missing builder tools.
 - This candidate path does not resolve exact Samsung source/firmware, kernel 4.4 compatibility/security, boot integration, or any physical-device validation. No user action is needed yet; a future authorized Debian-connected runner or user-authorized file transfer may allow verification without repeating blocked network attempts.
+
+## Rootfs checkpoint synchronization receipt — 2026-09-26 UTC
+
+- Updated `docs/BUILD.md` and `docs/STATUS.md` with the four failed outbound HTTPS probes and the official Debian GenericCloud ARM64 image as an unacquired candidate only. The status update commit is `3285b9fe87e010e7d5a3496314fc9eafec4ae9da`.
+- Independent GitHub branch API read verified private repository `main` at that commit, tree `1b4d91ee5aa389e8079accab4a9cb7e5fefb8820`. This journal receipt will advance the branch once more; verify the resulting live head before resuming.
