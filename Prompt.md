@@ -1,3 +1,19 @@
+# CURRENT AUTHORITY — EXISTING PROJECT CONTINUATION (2026-09-26)
+
+This dated addendum supersedes conflicting bootstrap language below. Continue the established project in the existing private repository `thamindudenuwarajayasinghe/SM-A105F`; do not recreate it, make it public, or repeat setup. Use the authorized Codespace for substantial builds. Keep the Codespace, GitHub and Drive records aligned where their capabilities permit, and report each boundary accurately. Never claim synchronization of a checkout or storage location that was not verified.
+
+The previous-chat export and `Prompt.md` were attached directly to the 2026-09-26 continuation conversation. The export was read and the consequential collaboration history reconciled. Later user decisions control: the private existing repo replaces the old public fresh-start setup; canceled tmate/SSHx sharing must not be resumed; the phone remains untouched absent specific informed authorization; do not use arbitrary progress percentages; and do not retain credentials or irrelevant personal conversation in project records. The export itself is continuity input, not a file to commit.
+
+At the verified baseline, GitHub `main` and the Codespace showed commit `5166d9da6f585d1bf98d868b17ff20d7bc81d925`. The Debian ARM64 rootfs archive has SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975` and size 196,298,240 bytes. It was found root-owned in Codespace `/tmp/SM-A105F/` and copied with its matching checksum sidecar to ignored Codespace workspace storage `work/artifacts/rootfs/`. Tar/package inventory and hash verification are recorded in the current checkpoint. This workspace copy is not yet a Drive or GitHub artifact; reverify storage and checksums at every resumption. Do not describe this tar as bootable or device-tested.
+
+Keep the kernel tracks separate: the Eureka Linux 4.4 tree is a vendor/community bring-up reference; investigate maintainable modern upstream/LTS alternatives in parallel and choose by evidenced device support, security, compatibility, and reliability. Static config does not prove runtime behavior. No physical-phone action is authorized by this prompt.
+
+## Resumption order
+
+Read `AGENTS.md`, `START_HERE.md`, this current authority block, `docs/STATUS.md`, `docs/WORK_SESSION_CONTINUATION.md`, `docs/ARTIFACTS.md`, `docs/BUILD.md`, `docs/ARCHITECTURE.md`, and `docs/JOURNAL.md`. Verify live GitHub head, Codespace status, Drive artifacts, rootfs hash and location, and any other claimed state. Continue safe engineering and host-side validation; keep source/provenance limitations and all untested boot/device behaviors explicit.
+
+---
+
 PRE-MISSION BOOTSTRAP — COMPLETE CLOUD PROJECT SETUP AND CONTINUITY
 
 0. Purpose and execution order

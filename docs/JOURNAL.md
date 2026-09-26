@@ -1,3 +1,12 @@
+## 2026-09-26 — Chat continuity and rootfs recovery
+
+- Read the conversation export attached to this chat (`upload/Chat-0.json`; 107 user messages) and reconciled material user decisions. The existing private repository supersedes old fresh-start/public-repository bootstrap language. The old tmate/SSHx sharing attempt was canceled and remains canceled. The phone is untouched. Arbitrary readiness percentages are not acceptance evidence. No secrets or unrelated personal conversation were copied into project documentation.
+- Reverified the current GitHub/Codespace baseline at `5166d9da6f585d1bf98d868b17ff20d7bc81d925`. The initial status prose had stale contradictory hashes and readiness percentages; current checkpoint was replaced and old records are retained only as historical snapshots.
+- Located the documented rootfs archive in Codespace `/tmp/SM-A105F/`. Ordinary access failed because its parent/file is root-owned; `sudo` inspection worked. The archive is 196,298,240 bytes and SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`, matching the prior build record. Copied archive and checksum sidecar to ignored workspace path `work/artifacts/rootfs/`; recomputed hash and sidecar value match.
+- Read-only archive inspection found 8,406 entries and a dpkg database with 117 package records. Installed ARM64 `systemd-sysv`, `openssh-server`, `iproute2`, and `ca-certificates` were observed; inspected package names contain no obvious desktop stack. This does not establish complete release/configuration validation, chroot execution, system boot, or device compatibility.
+- Codespace provides `mmdebstrap`, `qemu-aarch64-static`, noninteractive sudo, and approximately 18 GiB free. No new prerequisite package was installed and no rebuild was necessary. Drive search found no matching rootfs artifact; external durable copy/retrieval verification remains outstanding.
+- No source, kernel config, device, or phone was modified or tested.
+
 # Engineering journal
 
 This records consequential investigation and work. [STATUS.md](STATUS.md) is the current state; this file explains how it developed. Times are UTC when recorded.
