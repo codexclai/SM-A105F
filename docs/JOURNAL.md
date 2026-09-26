@@ -305,9 +305,21 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 ## Successful host rootfs build recorded — 2026-09-26 UTC
 
 - The user reported that the other Codespace shell successfully ran `sudo ./scripts/build-rootfs.sh /tmp/SM-A105F/debian-trixie-arm64-rootfs.tar` in 344.7618 seconds. Reported host: Ubuntu 24.04.5 x86_64; `mmdebstrap` and `qemu-aarch64-static` present; ARM64 binfmt emulation used; Debian Trixie signed archive keyring configured.
-- Direct `sudo sha256sum` reportedly verified `67ba302d06670799eba4a3d51d9897655bd1641835e346bf8c6126ed9471f975`. The tar listing reportedly contains `/etc/os-release` and `/var/lib/dpkg/status`. Exact size and checksum-sidecar comparison remain unverified. The TAR remains temporary in Codespace `/tmp`, not persisted to Drive or GitHub.
+- The initial report transcribed the `sudo sha256sum` result as `67ba302d06670799eba4a3d51d9897655bd1641835e346bf8c6126ed9471f975`; this was an earlier transcription, not the verified digest. At that time the tar listing was reported to contain `/etc/os-release` and `/var/lib/dpkg/status`, while exact size and sidecar comparison remained unverified. The TAR remains temporary in Codespace `/tmp`, not persisted to Drive or GitHub.
 - This is a host-built, unprovisioned Debian ARM64 rootfs TAR, not a bootable image. No QEMU system boot, physical phone test, flash, or deployment occurred. Updated BUILD, ARTIFACTS, and STATUS records; no implementation files changed. Git synchronization state remains as recorded above; no new remote commit or synchronization is claimed.
 
 ## GitHub rootfs documentation sync receipt — 2026-09-26 UTC
 
 - The GitHub connector independently verified private repository `main` at `290c6440a27d7767be79d76b8a2d4d183c0b7873` after publication. That commit includes the earlier `93ab8d0` rootfs safety/workflow commit, `5ae9b23` checkpoint commit, and the successful rootfs build documentation. The checkout was clean immediately after this commit. This journal/status correction is a subsequent local-only change until separately synchronized; no CLI remote check was attempted.
+
+## Rootfs artifact and owner-decision checkpoint — 2026-09-26 UTC
+
+- Verified in the existing Codespace: local `main` and `origin/main` were both `f62cb2671872fe025a530337400d0e442fc1defa`, clean before these documentation edits; the GitHub connector independently confirmed the repository is private, default branch is `main`, and the same commit is live. These edits are not synchronized. No remote Git CLI command was run.
+- `/tmp/SM-A105F/debian-trixie-arm64-rootfs.tar` is 196,298,240 bytes (about 187.2 MiB), SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`; its `.sha256` sidecar exists and its hash/name match. The archive listing confirms `./etc/os-release` and `./var/lib/dpkg/status`. It remains temporary, not persisted to Drive/GitHub. It is a host-built, unprovisioned Debian Trixie ARM64 TAR, not bootable; no QEMU system boot or device test occurred.
+- Eight Python unit tests passed; `bash -n` passed for `scripts/build-rootfs.sh`, `scripts/rootfs-output.sh`, and `scripts/configure-eureka-a10.sh`; `git diff --check` passed.
+- Appended the owner's explicit decisions to `Prompt.md`: keep the existing repository private and use its Codespace; SSHX was uninstalled and its terminal/tab closed; keep exactly CodexCLI and one normal Bash terminal; verify CLI capabilities; work autonomously only during the active session; phone operations require specific approval, with Find My Device ringing limited to genuine need, at/after 06:00 Asia/Colombo, at most 15 seconds, and actual feature availability; do not change accounts or delete unrelated Drive/chat data. No ring or phone operation was performed.
+
+## Rootfs checksum transcription correction — 2026-09-26 UTC
+
+- Direct `sudo sha256sum` output and the sidecar both give `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`. The earlier recorded `67ba302d06670799eba4a3d51d9897655bd1641835e346bf8c6126ed9471f975` was a one-character transcription error (`d` in place of `2`). The artifact is 196,298,240 bytes; `sudo tar -tf` confirms `./etc/os-release` and `./var/lib/dpkg/status`.
+- The TAR remains only in temporary Codespace storage. Drive folder `1azGQb-dRNXhy6fNAEKrwNOok4A2KiJYS` lists 19 files and has neither this TAR nor a bundle for checkpoint `f62cb2671872fe025a530337400d0e442fc1defa`. Nothing was uploaded; neither Drive nor an old local checkout is claimed synchronized with this rootfs.

@@ -5063,3 +5063,15 @@ This addendum preserves the project owner's later collaboration instructions alo
 - A 2026-09-26 Debian Installer experiment ran under staged QEMU on a generic ARM virt machine. The preseed was fetched, network setup succeeded, and Debian Trixie's InRelease signature was checked. The installer partitioned a disposable virtual disk and installed the base system plus a generic VM kernel; at the workspace disconnect it was still processing the standard task and safe-upgrade. No export, completed rootfs archive, installed-guest boot, or phone test was verified. The execution service reported environment_offline; process and scratch survival are unknown. Recover by inspecting actual surviving state before restarting. See the exact record in docs/BUILD.md, docs/STATUS.md, and docs/JOURNAL.md.
 - No official Samsung source archive bytes or exact stock firmware bytes are present. The existing official-listing/security-gate finding remains; do not bypass access controls or treat a listing as an acquired input.
 - The phone has not been flashed, wiped, repartitioned, modified for this project, or booted into a project image. No such action is authorized by this addendum.
+
+## Owner decision addendum — 2026-09-26 UTC
+
+The owner directly decided the following, superseding any conflicting older text in this prompt:
+
+- Keep the existing canonical GitHub repository private and use the existing SM-A105F Codespace and repository. Do not make the repository public or create another one.
+- SSHX was explicitly uninstalled and its terminal/tab closed, superseding the earlier request to use SSHX. Keep exactly two terminals: CodexCLI and one normal Bash terminal. Avoid spawning others and verify CLI limitations rather than assuming network access.
+- Work autonomously on safe tasks during the active session, but never claim background or always-on work after it ends.
+- The phone remains untouched. Do not flash, wipe, or modify it without operation-specific informed approval. Find My Device ringing is only an option if genuinely needed, at or after 06:00 Asia/Colombo, for no more than 15 seconds, and only if that feature is actually available; do not ring now.
+- Do not change accounts or delete unrelated Drive or chat data.
+
+These are explicit owner decisions, not inferred permissions.
