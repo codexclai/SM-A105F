@@ -329,3 +329,11 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 - Verified Codespace `main` and GitHub `origin/main` at `24af697c7728246677cc07771b4c05d0006fa282`, with matching tree `ada0585097fffe75c3d455be85201af96720c5c30` and a clean Codespace worktree after push. This supersedes older current-state statements naming `f62cb267`.
 - The older scratch checkout (`5aee00f`) remains untouched and unsynchronized; its remote authentication failed. Two nested symlinks were already absent and were left alone.
 - The rootfs TAR and matching SHA-256 sidecar remain in Codespace `/tmp`; neither was uploaded to Drive/GitHub. Thus full four-surface synchronization is incomplete. No build, QEMU, or device test was run.
+
+## Checkpoint reconciliation — 2026-09-27 Asia/Colombo
+
+- Reconciled stale `docs/STATUS.md` statements against the later architecture/config evidence: helper mismatch is resolved (`CONFIG_FW_LOADER_USER_HELPER_FALLBACK` unset in the tracked Debian config); two pinned host builds matched the Image and recorded outputs. This remains host/static evidence, not runtime or physical-device verification.
+- Clarified that the failed QEMU Installer route produced no rootfs, while the later `mmdebstrap` run did produce the verified 196,298,240-byte TAR (SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`). TAR and matching sidecar remain temporary in Codespace `/tmp` and are not in Drive/GitHub.
+- Uploaded and read back Drive sync receipt `SM-A105F-sync-checkpoint-20260926.md`, file ID `1wfyD3ELfLUCwsHHIh624kqvMqLE6bF85`; it explicitly reports partial synchronization.
+- Verified Codespace/GitHub `main` clean at `acc88e103c05c746d19637d0bc72af3a7e9816ab` before this docs-only correction. The separate scratch clone remains at `5aee00f`; remote authentication is unavailable there, so no destructive reconciliation was attempted.
+- Next: find a supported artifact-transfer route, decide `CONFIG_USER_NS` via security review, and continue exact Samsung-source and newer-kernel research. The phone remains untouched.
