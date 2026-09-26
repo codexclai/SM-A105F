@@ -69,3 +69,9 @@ This is evidence of successful host build and matching kernel/DTB payloads after
 ## Synchronization update — 2026-09-26 UTC
 
 The current Codespace/GitHub source checkpoint is `24af697c7728246677cc07771b4c05d0006fa282` on `main`; the push and matching tree were verified. Earlier references to the current checkpoint `f62cb267` are historical. The rootfs TAR remains temporary in Codespace `/tmp/SM-A105F` and is not present in Drive or GitHub. The separate scratch checkout at `/workspace/scratch/4d6756134406/SM-A105F` remains an older unsynchronized snapshot (`5aee00f`); it was not modified because its remote authentication is unavailable here.
+
+## Eureka R24U host-build bundle (2026-09-26)
+
+The host-build outputs and provenance are stored in a private draft prerelease: https://github.com/thamindudenuwarajayasinghe/SM-A105F/releases/tag/untagged-89276aa14e95f9571dda . Release ID 397403676; draft and prerelease flags were verified. Archive: SM-A105F-eureka-r24u-clang14-host-build-20260926-retry1.tar.gz, 25,921,038 bytes, SHA-256 d329705eb201eef4d6c0d91b26bf8617476a783bfa534110128f00c52b8a980b. Its .sha256 sidecar is also attached. Contents include build record, input and resolved configs, Image, vmlinux, System.map, generic Exynos 7885 DTB, seven A10 DTBOs, provenance log, and per-file checksums. All archived file checksums passed at packaging. A fresh release download passed sidecar verification and byte-for-byte cmp against the original; the tar listed 22 entries.
+
+This bundle is not a bootable or flashable package and has not been tested on hardware. Keep the release private and draft pending a separately validated packaging and boot path.
