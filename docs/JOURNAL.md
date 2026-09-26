@@ -1,3 +1,10 @@
+## 2026-09-26 — Rootfs artifact persisted and read back
+
+- GitHub CLI in the Codespace was already authenticated to the private project repository. Created a private draft prerelease tagged `rootfs-trixie-arm64-20260926` at the verified documentation commit; uploaded the rootfs TAR (196,298,240 bytes) and 97-byte `.sha256` sidecar. The release is explicitly marked prerelease/draft and describes the artifact as unprovisioned, not bootable, and not device-tested.
+- `gh release view` confirmed draft/prerelease metadata and both asset names/sizes. Downloaded both assets back into temporary Codespace verification storage. The TAR SHA-256 remained `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`, and `cmp` against the workspace recovery copy passed. GitHub private release assets are now the durable artifact copy; Drive search did not find a rootfs asset.
+- The initial update commit `44273b7faaa2f9146d0cb02192e5a5af937a8301` corrected `Prompt.md`, STATUS, ARTIFACTS, JOURNAL and BUILD. The Codespace was fetched and fast-forwarded to it; terminal `git rev-parse HEAD` matched that commit and `git status --short` was empty. Follow-up documentation will record the release asset and readback.
+- Rootfs validation remains host/static and partial. No chroot execution, QEMU system boot, new kernel build, or physical test occurred. Phone remains untouched.
+
 ## 2026-09-26 — Chat continuity and rootfs recovery
 
 - Read the conversation export attached to this chat (`upload/Chat-0.json`; 107 user messages) and reconciled material user decisions. The existing private repository supersedes old fresh-start/public-repository bootstrap language. The old tmate/SSHx sharing attempt was canceled and remains canceled. The phone is untouched. Arbitrary readiness percentages are not acceptance evidence. No secrets or unrelated personal conversation were copied into project documentation.
