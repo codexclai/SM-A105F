@@ -251,3 +251,8 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 - All seven A10 DTBOs and the generic Exynos7885 DTB match the stored artifact's 19-entry internal SHA-256 manifest exactly. Fresh `System.map` differs from the stored map in exactly two local LLVM symbol-name suffixes; addresses are unchanged. Config remains identical. The fresh outputs stay in ignored scratch; the existing private Drive artifact remains the durable copy and was not duplicated.
 - Re-ran archive-inventory tests (2 passed), Python compilation, shell syntax checks for project rootfs/config helpers and the kernel build helper, and `git diff --check`. Root tracked worktree remains clean and local Git remains a stale historical line; publication uses GitHub connector commits. The phone remains untouched. No rootfs, Samsung source archive, stock firmware package, emulator guest boot, or physical-device test resulted from this kernel audit.
 
+
+## Checkpoint synchronization receipt — 2026-09-26 UTC
+
+- Refreshed `docs/STATUS.md` with the two clean kernel builds, canonical artifact comparison, actual runner limitations, and current blockers. GitHub contents API returned status commit `9bd3b2e4a685b8a7b85c1d6e72fe3eae16c1ad33`. This records the synchronization operation result; verify live `main` independently before treating it as current.
+- This journal receipt is being added as a separate sequential commit so the checkpoint update has a durable, auditable synchronization record.
