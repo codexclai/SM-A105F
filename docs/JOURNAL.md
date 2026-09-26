@@ -280,3 +280,9 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 ## Drive search checkpoint sync receipt — 2026-09-26 UTC
 
 - Checkpoint was advanced to record the completed targeted Drive search. GitHub returned status commit `d04a867f78aa3f9954061e9df1338276df2ff8d8`; its parent was the previously live-verified `6fb7ad8e1aa9f11bbb132c978957bbdf93a98994` (tree `4b1022e0a16241e8aa922a8233d37be3b44a09a0`). Verify the final main head after this receipt is published.
+
+## Rootfs builder output-safety fix — 2026-09-26 UTC
+
+- Static review of the live rootfs script found overwrite and retry-safety gaps: it did not protect an existing `.sha256` file, accepted dangling output symlinks, and wrote directly to the final archive path. Updated `scripts/build-rootfs.sh` at commit `29827a26cdc643050ad7497a29ee90daac9d831b` to reject existing files/symlinks for both destinations, build to a private sibling staging directory, hash from the archive's basename, and publish completed output/checksum using exclusive hard links. Failed builds clean staged files; an unsuccessful checksum link attempts to remove only the verified archive hard link created by this invocation.
+- Fetched the updated script from the private GitHub remote into an ignored temporary validation file. `bash -n` passed; three focused probes verified an existing output archive remains unchanged, an existing sidecar remains unchanged and blocks build, and a dangling output symlink is rejected and preserved. The temporary validation copy was removed. This did not exercise the full build or the final artifact filesystem's hard-link support.
+- No rootfs was built. The host lacks required builder components and cannot reach Debian repositories. Phone remains untouched. Details/limits recorded in [BUILD.md](BUILD.md).
