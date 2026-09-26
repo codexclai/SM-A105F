@@ -5027,3 +5027,38 @@ During this continuation, the KSU-disabled community Eureka kernel and DTB host 
 The owner again asked for thorough, autonomous safe engineering while asleep and said they expected to sleep until approximately 06:00 Sri Lanka time. Keep working only while the actual session/tools remain active; do not claim work continues after execution ends or wait for a reply before routine safe work. The owner reaffirmed that Google Find Hub ringing had already been tested successfully, told the assistant not to ring or retest immediately, and prefers contact only for a genuine need at/after 06:00 Sri Lanka time while the live session is active. This does not justify routine check-ins or imply a background contact mechanism.
 
 At this session's resume, GitHub confirmed the existing repository remains private, `main` points to `281c29deed0522133ff06e2fb4fdffba4ed132ab`, and its tree matches the local checkout tree `8b3ed0a90f69509cb3c7ce0301d190ffba1926f0`. A second full-system QEMU Debian Installer run successfully fetched the local preseed and completed virtual network autoconfiguration, then failed Debian mirror validation because this execution environment could not reach `deb.debian.org` through its current network route. No rootfs was produced. Details and exact evidence belong in `docs/STATUS.md`, `docs/BUILD.md`, `docs/JOURNAL.md`, and `docs/ARTIFACTS.md`. The reviewed update was published and verified on private `main` as commit `4e25e8d697991538ecd21faf3d66e9a5349bea04`; the disconnected local scratch checkout still needs reconciliation.
+
+
+---
+
+## Owner-authorized continuation addendum — 2026-09-26
+
+This addendum preserves the project owner's later collaboration instructions alongside the complete master prompt above. It supplements, and does not replace, the original mission. The corresponding durable collaboration record is [docs/WORK_SESSION_CONTINUATION.md](docs/WORK_SESSION_CONTINUATION.md); the authoritative current engineering state is [docs/STATUS.md](docs/STATUS.md), and the project chronology is [docs/JOURNAL.md](docs/JOURNAL.md).
+
+### Owner and collaboration authority
+
+- The user is the project owner, the primary human collaborator, and owner of the physical phone. Work with the user directly. Another ChatGPT conversation may help coordinate, review, and draft prompts, but it is not the owner, supervisor, or required approval authority. A relayed prompt is an instruction when the user presents/adopts it, subject to higher-priority requirements and the user's current decisions.
+- Take ownership of ordinary safe engineering: inspect actual state, investigate, implement, build, test, debug, document, and publish verified work where authorized. Do not stop at a plan, scaffold, or partial milestone; do not ask the user to do routine work available tools can perform.
+- Continue useful work during an active supported session when the user is away. Do not claim that a session, process, browser, phone contact, or automation will continue after the active session ends unless a real authorized mechanism exists.
+- Preserve direct user participation and ask only for genuine missing access, consequential choices, spending, or narrowly scoped human/device actions. The user's broad autonomy request does not override the explicit physical-device approval boundary in this master prompt.
+
+### Durable identity, synchronization, and continuity
+
+- Continue the existing canonical repository [thamindudenuwarajayasinghe/SM-A105F](https://github.com/thamindudenuwarajayasinghe/SM-A105F), named SM-A105F, and keep it **private** unless the user explicitly changes that decision. Preserve valid project source, history, and artifacts; do not create a competing repository or delete project recovery inputs as cleanup.
+- Treat the repository, verified private artifacts, checkpoint, journal, manifests, and resume guide as the durable cross-session project state. A new chat has no guaranteed shared memory, credentials, files, connections, or running tasks. It must verify live state and reconstruct from those records.
+- Before publication inspect changes, run relevant checks, avoid secrets and unsuitable generated data, then verify the actual remote branch/commit/content. Never equate a local commit or attempted upload with remote synchronization. Preserve divergent local/remote histories; never force-update or reset blindly.
+- Keep large source, firmware, kernel, rootfs, and test artifacts in authorized private persistent storage as appropriate; hash and verify them. Do not assume scratch survives a disconnect. No spending or paid storage without explicit approval.
+
+### User collaboration preferences
+
+- The user prefers cost-aware model use: use an inexpensive suitable available configuration for routine work and reserve stronger/limited usage for work that materially needs it. Model names, quota limits, current selection, switching capability, and reset times must be verified in the actual interface; never invent them. Before a planned model handoff, follow the handoff and persistence requirements in the project instructions and wait for the user's confirmation when required.
+- The user previously verified that Find Hub ringing works and explicitly instructed not to retry it just to check. A phone ring is only for a genuine need while the session is actually active, at or after 06:00 Asia/Colombo, and only through a supported authorized mechanism; do not promise background contact.
+- The user asked that routine engineering continue while they sleep rather than stopping for ordinary replies. Continue safe independent work, but do not invent missing answers, approvals, tool capabilities, or post-session execution.
+
+### Technical evidence and live state
+
+- The physical target and objective remain Samsung Galaxy A10 SM-A105F, native Debian 13 Trixie ARM64, minimal/headless/CLI; exact-device boot and operational production readiness are not established.
+- The repository's current checkpoint and journal supersede historical narrative in older prompt sections. As of this addendum the verified candidate host milestone is a byte-identical repeated build of a third-party Eureka R24U Linux 4.4.302-p6 kernel/Image and Exynos DTB/DTBO outputs; it is not official Samsung source, a compatible boot image, or device evidence.
+- A 2026-09-26 Debian Installer experiment ran under staged QEMU on a generic ARM virt machine. The preseed was fetched, network setup succeeded, and Debian Trixie's InRelease signature was checked. The installer partitioned a disposable virtual disk and installed the base system plus a generic VM kernel; at the workspace disconnect it was still processing the standard task and safe-upgrade. No export, completed rootfs archive, installed-guest boot, or phone test was verified. The execution service reported environment_offline; process and scratch survival are unknown. Recover by inspecting actual surviving state before restarting. See the exact record in docs/BUILD.md, docs/STATUS.md, and docs/JOURNAL.md.
+- No official Samsung source archive bytes or exact stock firmware bytes are present. The existing official-listing/security-gate finding remains; do not bypass access controls or treat a listing as an acquired input.
+- The phone has not been flashed, wiped, repartitioned, modified for this project, or booted into a project image. No such action is authorized by this addendum.
