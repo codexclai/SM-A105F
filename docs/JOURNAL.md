@@ -267,3 +267,7 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 
 - Updated `docs/BUILD.md` and `docs/STATUS.md` with the four failed outbound HTTPS probes and the official Debian GenericCloud ARM64 image as an unacquired candidate only. The status update commit is `3285b9fe87e010e7d5a3496314fc9eafec4ae9da`.
 - Independent GitHub branch API read verified private repository `main` at that commit, tree `1b4d91ee5aa389e8079accab4a9cb7e5fefb8820`. This journal receipt will advance the branch once more; verify the resulting live head before resuming.
+
+## Final status wording correction — 2026-09-26 UTC
+
+- Removed a stale tree SHA from the status checkpoint's pre-update synchronization note. GitHub contents API returned `docs/STATUS.md` commit `362726f1ab4c0b0c8efead70114b414eaa9cf1da`; live branch readback is required for the final head.
