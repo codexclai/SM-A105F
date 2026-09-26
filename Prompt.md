@@ -2,7 +2,7 @@
 
 The existing private repository and authenticated GitHub Codespace are available. The Codespace checkout was fast-forwarded from 54a6388c24a792e1cde4d1a376ff4bc804bd1cc8 to c26922f08b00d8b8e331f0bd07a5af6d89a0eee5; subsequent build artifacts are documented in docs/BUILD.md, docs/ARTIFACTS.md, and docs/JOURNAL.md. Eureka R24U Linux 4.4 host compilation produced a kernel Image, vmlinux, System.map, generic Exynos 7885 DTB, and seven A10 DTBOs. KSU was unset and no modules were produced. These are host outputs only, not boot-tested or flashable. Archive was checksummed, uploaded to a private draft prerelease, freshly downloaded, verified, and byte-compared.
 
-Read-only inspection of the persisted Debian Trixie arm64 rootfs TAR is recorded in docs/STATUS.md; it remains unprovisioned and untested at runtime. Continue the separate modern-kernel research/bring-up track. Preserve private repository/release visibility and leave the physical phone untouched. Do not describe the rootfs as bootable or tested.
+Read-only inspection of the persisted Debian Trixie arm64 rootfs TAR and the R24U boot-path audit are recorded in docs/STATUS.md. The rootfs remains unprovisioned and runtime-untested; no boot-image packaging is supported until exact SM-A105F boot layout and matching ramdisk/device-tree inputs are sourced and verified. Continue the separate modern-kernel research/bring-up track. Preserve private repository/release visibility and leave the physical phone untouched. Do not describe the rootfs as bootable or tested.
 
 # RESUMPTION AUTHORITY — 2026-09-27 Asia/Colombo
 

@@ -370,3 +370,7 @@ Resumed the authenticated stunning acorn Codespace in the browser. Fast-forwarde
 ## 2026-09-26 — Read-only rootfs inspection
 
 Checked the rootfs TAR in place without extraction: recorded SHA-256 matches; Debian 13.7 Trixie metadata; 117 dpkg records all installed (101 arm64, 16 all); systemd init target, Debian APT Trixie sources, expected empty pseudo-filesystem mountpoint directories, and absence of common desktop executables in the checked paths. This did not test execution or bootability; see docs/STATUS.md.
+
+## 2026-09-26 — Host boot-path audit
+
+Reviewed the resolved Eureka config and build helper. Ext4, initrd, devtmpfs auto-mount, MMC/block, Samsung serial and Exynos 7885 options are built in. The sole scripts/build-eureka-kernel.sh outputs and hashes the kernel Image/vmlinux but makes no boot image, ramdisk or flashable package. The output DTB is generic and the seven overlays are A10 variants, not validated as an SM-A105F boot composition. Exact device boot layout and matched ramdisk/DT provenance are still required. No device access or test.
