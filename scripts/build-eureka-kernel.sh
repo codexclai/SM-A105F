@@ -30,6 +30,9 @@ done
 [[ $(git -C "$source_dir" rev-parse HEAD) == "$expected_source" ]] || {
     printf 'Unexpected Eureka source revision\n' >&2; exit 1;
 }
+[[ $(git -C "$source_dir" symbolic-ref --short HEAD) == R24U ]] || {
+    printf 'Eureka checkout must be on the pinned R24U branch; detached builds change the kernel release string\n' >&2; exit 1;
+}
 [[ $(git -C "$source_dir/KernelSU" rev-parse HEAD) == "$expected_kernelsu" ]] || {
     printf 'Unexpected KernelSU submodule revision\n' >&2; exit 1;
 }
