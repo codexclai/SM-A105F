@@ -82,3 +82,11 @@ Updated: 2026-09-26 UTC, after live repository/artifact reconciliation and rerun
 5. Reconcile documentation/manifests after each substantive result and verify each artifact's actual durable location. The KSU-disabled kernel archive remains the last retrieval-verified Drive artifact; the Debian Installer kernel/initrd and the incomplete QEMU disk exist only in temporary scratch.
 
 Exact next action: on a connected workspace, verify live GitHub `main` and tree, inspect local Git status and outstanding processes, reconcile the local checkout without destructive reset, then fix and rebuild the Debian-oriented kernel configuration. Continue rootfs access research and exact source/firmware work independently where feasible. The phone remains untouched.
+
+## Current synchronization snapshot — 2026-09-26 UTC
+
+This snapshot supersedes the earlier status above that identified `f62cb267` as the current checkpoint or said this documentation update was unsynchronized. Codespace `main` and GitHub `origin/main` were verified at commit `24af697c7728246677cc07771b4c05d0006fa282`, with matching tree `ada0585097fffe75c3d455be85201af96720c5c30`; the Codespace worktree was clean after the push.
+
+The separate scratch checkout at `/workspace/scratch/4d6756134406/SM-A105F` remains at `5aee00f1c69cca636a0374c4ce3e19a8bb427bab` and is not synchronized. Its GitHub remote authentication failed in this runner. It was left untouched; two nested symlinks were already absent there and were not restored.
+
+The verified 196,298,240-byte Debian rootfs archive and matching sidecar remain only in Codespace `/tmp/SM-A105F`; they have not been uploaded to Drive or GitHub. Therefore source/docs are synchronized between Codespace and GitHub, while the scratch checkout and rootfs artifact remain outstanding. No phone, boot, or QEMU test occurred.

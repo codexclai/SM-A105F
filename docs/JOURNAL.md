@@ -323,3 +323,9 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 
 - Direct `sudo sha256sum` output and the sidecar both give `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`. The earlier recorded `67ba302d06670799eba4a3d51d9897655bd1641835e346bf8c6126ed9471f975` was a one-character transcription error (`d` in place of `2`). The artifact is 196,298,240 bytes; `sudo tar -tf` confirms `./etc/os-release` and `./var/lib/dpkg/status`.
 - The TAR remains only in temporary Codespace storage. Drive folder `1azGQb-dRNXhy6fNAEKrwNOok4A2KiJYS` lists 19 files and has neither this TAR nor a bundle for checkpoint `f62cb2671872fe025a530337400d0e442fc1defa`. Nothing was uploaded; neither Drive nor an old local checkout is claimed synchronized with this rootfs.
+
+## Synchronization follow-up — 2026-09-26 UTC
+
+- Verified Codespace `main` and GitHub `origin/main` at `24af697c7728246677cc07771b4c05d0006fa282`, with matching tree `ada0585097fffe75c3d455be85201af96720c5c30` and a clean Codespace worktree after push. This supersedes older current-state statements naming `f62cb267`.
+- The older scratch checkout (`5aee00f`) remains untouched and unsynchronized; its remote authentication failed. Two nested symlinks were already absent and were left alone.
+- The rootfs TAR and matching SHA-256 sidecar remain in Codespace `/tmp`; neither was uploaded to Drive/GitHub. Thus full four-surface synchronization is incomplete. No build, QEMU, or device test was run.
