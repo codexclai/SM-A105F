@@ -271,3 +271,8 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 ## Final status wording correction — 2026-09-26 UTC
 
 - Removed a stale tree SHA from the status checkpoint's pre-update synchronization note. GitHub contents API returned `docs/STATUS.md` commit `362726f1ab4c0b0c8efead70114b414eaa9cf1da`; live branch readback is required for the final head.
+
+## Drive rootfs candidate search — 2026-09-26 UTC
+
+- Re-listed the authorized SM-A105F Drive folder and searched accessible Drive for `Debian Trixie ARM64 rootfs`, `debian cloud arm64`, `debian trixie image`, `rootfs`, `arm64`, and `trixie`. No Debian rootfs or Debian cloud image was found. The `arm64` results were existing kernel config files; the project folder contains the already catalogued kernel artifacts and repository recovery bundles. This closes the current Drive search route, not the possibility of a future user-supplied or network-retrieved verified input.
+- Updated [STATUS.md](STATUS.md) to reflect the actual search. No external source bytes were fetched or uploaded, and no build was started.
