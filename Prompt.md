@@ -5105,3 +5105,11 @@ The owner directly decided the following, superseding any conflicting older text
 - Do not change accounts or delete unrelated Drive or chat data.
 
 These are explicit owner decisions, not inferred permissions.
+
+## Latest engineering checkpoint — 2026-09-26
+
+Live private GitHub main was verified at 933ef839a18e3e3821709674b4d293764390edb1 before this work. A pinned Eureka Android device-tree review at 9bc3736454ee43dcdff12ad86189b2a96fdb2678 establishes the downstream A10 build recipe: ARM64 Image, base 0x10000000, page size 2048, kernel/ramdisk/tags offsets 0x00008000/0x01000000/0x00000100, boot partition 37,748,736 bytes, and seven DTBO cfg entries. This does not establish stock Samsung boot header/version, ramdisk, DTB placement, DTBO metadata, or the active overlay. See docs/BOOT_PACKAGING.md.
+
+Modern-path experiment: Linux 6.18.54 generic ARM64 build is running with Clang 18/LLD 18. ARM64 DTBs completed; Image build was still compiling when this note was added. Upstream contains Exynos7885 jackpotlte DTS but no A10/SM-A105F/exynos7884B board DTS, so a generic build cannot supply an A105F boot candidate. Linux 4.4.302-p6 Eureka R24U remains the nearer hardware bring-up track and likewise awaits exact Samsung boot metadata and ramdisk provenance.
+
+Samsung source portal and SamFW listing served human-verification challenges. No challenge was solved or bypassed. Exact matching AP firmware / stock boot.img + dtbo.img and Samsung OSS source archive remain unacquired. No phone action was performed. Next exact input: the original AP archive for the handset's installed firmware, or its extracted boot.img and dtbo.img with build identification; inspect hashes, header, ramdisk, DTB/DTBO metadata, then derive a non-flash Debian test package.

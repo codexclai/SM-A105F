@@ -346,7 +346,7 @@ Acquire exact Samsung source and firmware via legitimate accessible mechanisms, 
 - The older scratch checkout (`5aee00f`) remains untouched and unsynchronized; its remote authentication failed. Two nested symlinks were already absent and were left alone.
 - The rootfs TAR and matching SHA-256 sidecar remain in Codespace `/tmp`; neither was uploaded to Drive/GitHub. Thus full four-surface synchronization is incomplete. No build, QEMU, or device test was run.
 
-## Checkpoint reconciliation — 2026-09-27 Asia/Colombo
+## Checkpoint reconciliation — 2026-09-26 Asia/Colombo
 
 - Reconciled stale `docs/STATUS.md` statements against the later architecture/config evidence: helper mismatch is resolved (`CONFIG_FW_LOADER_USER_HELPER_FALLBACK` unset in the tracked Debian config); two pinned host builds matched the Image and recorded outputs. This remains host/static evidence, not runtime or physical-device verification.
 - Clarified that the failed QEMU Installer route produced no rootfs, while the later `mmdebstrap` run did produce the verified 196,298,240-byte TAR (SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`). TAR and matching sidecar remain temporary in Codespace `/tmp` and are not in Drive/GitHub.
@@ -374,3 +374,11 @@ Checked the rootfs TAR in place without extraction: recorded SHA-256 matches; De
 ## 2026-09-26 — Host boot-path audit
 
 Reviewed the resolved Eureka config and build helper. Ext4, initrd, devtmpfs auto-mount, MMC/block, Samsung serial and Exynos 7885 options are built in. The sole scripts/build-eureka-kernel.sh outputs and hashes the kernel Image/vmlinux but makes no boot image, ramdisk or flashable package. The output DTB is generic and the seven overlays are A10 variants, not validated as an SM-A105F boot composition. Exact device boot layout and matched ramdisk/DT provenance are still required. No device access or test.
+
+## 2026-09-26 — boot packaging evidence and 6.18 experiment
+
+Verified live main at 933ef839a18e3e3821709674b4d293764390edb1 before work. Pinned Eureka Exynos7885 device-tree sources at 9bc3736454ee43dcdff12ad86189b2a96fdb2678 provide A10 Android packaging values (base, page size, offsets, boot size) and seven DTBO cfg entries, but do not establish stock Samsung boot layout, ramdisk provenance, or handset overlay selection. See BOOT_PACKAGING.md.
+
+Selected upstream Linux 6.18.54 for the modern LTS compile experiment. Generic ARM64 DTBs completed; kernel Image compilation remains in progress at journal time. Initial Clang 14 and LLD 14 version gates were respected; Clang 18 and LLD 18 were installed from the Codespace distro and the build resumed. This generic compile is not an A105F boot package: upstream lacks an A10/exynos7884B DTS, and Exynos7885 jackpotlte is a different device.
+
+Samsung source portal and SamFW both served human verification. No challenge was solved or bypassed. Exact stock AP firmware and Samsung OSS source remain unacquired; no handset action was performed.
