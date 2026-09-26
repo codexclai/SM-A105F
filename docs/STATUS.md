@@ -1,3 +1,13 @@
+# Resumption checkpoint — 2026-09-27 Asia/Colombo
+
+GitHub connector readback verifies the canonical private `main` at `54a6388c24a792e1cde4d1a376ff4bc804bd1cc8`. The attached `upload/Chat-0.json` is available in this conversation and contains 107 user messages; it was inspected for user decisions. Current repo authority notes preserve the key decisions: continue the existing private repository, do not resume tmate/SSHx, leave the physical phone untouched absent specific informed approval, and avoid arbitrary readiness percentages.
+
+The rootfs TAR is present as a private draft prerelease asset, not merely in Codespace `/tmp`: release metadata reports 196,298,240 bytes and SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`; the Drive checkpoint records a fresh Codespace retrieval that matched byte-for-byte. It remains an unprovisioned host-built TAR, not bootable or device-tested. Keep the recovery copy until a new live inventory verifies durable retrieval.
+
+This session has GitHub and Drive connectors but no live Codespace terminal/filesystem access. The reported Eureka compilation-in-progress state in the handoff is therefore unverified here; do not mark it complete until checking the actual process/logs and outputs in Codespace. No build, QEMU boot, or device operation was run in this session. Next: reconnect to the authorized Codespace, verify its branch/worktree and whether the reported single-job kernel build is still running or finished, preserve its full log, validate outputs if complete, then resume rootfs host-side checks and the separate modern-kernel investigation.
+
+---
+
 # Authoritative project checkpoint
 
 Updated: 2026-09-26 UTC after reading the attached collaboration export and rechecking the Codespace rootfs.

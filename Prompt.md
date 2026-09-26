@@ -1,3 +1,11 @@
+# RESUMPTION AUTHORITY — 2026-09-27 Asia/Colombo
+
+This newer checkpoint supplements and supersedes stale current-state statements below. GitHub connector readback verified the canonical private repository `thamindudenuwarajayasinghe/SM-A105F`, branch `main`, at `54a6388c24a792e1cde4d1a376ff4bc804bd1cc8`. The current chat includes `upload/Chat-0.json` and `upload/Prompt.md`; the export has 107 user messages and is available as an attachment, not just via repository/Drive search. The prior authority summary is present in this repository and remains controlling where consistent with later user decisions.
+
+The rootfs artifact is no longer accurately described as only in `/tmp`: the private draft GitHub release `rootfs-trixie-arm64-20260926` has the TAR (196,298,240 bytes; SHA-256 `67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975`) and checksum sidecar. Live release metadata reports the asset as uploaded with that digest; the Drive checkpoint records the earlier fresh-download byte comparison. The artifact remains an unprovisioned host-built TAR, not a bootable image and not device-tested. Do not delete the Codespace recovery copy based only on metadata.
+
+This Work session can read GitHub and Drive through their connectors but has no live Codespace terminal/filesystem connection. Therefore the current Codespace worktree, `/tmp` copy, resource state, and reported in-progress kernel build are not independently verified here. The handoff says kernel compilation was still running; treat that as reported, not completed, until a live build log and output hashes are checked. Do not claim this session remains active after it ends; provide progress while working and resume only in an active session.
+
 # CURRENT AUTHORITY — EXISTING PROJECT CONTINUATION (2026-09-26)
 
 This dated addendum supersedes conflicting bootstrap language below. Continue the established project in the existing private repository `thamindudenuwarajayasinghe/SM-A105F`; do not recreate it, make it public, or repeat setup. Use the authorized Codespace for substantial builds. Keep the Codespace, GitHub and Drive records aligned where their capabilities permit, and report each boundary accurately. Never claim synchronization of a checkout or storage location that was not verified.
