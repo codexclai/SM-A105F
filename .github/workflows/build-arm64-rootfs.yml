@@ -1,0 +1,69 @@
+name: Build Debian Trixie ARM64 rootfs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-rootfs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out the requested project revision
+        uses: actions/checkout@11d5960a326750d5838076e3cfb86dd2cf707672 # v4
+
+      - name: Install isolated ARM64 rootfs builder prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            mmdebstrap qemu-user-static binfmt-support debian-archive-keyring
+          sudo /lib/systemd/systemd-binfmt
+          test -r /proc/sys/fs/binfmt_misc/qemu-aarch64
+
+      - name: Build and verify the minimal rootfs
+        id: rootfs
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/rootfs-output"
+          check="$RUNNER_TEMP/rootfs-check"
+          mkdir -p "$out" "$check"
+          archive="$out/debian-trixie-arm64-minbase.tar"
+          sudo scripts/build-rootfs.sh "$archive"
+          sudo chmod 0644 "$archive" "$archive.sha256"
+          (cd "$out" && sha256sum -c "$(basename "$archive").sha256")
+          sudo tar -xf "$archive" -C "$check"
+          arch=$(sudo chroot "$check" /usr/bin/dpkg --print-architecture)
+          release=$(sudo chroot "$check" /bin/cat /etc/debian_version)
+          test "$arch" = arm64
+          [[ "$release" =~ ^13(\.[0-9]+)?$ ]]
+          sudo chroot "$check" /usr/bin/dpkg --audit
+          sudo chroot "$check" /usr/bin/dpkg --verify
+          count=$(tar -tf "$archive" | wc -l)
+          size=$(stat -c '%s' "$archive")
+          sha=$(sha256sum "$archive" | cut -d' ' -f1)
+          {
+            printf 'source_commit=%s\n' "$GITHUB_SHA"
+            printf 'build_utc=%s\n' "$(date -u +%FT%TZ)"
+            printf 'host=%s\n' "$(. /etc/os-release; printf '%s %s' "$ID" "$VERSION_ID")"
+            printf 'architecture=%s\nrelease=%s\n' "$arch" "$release"
+            printf 'archive=%s\nsize_bytes=%s\nsha256=%s\nentries=%s\n' \
+              "$(basename "$archive")" "$size" "$sha" "$count"
+            dpkg-query -W -f='builder_package=${Package} ${Version}\n' \
+              mmdebstrap qemu-user-static binfmt-support debian-archive-keyring
+            sudo chroot "$check" /usr/bin/dpkg-query -W \
+              -f='target_package=${Package} ${Version}\n' \
+              apt debian-archive-keyring openssh-server systemd-sysv iproute2 ca-certificates kmod
+          } > "$out/provenance.txt"
+          cat "$out/provenance.txt"
+          rm -rf -- "$check"
+
+      - name: Upload short-lived build artifact for review
+        uses: actions/upload-artifact@043fb46d1a93c77aae6e7ce1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: debian-trixie-arm64-rootfs-${{ github.sha }}
+          path: ${{ runner.temp }}/rootfs-output/
+          retention-days: 7
+          if-no-files-found: error

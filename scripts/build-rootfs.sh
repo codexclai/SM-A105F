@@ -12,8 +12,8 @@ output=$1
 [[ "$output" = /* ]] || { printf 'Output must be an absolute path\n' >&2; exit 2; }
 [[ "$output" = *.tar ]] || usage
 checksum_output="$output.sha256"
-[[ ! -e "$output" && ! -L "$output" ]] || { printf 'Refusing to overwrite existing output or symlink: %s\n' "$output" >&2; exit 2; }
-[[ ! -e "$checksum_output" && ! -L "$checksum_output" ]] || { printf 'Refusing to overwrite existing checksum or symlink: %s\n' "$checksum_output" >&2; exit 2; }
+source "$(dirname -- "${BASH_SOURCE[0]}")/rootfs-output.sh"
+rootfs_refuse_existing_outputs "$output" "$checksum_output" || exit $?
 
 for tool in mmdebstrap qemu-aarch64-static sha256sum; do
     command -v "$tool" >/dev/null || { printf 'Missing required tool: %s\n' "$tool" >&2; exit 1; }
@@ -52,12 +52,5 @@ mmdebstrap --mode=root --architectures=arm64 --variant=minbase --format=tar \
     trixie "$staged_output" "$sources"
 (cd -- "$staging_dir" && sha256sum -- "$output_name" > "$output_name.sha256")
 
-# Hard links publish each completed file atomically and refuse to replace a
-# destination that appeared after the initial preflight check.
-ln -- "$staged_output" "$output"
-if ! ln -- "$staged_checksum" "$checksum_output"; then
-    [[ ! "$output" -ef "$staged_output" ]] || rm -f -- "$output"
-    printf 'Could not publish checksum without replacing an existing path: %s\n' "$checksum_output" >&2
-    exit 1
-fi
+rootfs_publish_outputs "$staged_output" "$output" "$staged_checksum" "$checksum_output"
 printf 'Unprovisioned rootfs: %s\nChecksum: %s\n' "$output" "$checksum_output"

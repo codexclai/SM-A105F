@@ -428,11 +428,7 @@ Fresh Start • Maximum Practical Autonomy • Complete Adaptive Engineering Ins
 
 The human is using ChatGPT Plus and wants to conserve model usage without sacrificing engineering quality.
 
-Begin this project using:
-
-Model: GPT-5.6 Sol
-
-Reasoning effort: Medium
+For routine project work, prefer GPT-6 Luna at a suitable effort when it is actually available in the active CLI. Use GPT-6 Sol or Astra only when the task's complexity, uncertainty, or consequences justify them.
 
 Operating mode: Work, with its available cloud capabilities
 
@@ -4287,16 +4283,11 @@ The human is on ChatGPT Plus.
 
 Model usage and reasoning effort should be managed efficiently.
 
-The initial intended configuration is:
-
-GPT-5.6 Sol
-Medium reasoning effort
+For routine work, prefer GPT-6 Luna at a suitable effort. Escalate to GPT-6 Sol or Astra only when complexity, uncertainty, or consequence justifies it.
 
 Use the actual models and reasoning levels available in the Work interface.
 
-Do not assume that a model name mentioned in previous conversations is currently available.
-
-Do not invent access to GPT-6, Max, XHigh, or any other configuration that is not actually offered.
+The active CLI currently offers GPT-6 Luna, Sol, and Astra. Recheck the actual model catalog and supported effort controls when resuming; do not assume Max, XHigh, or another configuration is available unless shown.
 
 Your responsibility is to continuously assess whether the current model and effort remain appropriate for the next meaningful stage.
 
@@ -5011,9 +5002,19 @@ The user is the primary human project owner and may collaborate directly with th
 
 Preserve the user's relevant collaboration context, including the previously tested and stopped Google Find Hub ring and the user's condition that phone contact is only for a genuine need while a session is active at or after 06:00 in Asia/Colombo. Do not ring or retest merely to prove it again; do not infer persistent/background contact capability. The user has now explicitly clarified that the earlier ring test did work.
 
-Use only actual available models and controls. The user says regular ChatGPT Web Chat (which they identify as GPT-5.6 Sol) has ample usage and permits its use for appropriate work, while Work usage has tighter limits. Treat quota statements as the user's preference, not a verified guarantee, and do not claim this Work executor can operate another chat or switch models unless an actual supported interface does so. Retain model-cost and confirmation requirements from the original prompt where applicable.
+Use only actual available models and controls. The user's earlier identification of ordinary ChatGPT Web Chat as GPT-5.6 Sol and statement about relative usage are historical preferences, not a verified current model or quota. Prefer GPT-6 Luna for routine work and justify GPT-6 Sol or Astra escalation as specified in the current collaboration addendum. Do not claim this Work executor can operate another chat or switch models unless an actual supported interface does so. Retain applicable model-cost and confirmation requirements from the original prompt.
 
 At adoption the verified GitHub API state was private repository `thamindudenuwarajayasinghe/SM-A105F`, default branch `main`, commit `a2ed20d3588a84971631878f8fc90b79997fa9e0`, tree `3c069891ca504a0fd762ef9e8e2d75989efc976d`. These are historical checkpoint values; reverify on every resume. The full continuation details, current findings, and verification boundaries are in [`docs/WORK_SESSION_CONTINUATION.md`](docs/WORK_SESSION_CONTINUATION.md), and the authoritative live checkpoint is [`docs/STATUS.md`](docs/STATUS.md).
+
+### Current collaboration preferences — 2026-09-26
+
+- Codex CLI is an authorized delegated engineering tool for suitable tasks. Use it when installed, authenticated as needed, and useful; verify its capabilities and never claim delegation that did not occur.
+- Prefer GPT-6 Luna for routine work. Use GPT-6 Sol or Astra only when the task's complexity, uncertainty, or consequences justify escalation. Recheck the active CLI's model and effort choices; preferences do not change the selected model.
+- The user directly owns this project and makes its decisions. Collaborate with the user directly; another conversation or agent is not a superior or mandatory approval authority.
+- Keep only interactive terminals needed for current project work. Do not leave avoidable shells or sessions open.
+- Do not promise background, always-on, or post-session work. Continue only while an active authorized execution mechanism is running.
+
+These current preferences supersede older model-selection defaults and statements that GPT-6 models are unavailable. Other mission, privacy, and safety instructions remain in force.
 
 
 # SESSION CONTINUATION NOTE — 2026-09-25 (owner reaffirmation)
@@ -5051,7 +5052,7 @@ This addendum preserves the project owner's later collaboration instructions alo
 
 ### User collaboration preferences
 
-- The user prefers cost-aware model use: use an inexpensive suitable available configuration for routine work and reserve stronger/limited usage for work that materially needs it. Model names, quota limits, current selection, switching capability, and reset times must be verified in the actual interface; never invent them. Before a planned model handoff, follow the handoff and persistence requirements in the project instructions and wait for the user's confirmation when required.
+- The user prefers GPT-6 Luna for routine work and GPT-6 Sol or Astra only when complexity, uncertainty, or consequences justify them. Recheck available models, efforts, and switching controls in the active CLI; these preferences do not change the selected model. Follow applicable handoff and persistence requirements before any planned switch.
 - The user previously verified that Find Hub ringing works and explicitly instructed not to retry it just to check. A phone ring is only for a genuine need while the session is actually active, at or after 06:00 Asia/Colombo, and only through a supported authorized mechanism; do not promise background contact.
 - The user asked that routine engineering continue while they sleep rather than stopping for ordinary replies. Continue safe independent work, but do not invent missing answers, approvals, tool capabilities, or post-session execution.
 
