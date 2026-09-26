@@ -44,3 +44,8 @@ For each future artifact record name, purpose, size, SHA-256, source revision/co
 
 
 The Codex CLI package used during the 2026-09-25 experiment was installed only in session scratch and removed at the user's direction. Its launcher and repository config were removed; no CLI binary, authentication state, or durable CLI artifact is retained for this project.
+
+
+## 2026-09-26 retrieval verification
+
+Re-fetched the KSU-disabled experimental host-build archive from Drive file ID `1Vqzn_d3MWrXIJawOFevk748EKOWLoG7o`. The downloaded object was 25,899,371 bytes and SHA-256 `78594b207d6c526fdb2a6e007fefedda8ae66c6a228609694a4d6852302bf8d8`, matching this manifest's existing record. An in-memory read-only tar check verified all 15 payload entries listed in its internal `SHA256SUMS`. Drive metadata points to the authorized private project folder and reports owner-only/not-shared access. No artifact content or sharing setting was changed. This retrieval test establishes access and archive integrity only; it does not provide new kernel, emulator, or physical-device validation.
