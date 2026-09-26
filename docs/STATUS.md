@@ -1,5 +1,33 @@
 # Authoritative project checkpoint
 
+Updated: 2026-09-26 UTC, after corrected firmware-loader Kconfig, two byte-identical fresh host builds, and Drive artifact readback.
+
+## Current verified state
+
+- Canonical repository: [thamindudenuwarajayasinghe/SM-A105F](https://github.com/thamindudenuwarajayasinghe/SM-A105F), **private**, default branch `main`. Parent state before this update was verified at `c6fb93b14ec1062abe82f2cbea3b28e1643cdfa1`, tree `155fd0cfb08bad9f0549d5d7690843eeb498da6a`; this update is being published against that live parent and must be re-verified afterward.
+- Objective remains native Debian 13 Trixie ARM64 on Samsung Galaxy A10 SM-A105F, minimal/headless/CLI. Production readiness remains **0%**; prior overall engineering estimate **12%** is an informal milestone estimate.
+- Newly verified stage: corrected Kconfig and two completed, clean, out-of-tree host builds of the third-party Eureka R24U candidate. Both completed builds matched byte-for-byte for ARM64 Image, .config, System.map, vmlinux, generic Exynos7885 DTB and seven A10 DTBOs. Image SHA-256 `9427674bcd873754db50009ae2ad1d0ba6e755abc37aa7a744061a5b72e77752`; resolved config `8cf0cdb2afd5dfcaff779460b09351cb6feeb4ebc306710598c2aeed6aae3d4c`; System.map `53b6ebfbe01958f3371b2945542fc72e47b0ce641fdc99fda483caef6e8d947b`; vmlinux `57b1f811a4aa49bd35f7ce20fcf0607b07304432a8f155ceb03f52214da88c93`. Release `4.4.302-p6-Eureka_R24U`. `MODPOST 0 modules` means no loadable modules were produced.
+- A previous static claim that firmware-helper support was active was corrected: `CONFIG_FW_LOADER_USER_HELPER` is a hidden symbol and a direct input assignment is dropped by Kconfig. The active fallback selector is unset; generated autoconf files contain no helper symbol. This is static/build evidence, not runtime firmware-loader validation.
+- Private Drive archive `SM-A105F-eureka-r24u-fw-loader-off-20260926.tar.gz`, ID `12CSS7Seyot5N3t7xPCkW9CERX8j_8OJY`, size 25,951,399 bytes, SHA-256 `603c5aee649e2cfddaa21101e9fe6efdd770cdb5f946155f9fedc5b6757cb086`. Re-fetched after update; outer hash and all 18 inner payload checks pass. See [ARTIFACTS.md](ARTIFACTS.md).
+- Available checks passed: 2 synthetic Python archive tests; Python byte-compilation; shell syntax checks; `git diff --check`. The corrected helper's repeat run and explicit byte comparisons passed.
+- No official Samsung source archive or stock firmware bytes have been obtained. No Debian rootfs/initramfs/boot container exists; no QEMU Debian OS boot has passed. Exact stock boot chain, partition/DTBO selection, and recovery remain unverified.
+- The physical phone remains untouched: no flash, wipe, repartition, bootloader/recovery change, project-image boot, or device test. No physical-operation permission is in use.
+- Local checkout history is divergent from live GitHub; do not reset/push it. Publish only reviewed files using the authorized GitHub connector with a fresh non-forced fast-forward from the verified live parent.
+
+## Next authorized engineering action
+
+Continue a safe, evidence-based investigation of acquiring exact official Samsung source and exact stock firmware bytes through legitimate routes; independently continue static boot-chain/hardware mapping and find a supported ARM64 Debian rootfs build path. Debian archive HTTPS was recently reachable from the host, but this environment lacks the ordinary rootfs tools and sandbox capabilities. No human decision is needed yet for those read-only/cloud-side steps. Ask the user only if their authenticated/manual official-download action becomes necessary or before any physical modification.
+
+## Resumption
+
+Read `Prompt.md`, `AGENTS.md`, `START_HERE.md`, then this checkpoint, `JOURNAL.md`, `SOURCES.md`, `ARTIFACTS.md`, `ARCHITECTURE.md`, and `BUILD.md`. Re-read live GitHub branch/commit, reconcile local state without destructive reset, retrieve and checksum the private Drive artifact if needed, and keep host evidence distinct from emulation and physical-device results. No background execution is promised after this session ends.
+
+---
+
+Historical snapshots follow; their live hashes, estimates, and process state are superseded by this checkpoint and later dated journal entries.
+
+
+
 
 ## Resume reconciliation — 2026-09-26
 

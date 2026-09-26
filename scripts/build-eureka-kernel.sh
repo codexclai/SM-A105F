@@ -15,7 +15,7 @@ project_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 patch_file=$project_root/patches/eureka-r24u/0001-guard-kernelsu-hooks.patch
 expected_source=e1b8464bb29ce5bcb9d52bfcfc71bc2563e12563
 expected_kernelsu=109442f8c4c7692af6562bdad6fd9f39dc1f935b
-expected_config=faf3394e6f1bc194189b306c7774e31dde308c82cfb56f140c4471d98aa11c34
+expected_config=8cf0cdb2afd5dfcaff779460b09351cb6feeb4ebc306710598c2aeed6aae3d4c
 expected_patch=3427a61bc71b565182d8c71e989b997999c523c314d57aef692a4309bd31cbaa
 
 for tool in git make realpath sha256sum cmp sed awk grep file; do
@@ -80,6 +80,10 @@ make -C "$source_dir" O="$output_dir" ARCH=arm64 LLVM=1 LLVM_IAS=1 \
 cmp -s "$config_file" "$output_dir/.config" || {
     printf 'olddefconfig changed the reviewed configuration\n' >&2; exit 1;
 }
+# Kconfig may leave host fixdep without execute permission in restricted builders.
+if [[ -f "$output_dir/scripts/basic/fixdep" ]]; then
+    chmod u+x "$output_dir/scripts/basic/fixdep"
+fi
 if grep -q '^CONFIG_KSU=y\|^CONFIG_KSU=m' "$output_dir/.config"; then
     printf 'KernelSU must remain disabled for this Debian candidate\n' >&2; exit 1
 fi

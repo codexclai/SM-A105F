@@ -49,3 +49,10 @@ The Codex CLI package used during the 2026-09-25 experiment was installed only i
 ## 2026-09-26 retrieval verification
 
 Re-fetched the KSU-disabled experimental host-build archive from Drive file ID `1Vqzn_d3MWrXIJawOFevk748EKOWLoG7o`. The downloaded object was 25,899,371 bytes and SHA-256 `78594b207d6c526fdb2a6e007fefedda8ae66c6a228609694a4d6852302bf8d8`, matching this manifest's existing record. An in-memory read-only tar check verified all 15 payload entries listed in its internal `SHA256SUMS`. Drive metadata points to the authorized private project folder and reports owner-only/not-shared access. No artifact content or sharing setting was changed. This retrieval test establishes access and archive integrity only; it does not provide new kernel, emulator, or physical-device validation.
+
+
+## 2026-09-26 corrected config build archive update
+
+The private artifact `SM-A105F-eureka-r24u-fw-loader-off-20260926.tar.gz` (Drive ID `12CSS7Seyot5N3t7xPCkW9CERX8j_8OJY`) was updated in place to preserve the current build helper, repeat-build log, and corrected provenance. [Private Drive artifact](https://drive.google.com/file/d/12CSS7Seyot5N3t7xPCkW9CERX8j_8OJY/view?usp=drivesdk). Size: 25,951,399 bytes; SHA-256: `603c5aee649e2cfddaa21101e9fe6efdd770cdb5f946155f9fedc5b6757cb086`. Re-fetched after update; downloaded bytes matched the local archive SHA-256 and all 18 internal entries passed the archive's `SHA256SUMS` check. Drive file remains in the private SM-A105F folder and is not publicly shared.
+
+Two separate clean host builds with the pinned source/config/toolchain/patch matched byte-for-byte for `Image`, `.config`, `System.map`, `vmlinux`, generic Exynos7885 DTB, and all seven A10 overlays. Current Image SHA-256 `9427674bcd873754db50009ae2ad1d0ba6e755abc37aa7a744061a5b72e77752`. This is exact-input host reproducibility evidence only, not a Debian boot image or physical-device support claim. The artifact's `inputs/build-eureka-kernel.sh` includes the `fixdep` execute-bit workaround validated by the successful clean repeat.
