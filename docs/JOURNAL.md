@@ -406,3 +406,12 @@ The Codespace browser required a fresh Google sign-in. The user selected Google 
 ## 2026-09-27 boot-layout measurement and parser tests
 
 Downloaded the user's A105FDDS9CWB3 archive into temporary Codespace storage, verified its SHA-256 and outer ZIP integrity, extracted the AP boot/DT/DTBO images without adding firmware binaries to Git, and parsed the Android boot header and standard Android DT table/FDT metadata. Added `scripts/inspect_android_boot_layout.py` and synthetic parser regression tests. The suite now passes 12 tests (8 pre-existing, 4 new). The report is `docs/reports/a105f-cwb3.json`. Stock kernel reports 4.4.177-2184546; stock boot declares no ramdisk. The unknown vendor tail is explicitly left uninterpreted. Firmware is a candidate only; the phone remains untouched.
+
+
+## 2026-09-27 — official Samsung source archive audit
+
+- Audited the user-attached Samsung A10 SWA RR source ZIP. ZIP test passed; recorded archive/tarball SHA-256 values and exact `4.4.177` source version in `docs/source-audit.md` and `docs/SOURCES.md`. Samsung README specifies Android 11 / R / arm64 and `exynos7885-a10_defconfig`; SWA DTS compatible strings match the candidate AP's SWA DTBO. The source kernel version matches candidate stock `4.4.177-2184546`, but no signed source digest or phone firmware confirmation exists.
+- Ran the exact documented defconfig successfully with `ANDROID_MAJOR_VERSION=r PLATFORM_VERSION=11`; resulting config hash `27f3714948ad986331949100e702834fac8d08e917cf5e891c6dc6efde4261a3`. Kconfig emitted choice warnings. An initial environment-free run failed due recursive `fs/sdcardfs` config inclusion, which the Samsung documented environment resolved.
+- Attempted DTB build; it failed in kernel preparation because the source's default Android GCC 4.9 cross-toolchain is absent. No new kernel binary or device-tree artifact was produced. Large archive upload to the Codespace failed at the browser file-input transfer; proprietary source remains outside Git.
+- Corrected the AP kernel payload size transcription from 2,911,200 to 29,112,000 bytes. Boot v1/page 2048, empty stock ramdisk, external DT and DTBO table evidence, and limitations remain in `docs/BOOT_PACKAGING.md`.
+- Phone remains untouched. Next engineering gate: make the attached source available to the existing Codespace or provision a documented compatible cross-toolchain there, then build the 4.4.177 A10 SWA source and compare outputs. Continue the 6.x A10 DTS port separately.

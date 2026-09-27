@@ -89,3 +89,10 @@ This bundle is not a bootable or flashable package and has not been tested on ha
 - `scripts/inspect_android_boot_layout.py`: standard-library parser for Android boot headers, Android DT tables, and FDT compatible properties.
 - `tests/test_inspect_android_boot_layout.py`: four synthetic-format regression tests.
 - `docs/reports/a105f-cwb3.json`: measured boot, DT, and DTBO layouts and extracted-image hashes from user-supplied candidate firmware. No proprietary firmware binaries or full archive are checked in.
+
+
+## User-supplied Samsung source archive — 2026-09-27
+
+`SM-A105F_SWA_RR_Opensource.zip`, 229,817,794 bytes; SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`. ZIP integrity test passed. Members: `Kernel.tar.gz` (202,050,103 bytes; SHA-256 `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`), `Platform.tar.gz` (28,872,812 bytes; SHA-256 `de94b5e95ee1182435064f4cce1e1c940a1eb529aa35b4a5456692f6af503d1c`), and README files. This is a user-provided attachment identified as the Samsung A10 SWA source archive; no Samsung signature/digest was available to authenticate it independently. Source archive and extracted tree stayed in session scratch and are not committed or uploaded to Drive. Only audit metadata is committed; no new binary output was produced.
+
+Configuration audit output: `.config` 145,302-byte Samsung A10 config generated from the archive using documented environment; SHA-256 `27f3714948ad986331949100e702834fac8d08e917cf5e891c6dc6efde4261a3`. Scratch only. `make dtbs` stopped before artifacts because the default Android GCC 4.9 toolchain is absent.

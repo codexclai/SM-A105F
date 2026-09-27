@@ -1,3 +1,9 @@
+## Current engineering checkpoint — 2026-09-27
+
+Use the user-attached Samsung `SM-A105F_SWA_RR_Opensource.zip` as the strongest current kernel source lead; do not substitute the 4.4.111 community snapshot for it. Its recorded SHA-256, 4.4.177 Makefile, exact A10 defconfig and SWA DTS evidence are in `docs/SOURCES.md` and `docs/source-audit.md`. The configured Kconfig test succeeded with the README-mandated Android environment. Full 4.4.177 build is not yet done: browser transfer of the 220 MiB archive into Codespaces failed and the archive's expected Android GCC 4.9 cross-toolchain is missing. Keep proprietary archive out of Git.
+
+Use `docs/BOOT_PACKAGING.md` for the candidate AP evidence: boot header v1, 2048-byte page, 29,112,000-byte kernel payload, empty stock ramdisk, and separate DT/DTBO partition images. Do not assume handset firmware identity, partition size, bootloader DT handling, or selected overlay. Required next work is to build the correlated source with an available compatible toolchain, validate a nonempty Debian initramfs, and package only from measured header/DT evidence. Keep the Eureka 4.4.302 host artifact and upstream 6.18.54 A10 DTS port as separate tracks. Phone remains untouched; no bootable/deployable image exists.
+
 ## Current verified checkpoint — 2026-09-26
 
 The existing private repository and authenticated GitHub Codespace are available. The Codespace checkout was fast-forwarded from 54a6388c24a792e1cde4d1a376ff4bc804bd1cc8 to c26922f08b00d8b8e331f0bd07a5af6d89a0eee5; subsequent build artifacts are documented in docs/BUILD.md, docs/ARTIFACTS.md, and docs/JOURNAL.md. Eureka R24U Linux 4.4 host compilation produced a kernel Image, vmlinux, System.map, generic Exynos 7885 DTB, and seven A10 DTBOs. KSU was unset and no modules were produced. These are host outputs only, not boot-tested or flashable. Archive was checksummed, uploaded to a private draft prerelease, freshly downloaded, verified, and byte-compared.
