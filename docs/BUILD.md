@@ -179,3 +179,7 @@ This confirms source/configuration consistency and a reproducible Kconfig gate o
 The Codespace has the AOSP Android AArch64 GCC 4.9 toolchain at pinned commit `f144eaad5cb268fa4105875e98ed4ac47efa7f06` in ignored `work/toolchains/aosp-gcc49`. Version: `aarch64-linux-android-gcc (GCC) 4.9.x-google 20150123 (prerelease)`. A freestanding AArch64 C probe compiled and statically linked to an AArch64 ELF executable with the toolchain’s own assembler/linker. This validates toolchain execution and basic compile/link functionality only; compatibility with the Samsung 4.4.177 build has not yet been demonstrated.
 
 The current Work session cannot access the user-supplied `SM-A105F_SWA_RR_Opensource.zip` attachment. Codespace inspection confirms only `work/kernel.tar.gz.part-00` (33,554,432 bytes); no complete archive or remaining parts are present. Do not attempt extraction/build until the source archive has been retransferred and reconstructed SHA-256 verifies as `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`.
+
+### Public 4.4.177 mirror disposition — 2026-09-27
+
+The `topser9/kernel_samsung_universal7885` public mirror is a Linux 4.4.177 tree with an A10-labelled ARM64 defconfig, but its inspected branch selects Android P and has no A10/A105F-named DTS in the Exynos DTS directory. Keep it as a driver/config reference; do not substitute it for the user-supplied Android 11/R SWA source.

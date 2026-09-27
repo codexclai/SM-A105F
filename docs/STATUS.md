@@ -168,3 +168,7 @@ The previous Eureka Linux 4.4.302 image is still only a different-source host ar
 - Official AOSP Android AArch64 GCC 4.9 is staged outside Git in ignored `work/toolchains/aosp-gcc49`, pinned to populated upstream commit `f144eaad5cb268fa4105875e98ed4ac47efa7f06`. The compiler passes a freestanding AArch64 compile/static-link probe; the Samsung kernel build has not run.
 - Only source transfer part confirmed in Codespace is `work/kernel.tar.gz.part-00` at 33,554,432 bytes. The current Work session does not have the supplied source ZIP available. Reconstruction and hash verification are blocked pending retransmission of the source archive.
 - Physical handset remains untouched. No Debian boot image or initramfs is validated or deployable.
+
+### Mirror audit update — 2026-09-27
+
+A public same-version mirror (`topser9/kernel_samsung_universal7885`, `master` commit `ae3bd5aef8fd81bff8c8807fa9a16ef47970b9c3`) has Linux 4.4.177 and `exynos7885-a10_defconfig`, but that config selects Android P and no A10/A105F DTS appears in its Exynos DTS directory. Retain as a comparison source only; exact supplied Android R kernel build remains blocked on archive transfer.
