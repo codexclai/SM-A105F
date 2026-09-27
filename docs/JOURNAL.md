@@ -384,6 +384,25 @@ Selected upstream Linux 6.18.54 for the modern LTS compile experiment. Generic A
 Samsung source portal and SamFW both served human verification. No challenge was solved or bypassed. Exact stock AP firmware and Samsung OSS source remain unacquired; no handset action was performed.
 
 
+## 2026-09-27 — GitHub A10 source/DTBO audit and parser
+
+Searched GitHub mirrors for the A105F Samsung source archive and AP firmware. No matching downloadable firmware archive or original `SM-A105F_SWA_RR_Opensource.zip` was found in the searched repositories. Did find `neronewman/A10-A105F-kernel`, whose README labels the tree as Samsung Open Source Release Center material. Pinned commit `ad623e4df6718c2c371eee6d5fa8c4e1108b75bc` identifies kernel 4.4.111, an ARM64 A10 defconfig, and an A10 SWA DTS. Treat mirror lineage as a claim until the official archive can be hashed and matched.
+
+Inspected the commit-pinned TWRP generator tree `twrpdtgen/android_device_samsung_a10` (commit `af1681558e88d88a625115334724dca8acfbdd80`). Its product build string is `A105FDDS9CWD2`; the build recipe specifies header version 1 and the previously documented 2 KiB page/base/offset values, and recovery.fstab lists separate dtb and dtbo partition names. The build config's image limit (55,574,528 bytes) conflicts with Eureka's boot limit (37,748,736 bytes). Neither build recipe proves real AP-image fields or partition capacity.
+
+Fetched the pinned tree's prebuilt DTBO and ran the newly added read-only checker. Input SHA-256: `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`; table version 0, one entry, 2048-byte page, custom pair 0/0xff. FDT strings identify `A10 SWA OPEN 00` and `EXYNOS7884B`, confirming the community prebuilt's SWA identity. This is strong target-family evidence but not handset firmware provenance.
+
+Added an Android DT table inspector and five unit tests. All passed; the script parsed the real community prebuilt successfully. No kernel or boot-image build was run: this workspace has no Codespace terminal/session, the browser reconnection attempt was interrupted, and building a Debian boot image is still gated on matching stock AP inputs. Physical phone remains untouched.
+
+Next step: obtain the exact AP archive for the handset's confirmed build (candidate clue only: D9CWD2), extract/hash its stock boot, dtb, and dtbo images, and compare header/partition metadata against the two community build recipes before selecting packaging parameters. Continue the 4.4.302 R24U bring-up path and assess porting the discovered Samsung A10 DTS into upstream 6.x; do not mark either as boot-tested.
+
+## 2026-09-27 — geckyn Exynos7885 kernel source review
+
+Reviewed the user's candidate repository at branch tip ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282. Its Makefile identifies Linux 4.4.200, and a10_00_defconfig is ARM64 with A10-specific options. Config selects Exynos7885 and Exynos7884A while Exynos7884 is unset. Its Exynos DT list contains generic Universal7884 Treble files, but no A10 SWA/SM-A105F DT source in the inspected directory. Treat this as an additional 4.4 downstream comparison, not an exact A105F replacement or boot source. Findings were recorded in docs/BOOT_PACKAGING.md and docs/SOURCES.md.
+
+The Codespace browser required a fresh Google sign-in. The user selected Google and the first listed account in the secure authentication flow; Google's verification code was rejected twice. No active Codespace terminal or file transfer was reached. The provided TeraBox download launched a blocked terabox:// protocol instead of a browser download; no alternate protocol path was attempted. Next independent work can continue through repository source inspection; a live Codespace session or exact-build AP image files remain necessary inputs for compile/packaging.
+
+
 ## 2026-09-27 boot-layout measurement and parser tests
 
 Downloaded the user's A105FDDS9CWB3 archive into temporary Codespace storage, verified its SHA-256 and outer ZIP integrity, extracted the AP boot/DT/DTBO images without adding firmware binaries to Git, and parsed the Android boot header and standard Android DT table/FDT metadata. Added `scripts/inspect_android_boot_layout.py` and synthetic parser regression tests. The suite now passes 12 tests (8 pre-existing, 4 new). The report is `docs/reports/a105f-cwb3.json`. Stock kernel reports 4.4.177-2184546; stock boot declares no ramdisk. The unknown vendor tail is explicitly left uninterpreted. Firmware is a candidate only; the phone remains untouched.

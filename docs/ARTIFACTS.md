@@ -77,6 +77,13 @@ The host-build outputs and provenance are stored in a private draft prerelease: 
 This bundle is not a bootable or flashable package and has not been tested on hardware. Keep the release private and draft pending a separately validated packaging and boot path.
 
 
+## Android DT table inspector
+
+- `scripts/inspect_android_dtbo.py` — read-only host-side parser for Android DT table headers and entry metadata; SHA-256 `472dfd0682eaf0532f44ad69abf1b50956e1ee37921e86fd326188e74cfab177`.
+- `tests/test_inspect_android_dtbo.py` — five parser validation tests; SHA-256 `accc5c0b15cd971c0a631564a6c748132a24e8cee38699e5bb8f6465e7efc880`. All five passed locally.
+- Exercised against the GitHub community TWRP A10 SWA DTBO (89,232 bytes; SHA-256 `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`). This input is not stored in the project. No bootable/deployable artifact was produced.
+
+
 ## 2026-09-27 additions
 
 - `scripts/inspect_android_boot_layout.py`: standard-library parser for Android boot headers, Android DT tables, and FDT compatible properties.

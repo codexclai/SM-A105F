@@ -39,6 +39,18 @@ Samsung's official Release Center also exposes an [Open Source Inquiry](https://
 - Exact AP firmware archive and Samsung OSS source archive remain unavailable because both Samsung and the credible firmware listing presented human-verification challenges in this browser. No challenge was solved or bypassed. Samsung update metadata identifies A105FDDS9CWB3 but does not prove the handset's installed build.
 
 
+## GitHub mirrors found on 2026-09-27
+
+- [neronewman/A10-A105F-kernel, commit `ad623e4df6718c2c371eee6d5fa8c4e1108b75bc`](https://github.com/neronewman/A10-A105F-kernel/tree/ad623e4df6718c2c371eee6d5fa8c4e1108b75bc) is a public mirror identifying its contents as SM-A105F material from Samsung Open Source Release Center. Its `Kernel/Makefile` says Linux 4.4.111; `a10_00_defconfig` sets `CONFIG_ARM64=y`; and its Exynos 7884B A10 SWA DTS is target-specific. The repository does not supply the original Samsung OSS ZIP or a checksum to authenticate that ZIP.
+- [twrpdtgen/android_device_samsung_a10, commit `af1681558e88d88a625115334724dca8acfbdd80`](https://github.com/twrpdtgen/android_device_samsung_a10/tree/af1681558e88d88a625115334724dca8acfbdd80) identifies model SM-A105F and build fingerprint `A105FDDS9CWD2`. Its checked-in community `prebuilt/dtbo.img` has SHA-256 `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7` and contains an A10 SWA OPEN 00 overlay. It is not the stock AP firmware image for the handset.
+- GitHub searches did not surface the original Samsung OSS ZIP or a matching AP firmware archive. Do not use Cloudflare-gated download pages or bypass their human checks.
+
+## Additional Exynos7885 kernel source reviewed — 2026-09-27
+
+- [geckyn/android_kernel_samsung_exynos7885](https://github.com/geckyn/android_kernel_samsung_exynos7885/tree/ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282), branch `exelixis-2019-04-05_clang_lto`, tip `ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282` (2020-09-10): top-level Makefile says Linux 4.4.200. It has an A10 ARM64 defconfig with A10-labelled options, but selects Exynos7885 and Exynos7884A; its compiled DT list includes generic Universal7884 Treble targets, not an A10 SWA/SM-A105F board DTS. Useful downstream 4.4 comparison only; exact target correspondence and provenance are not established.
+- Relevant pinned files: [a10_00_defconfig](https://github.com/geckyn/android_kernel_samsung_exynos7885/blob/ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282/arch/arm64/configs/a10_00_defconfig), [Exynos DTS Makefile](https://github.com/geckyn/android_kernel_samsung_exynos7885/blob/ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282/arch/arm64/boot/dts/exynos/Makefile), and [Universal7884 Treble DTS](https://github.com/geckyn/android_kernel_samsung_exynos7885/blob/ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282/arch/arm64/boot/dts/exynos/exynos7884-universal7884_P_MR_Treble.dts).
+
+
 ## 2026-09-27 firmware candidate acquisition
 
 The user-supplied Google Drive download yielded `SAMFW.COM_SM-A105F_SLK_A105FDDS9CWB3_fac.zip` (3,839,978,221 bytes), SHA-256 `88e6b6f28c8e913520e660dd4d3f68e72e319812d1d595de899c0657298bda43`. `unzip -t` reported no archive errors. Its AP member is `AP_A105FDDS9CWB3_CL2184546_QB62519790_REV00_user_low_ship_meta_OS11.tar.md5`, with ZIP CRC32 0x79437588. The AP member's final 32 bytes are not a valid MD5 trailer; do not claim AP MD5 authentication. The archive hash is a local integrity fingerprint for the downloaded copy, not a Samsung signature or proof of phone-installed firmware. Extracted proprietary firmware binaries remain outside the repository.

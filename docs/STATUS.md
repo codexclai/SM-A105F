@@ -1,3 +1,12 @@
+# Current checkpoint — 2026-09-27
+
+- Live private GitHub `main` was independently read at `b5f74dd950c3332ec3c67e317b8b142e60158378` before this update; this checkpoint is based on that live tree.
+- GitHub evidence now includes a Samsung A10 Linux 4.4.111 source mirror with ARM64 A10 defconfig/SWA DTS, and a commit-pinned SM-A105F TWRP tree tied to product fingerprint D9CWD2. The tree specifies Android boot header v1, 2048-byte page size, base/offset values, and separate dtb/dtbo partition names. Its prebuilt DTBO was parsed and identified as one `A10 SWA OPEN 00` overlay.
+- Added and tested `scripts/inspect_android_dtbo.py`; 5/5 tests pass. The real community prebuilt parses with expected table header and metadata.
+- Exact stock AP firmware is still absent. Eureka and TWRP build recipes conflict on configured boot-image limit (36 MiB vs 53 MiB), and no stock boot header, ramdisk provenance, kernel payload encoding, actual partition size, or handset overlay choice is verified.
+- Eureka Linux 4.4.302-p6 host build remains the nearer hardware path. Upstream 6.x still lacks A10 DTS; the Samsung A10 vendor DTS has now been located as a porting reference. No new kernel/boot build ran here because the Codespace terminal was unavailable. No phone action occurred.
+- Next gate: inspect the handset-matching AP archive (candidate clue only: A105FDDS9CWD2) or extracted `boot.img`, `dtb.img`, `dtbo.img`; only then determine exact packaging. Keep phone untouched.
+
 # Resumption checkpoint — 2026-09-27 Asia/Colombo
 
 GitHub connector readback verifies the canonical private `main` at `54a6388c24a792e1cde4d1a376ff4bc804bd1cc8`. The attached `upload/Chat-0.json` is available in this conversation and contains 107 user messages; it was inspected for user decisions. Current repo authority notes preserve the key decisions: continue the existing private repository, do not resume tmate/SSHx, leave the physical phone untouched absent specific informed approval, and avoid arbitrary readiness percentages.
@@ -129,6 +138,14 @@ The separate Linux 4.4 Eureka R24U host build and its private draft artifact are
 Read-only inspection of work/build/eureka-r24u-sm-a105f-retry1/.config found built-in ext4 (CONFIG_EXT4_FS=y), initrd (CONFIG_BLK_DEV_INITRD=y, CONFIG_RD_GZIP=y), devtmpfs and its automatic mount (CONFIG_DEVTMPFS=y, CONFIG_DEVTMPFS_MOUNT=y), MMC and block support, Samsung serial console, and Exynos 7885 SoC support. These are configuration prerequisites only, not proof that the storage controller, partition map, bootloader handoff, device tree, or Debian init sequence works on SM-A105F.
 
 The repository's scripts directory contains only scripts/build-eureka-kernel.sh. Its final checks establish Image and vmlinux outputs, reject unresolved KernelSU symbols, report kernelrelease and hashes; it does not create an initramfs, boot.img, AnyKernel archive, or flash package. The current host output has a generic exynos7885.dtb and seven A10 DTBOs but no exact boot image, no extracted matching vendor ramdisk, and no device-tested DTB/DTBO composition. Therefore no packaging format or bootable artifact is justified yet. Next dependency is exact SM-A105F boot image/layout and matching stock ramdisk/device-tree provenance from an authorized source; do not infer it from the generic DTB or other A10 variants. No device access occurred.
+
+## 2026-09-27 continuation update
+
+- Live project work is now based on GitHub main through the preceding journal/source-review update; the linked geckyn tree was inspected at commit ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282. It is Linux 4.4.200 with an A10 ARM64 defconfig, but not an exact A105F tree: its config selects Exynos7885/7884A and it has only generic Universal7884 Treble DTs in the inspected set. The candidate is documented as comparison material, not a boot input.
+- The TeraBox share named SM-A105F_A105FDDS9CWB3 launched a terabox:// transfer instead of yielding downloadable image bytes; the browser security policy blocks that protocol. No firmware was acquired and no protocol workaround was attempted.
+- The Codespace browser currently requires Google sign-in and is stopped at an invalid security-code challenge. This session has no verified live Codespace terminal/filesystem, so there was no kernel build or firmware download into Codespace. No phone action occurred.
+- Repeat local verification of scripts/inspect_android_dtbo.py completed: 5/5 tests passed; the saved community SWA DTBO parsed as one 2 KiB-page entry. This remains community evidence, not stock-image provenance.
+- Exact blocker: obtain handset-matched stock AP data and authenticate an active Codespace session before host compilation there. Next: complete the visible Google verification manually if Codespace work is needed; obtain the confirmed-build AP archive or stock boot.img/dtb.img/dtbo.img for read-only inspection. Keep Linux 4.4 candidates separate and the modern 6.x port as a distinct track.
 
 
 ## 2026-09-27 update: firmware candidate parsed
