@@ -160,3 +160,11 @@ The user-attached Samsung source archive is integrity-checked and correlates to 
 The AP candidate's stock boot is Android header v1 / 2048-byte page, kernel size 29,112,000 bytes at `0x10008000`, and no stock ramdisk. Base DT and DTBO are separate 8 MiB table images with a single Exynos7885 base entry and a matching A10 SWA OPEN 00 overlay entry. Firmware archive is a user-provided candidate; active phone firmware, installed partition sizes, bootloader DT flow, selected overlay, and authenticity remain unverified.
 
 The previous Eureka Linux 4.4.302 image is still only a different-source host artifact; modern Linux 6.18.54 remains a generic Exynos7885 build without A10 DTS. Latest verified GitHub/Codespace baseline before these edits: `7b3f7c77f2c761c0b4182b75735786e5f066c9c1` (`main`). Phone untouched. Next: use the Samsung tree and a matching cross-toolchain in Codespaces, build and record hashes, then derive a nonempty Debian initramfs and package only against independently verified stock layout.
+
+
+## Live continuation update — 2026-09-27
+
+- Live private GitHub `main` and Codespace checkout were verified aligned at `c6fcc6fb1a19006630bea8efa1edc0bd2f56a31b` before this update.
+- Official AOSP Android AArch64 GCC 4.9 is staged outside Git in ignored `work/toolchains/aosp-gcc49`, pinned to populated upstream commit `f144eaad5cb268fa4105875e98ed4ac47efa7f06`. The compiler passes a freestanding AArch64 compile/static-link probe; the Samsung kernel build has not run.
+- Only source transfer part confirmed in Codespace is `work/kernel.tar.gz.part-00` at 33,554,432 bytes. The current Work session does not have the supplied source ZIP available. Reconstruction and hash verification are blocked pending retransmission of the source archive.
+- Physical handset remains untouched. No Debian boot image or initramfs is validated or deployable.

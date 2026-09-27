@@ -415,3 +415,12 @@ Downloaded the user's A105FDDS9CWB3 archive into temporary Codespace storage, ve
 - Attempted DTB build; it failed in kernel preparation because the source's default Android GCC 4.9 cross-toolchain is absent. No new kernel binary or device-tree artifact was produced. Large archive upload to the Codespace failed at the browser file-input transfer; proprietary source remains outside Git.
 - Corrected the AP kernel payload size transcription from 2,911,200 to 29,112,000 bytes. Boot v1/page 2048, empty stock ramdisk, external DT and DTBO table evidence, and limitations remain in `docs/BOOT_PACKAGING.md`.
 - Phone remains untouched. Next engineering gate: make the attached source available to the existing Codespace or provision a documented compatible cross-toolchain there, then build the 4.4.177 A10 SWA source and compare outputs. Continue the 6.x A10 DTS port separately.
+
+
+## 2026-09-27 — stage pinned AOSP Android GCC 4.9
+
+Verified the live private GitHub `main` and existing Codespace were aligned at `c6fcc6fb1a19006630bea8efa1edc0bd2f56a31b` before this documentation update. Inspected ignored Codespace work and found only kernel source transfer part 00 (33,554,432 bytes); no complete Samsung source archive or other split parts are present in that environment. The outer source ZIP attachment did not materialize in this Work session, so the supplied kernel source cannot currently be reconstructed here.
+
+Staged official AOSP Android AArch64 GCC 4.9 from populated commit `f144eaad5cb268fa4105875e98ed4ac47efa7f06` into ignored `work/toolchains/aosp-gcc49`. `aarch64-linux-android-gcc --version` reports `4.9.x-google 20150123 (prerelease)`; compiler SHA-256 `d44383cc35c6d777384b65edffbd57f5ee9085576c281831b9280b9061c4106`. A freestanding C probe compiled and statically linked to an AArch64 ELF executable. This is a toolchain smoke test, not a Linux kernel build. No source archive was committed.
+
+Next: recover/retransfer the user-supplied kernel archive, reconstruct and verify its recorded SHA-256, then attempt the exact Samsung 4.4.177 build with this staged compiler and record compatibility failures or outputs. The phone remains untouched.
