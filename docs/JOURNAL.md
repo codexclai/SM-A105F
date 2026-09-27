@@ -382,3 +382,16 @@ Verified live main at 933ef839a18e3e3821709674b4d293764390edb1 before work. Pinn
 Selected upstream Linux 6.18.54 for the modern LTS compile experiment. Generic ARM64 DTBs completed; kernel Image compilation remains in progress at journal time. Initial Clang 14 and LLD 14 version gates were respected; Clang 18 and LLD 18 were installed from the Codespace distro and the build resumed. This generic compile is not an A105F boot package: upstream lacks an A10/exynos7884B DTS, and Exynos7885 jackpotlte is a different device.
 
 Samsung source portal and SamFW both served human verification. No challenge was solved or bypassed. Exact stock AP firmware and Samsung OSS source remain unacquired; no handset action was performed.
+
+
+## 2026-09-27 — GitHub A10 source/DTBO audit and parser
+
+Searched GitHub mirrors for the A105F Samsung source archive and AP firmware. No matching downloadable firmware archive or original `SM-A105F_SWA_RR_Opensource.zip` was found in the searched repositories. Did find `neronewman/A10-A105F-kernel`, whose README labels the tree as Samsung Open Source Release Center material. Pinned commit `ad623e4df6718c2c371eee6d5fa8c4e1108b75bc` identifies kernel 4.4.111, an ARM64 A10 defconfig, and an A10 SWA DTS. Treat mirror lineage as a claim until the official archive can be hashed and matched.
+
+Inspected the commit-pinned TWRP generator tree `twrpdtgen/android_device_samsung_a10` (commit `af1681558e88d88a625115334724dca8acfbdd80`). Its product build string is `A105FDDS9CWD2`; the build recipe specifies header version 1 and the previously documented 2 KiB page/base/offset values, and recovery.fstab lists separate dtb and dtbo partition names. The build config's image limit (55,574,528 bytes) conflicts with Eureka's boot limit (37,748,736 bytes). Neither build recipe proves real AP-image fields or partition capacity.
+
+Fetched the pinned tree's prebuilt DTBO and ran the newly added read-only checker. Input SHA-256: `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`; table version 0, one entry, 2048-byte page, custom pair 0/0xff. FDT strings identify `A10 SWA OPEN 00` and `EXYNOS7884B`, confirming the community prebuilt's SWA identity. This is strong target-family evidence but not handset firmware provenance.
+
+Added an Android DT table inspector and five unit tests. All passed; the script parsed the real community prebuilt successfully. No kernel or boot-image build was run: this workspace has no Codespace terminal/session, the browser reconnection attempt was interrupted, and building a Debian boot image is still gated on matching stock AP inputs. Physical phone remains untouched.
+
+Next step: obtain the exact AP archive for the handset's confirmed build (candidate clue only: D9CWD2), extract/hash its stock boot, dtb, and dtbo images, and compare header/partition metadata against the two community build recipes before selecting packaging parameters. Continue the 4.4.302 R24U bring-up path and assess porting the discovered Samsung A10 DTS into upstream 6.x; do not mark either as boot-tested.

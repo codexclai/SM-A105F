@@ -1,3 +1,12 @@
+# Current checkpoint — 2026-09-27
+
+- Live private GitHub `main` was independently read at `b5f74dd950c3332ec3c67e317b8b142e60158378` before this update; this checkpoint is based on that live tree.
+- GitHub evidence now includes a Samsung A10 Linux 4.4.111 source mirror with ARM64 A10 defconfig/SWA DTS, and a commit-pinned SM-A105F TWRP tree tied to product fingerprint D9CWD2. The tree specifies Android boot header v1, 2048-byte page size, base/offset values, and separate dtb/dtbo partition names. Its prebuilt DTBO was parsed and identified as one `A10 SWA OPEN 00` overlay.
+- Added and tested `scripts/inspect_android_dtbo.py`; 5/5 tests pass. The real community prebuilt parses with expected table header and metadata.
+- Exact stock AP firmware is still absent. Eureka and TWRP build recipes conflict on configured boot-image limit (36 MiB vs 53 MiB), and no stock boot header, ramdisk provenance, kernel payload encoding, actual partition size, or handset overlay choice is verified.
+- Eureka Linux 4.4.302-p6 host build remains the nearer hardware path. Upstream 6.x still lacks A10 DTS; the Samsung A10 vendor DTS has now been located as a porting reference. No new kernel/boot build ran here because the Codespace terminal was unavailable. No phone action occurred.
+- Next gate: inspect the handset-matching AP archive (candidate clue only: A105FDDS9CWD2) or extracted `boot.img`, `dtb.img`, `dtbo.img`; only then determine exact packaging. Keep phone untouched.
+
 # Resumption checkpoint — 2026-09-27 Asia/Colombo
 
 GitHub connector readback verifies the canonical private `main` at `54a6388c24a792e1cde4d1a376ff4bc804bd1cc8`. The attached `upload/Chat-0.json` is available in this conversation and contains 107 user messages; it was inspected for user decisions. Current repo authority notes preserve the key decisions: continue the existing private repository, do not resume tmate/SSHx, leave the physical phone untouched absent specific informed approval, and avoid arbitrary readiness percentages.

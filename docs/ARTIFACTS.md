@@ -75,3 +75,10 @@ The current Codespace/GitHub source checkpoint is `24af697c7728246677cc07771b4c0
 The host-build outputs and provenance are stored in a private draft prerelease: https://github.com/thamindudenuwarajayasinghe/SM-A105F/releases/tag/untagged-89276aa14e95f9571dda . Release ID 397403676; draft and prerelease flags were verified. Archive: SM-A105F-eureka-r24u-clang14-host-build-20260926-retry1.tar.gz, 25,921,038 bytes, SHA-256 d329705eb201eef4d6c0d91b26bf8617476a783bfa534110128f00c52b8a980b. Its .sha256 sidecar is also attached. Contents include build record, input and resolved configs, Image, vmlinux, System.map, generic Exynos 7885 DTB, seven A10 DTBOs, provenance log, and per-file checksums. All archived file checksums passed at packaging. A fresh release download passed sidecar verification and byte-for-byte cmp against the original; the tar listed 22 entries.
 
 This bundle is not a bootable or flashable package and has not been tested on hardware. Keep the release private and draft pending a separately validated packaging and boot path.
+
+
+## Android DT table inspector
+
+- `scripts/inspect_android_dtbo.py` — read-only host-side parser for Android DT table headers and entry metadata; SHA-256 `472dfd0682eaf0532f44ad69abf1b50956e1ee37921e86fd326188e74cfab177`.
+- `tests/test_inspect_android_dtbo.py` — five parser validation tests; SHA-256 `accc5c0b15cd971c0a631564a6c748132a24e8cee38699e5bb8f6465e7efc880`. All five passed locally.
+- Exercised against the GitHub community TWRP A10 SWA DTBO (89,232 bytes; SHA-256 `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`). This input is not stored in the project. No bootable/deployable artifact was produced.

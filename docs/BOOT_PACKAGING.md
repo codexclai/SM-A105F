@@ -47,3 +47,30 @@ Unknown from the inspected downstream recipe: boot header version, boot ramdisk 
 ## Acquisition blocker
 
 Samsung source portal and the SamFW listing both presented human-verification challenges in this browser. No challenge was solved or bypassed. Samsung source archive SM-A105F_SWA_RR_Opensource.zip and exact AP archive for SM-A105F/SLK/A105FDDS9CWB3 have not been acquired or hashed. Samsung update notice identifies build A105FDDS9CWB3; that listing does not prove it is the handset installed build. Required next evidence is the original AP archive or extracted stock boot.img + dtbo.img for the handset exact firmware; the Samsung OSS archive is also needed to authenticate the vendor-kernel source baseline.
+
+
+## GitHub A10 source and image evidence — 2026-09-27
+
+### Target-specific kernel and board tree
+
+A public GitHub mirror, [neronewman/A10-A105F-kernel at ad623e4df6718c2c371eee6d5fa8c4e1108b75bc](https://github.com/neronewman/A10-A105F-kernel/tree/ad623e4df6718c2c371eee6d5fa8c4e1108b75bc), contains a Samsung A10 source snapshot. Its README identifies it as SM-A105F source from Samsung Open Source Release Center (a repository claim, not an independently verified original ZIP). `Kernel/Makefile` identifies Linux 4.4.111; `Kernel/arch/arm64/configs/a10_00_defconfig` has `CONFIG_ARM64=y`. The tree has the A10 SWA board source `exynos7884B-a10_swa_open_00.dts` and related common/GPIO includes. That DTS declares `samsung,A10 SWA OPEN 00`, `samsung,EXYNOS7884B`, and hardware revision range 0–255. The mirror commit is dated 2020-04-17 and has no verifiable Samsung archive checksum. This is useful source/provenance evidence, not proof of the original archive identity.
+
+The TWRP generator tree [twrpdtgen/android_device_samsung_a10 at af1681558e88d88a625115334724dca8acfbdd80](https://github.com/twrpdtgen/android_device_samsung_a10/tree/af1681558e88d88a625115334724dca8acfbdd80) names model SM-A105F and records build fingerprint `samsung/a10dd/a10:11/RP1A.200720.012/A105FDDS9CWD2:user/release-keys` in `omni_a10.mk`. Its `BoardConfig.mk` specifies boot header version 1, page size 2048, kernel base `0x10000000`, ramdisk offset `0x01000000`, tags offset `0x00000100`, and `Image`. It refers to a prebuilt DTBO. Its `recovery.fstab` exposes distinct `dtb` and `dtbo` partitions. These are build-tree settings for that community recovery target, not an extracted stock boot image or proof of this handset's installed firmware.
+
+The TWRP tree sets recovery `TARGET_ARCH := arm`; the Samsung A10 kernel defconfig independently sets `CONFIG_ARM64=y`. Thus the recovery userspace setting must not be mistaken for the kernel's bitness.
+
+### DTBO payload parsed and checked
+
+I fetched the community tree's [`prebuilt/dtbo.img`](https://github.com/twrpdtgen/android_device_samsung_a10/blob/af1681558e88d88a625115334724dca8acfbdd80/prebuilt/dtbo.img) from that exact commit and inspected the bytes without modifying the image. Size is 89,232 bytes; SHA-256 is `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`. Its Android DT table has magic `0xd7b7ab1e`, version 0, 32-byte header/entries, one entry, page size 2048, ID/revision 0/0, and custom values `[0, 255, 0, 0]`. The FDT strings identify `samsung,A10 SWA OPEN 00` and `samsung,EXYNOS7884B`; this resolves the SWA-versus-SEA ambiguity in the custom metadata for this community prebuilt. It is a specific SWA candidate associated with the tree's D9CWD2 product description, not evidence of the active overlay on the physical phone.
+
+Added `scripts/inspect_android_dtbo.py` and five unit tests. The parser validates table/entry bounds, page size, non-overlap, and FDT magic; it reports metadata and does not select an overlay. `python3 -m unittest discover -s tests -v` passed 5/5. The checker was also run against the fetched prebuilt above and reported the values recorded here. The fetched binary is not committed as a firmware artifact.
+
+### Packaging conclusion
+
+The TWRP header/page/offset recipe agrees with the Eureka offsets, but its configured boot/recovery image limit is 55,574,528 bytes (53 MiB), while the Eureka common recipe says a 37,748,736-byte boot limit (36 MiB). Both values are downstream build settings and neither has been confirmed as the stock partition's actual byte size. The target-family evidence now supports a header-v1, 2 KiB-page packaging candidate and a separate DTBO path; it still does not establish stock ramdisk contents/compression, boot image kernel payload encoding, stock DTB placement, exact stock cmdline, or partition capacity.
+
+The D9CWD2 fingerprint is a useful matching AP-firmware search candidate, not the installed firmware identifier. The exact AP archive (or stock `boot.img`, `dtb.img`, and `dtbo.img` extracted from the phone's confirmed build) remains necessary before building a Debian boot image. Do not combine the community prebuilt and Eureka kernel based only on matching offsets. Keep the device untouched.
+
+### Kernel path update
+
+The 4.4 vendor path now has both the previously built Eureka R24U candidate (Linux 4.4.302-p6) and a GitHub Samsung-source mirror (Linux 4.4.111) with A10 ARM64 defconfig and board DTS evidence. R24U remains the established host-build track; the 4.4.111 mirror is a distinct provenance/reference source, not a replacement binary. The modern 6.x upstream tree still lacks an A10/7884B DTS; the Samsung A10 DTS provides a concrete hardware-description source to port, but no modern A10 kernel has been built or validated in this session.
