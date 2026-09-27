@@ -434,3 +434,20 @@ Read the public `topser9/kernel_samsung_universal7885` `master` branch through G
 Inspected torvalds/linux branch snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab via GitHub API. Upstream contains Exynos7885 SoC and pinctrl DTS includes and exynos7885-jackpotlte.dts, whose header/model/compatible identify Samsung Galaxy A8 2018 / SM-A530F. The current Exynos DTS directory contains no SM-A105F/A10 board DTS. This improves the modern port baseline to a supported SoC plus related board, but board-specific A10 wiring/peripherals are still missing.
 
 Read the official kernel.org release listing on 2026-09-27: stable 7.2.8 and longterm 6.18.54, both dated 2026-09-25. Retain the already acquired 6.18.54 tree as the sustained-support candidate and assess a newer stable kernel as a separate track after board support and driver feasibility are understood. Do not call either tree bootable or device-ready.
+
+
+## 2026-09-27 — Codespace Debian ARM64 userspace execution check
+
+- Reverified the live private Codespace at main 920cc8edcf2d57ea796660ade4944d01d3669500 with a clean worktree before documentation edits. Only source chunk part-00 is present in ignored work/; its 33,554,432-byte size and SHA-256 9d2a1f893c8878182ce408da2104c8a61068a08abc6c2c572d83f433c5e98588 match the local source split. A 1 MiB upload probe failed in the VS Code file chooser with “No node found for given backend id”; no partial upload remains.
+- Confirmed the preserved Debian rootfs artifact remains 196,298,240 bytes and SHA-256 67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975. Separately, ignored work/debian-trixie-arm64-minbase.tar is 196,298,240 bytes with SHA-256 a69837bfdffded1e15c8e4e48097506033709e4f945c635acb835042f7838cab; its sidecar matches. These are different archives, not a checksum error. Both dpkg status members have SHA-256 d94cfb0af3f888e038ef898a0f8c24ca220142926fb86a60cd09c1cc269dc4ff and 117 installed package records. Debian release metadata confirms 13.7.
+- The existing extracted tree work/rootfs-verify.Gm1DH4 exactly matches the minbase archive under tar --compare (exit 0). Comparing that tree to the preserved rootfs artifact returns differences because this is a distinct archive, including a randomized temporary apt source-list filename and extracted file timestamps.
+- qemu-aarch64-static executed the tree’s ARM64 Bash 5.2.37, dpkg 1.22.22, dpkg-query 1.22.22, apt 3.0.3 and systemd 257 version commands successfully. Required init/systemd, etc/fstab, dev/proc/sys/run and dpkg status paths exist. This is user-mode binary execution, not a system boot, init handoff, target-kernel compatibility test or phone validation.
+- Reran python3 -m unittest discover -s tests -v: 17/17 tests passed. No project source transfer was completed, no kernel build ran, and the Galaxy A10 remains untouched.
+
+## 2026-09-27 continuation
+
+- Verified the repo's existing test suite: 17/17 tests pass.
+- Built generic ARM64 `Image` from upstream Linux 6.18.54 with the staged generic configuration, Clang/LLVM, `ld.lld-18`, and four jobs. Build completed; image is 39 MiB and its SHA-256 is recorded in `docs/ARTIFACTS.md`.
+- Confirmed this is only a generic baseline, not a device-ready SM-A105F kernel.
+- Tried the supplied Samsung source attachment through the authorized file download path; the file reference could not be resolved. Drive connector and signed-in Drive UI searches found no archive. Samsung Open Source portal is currently presenting Cloudflare human verification in the browser, so it was not interacted with.
+- The Codespace still has only the first 32-MiB Samsung kernel archive chunk, not a complete source archive. No flash, phone modification, or hardware test was performed.

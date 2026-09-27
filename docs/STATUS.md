@@ -1,5 +1,14 @@
 # Current checkpoint — 2026-09-27
 
+## Latest verified continuation — 2026-09-27 UTC
+
+- Before these documentation edits, live private GitHub main and the existing Codespace checkout were aligned at 920cc8edcf2d57ea796660ade4944d01d3669500; the worktree was clean. This continuation adds newer evidence above the historical checkpoints below.
+- The user-supplied Samsung source ZIP is present in this conversation upload. Its SHA-256 is 5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931. The extracted Kernel.tar.gz SHA-256 is e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2. Codespace work/ has only part-00 (33,554,432 bytes; SHA-256 9d2a1f893c8878182ce408da2104c8a61068a08abc6c2c572d83f433c5e98588), matching local part-00 exactly. The remaining six chunks were not transferred; a 1 MiB test upload hit a Codespaces file-chooser backend error. No reconstruction or Samsung 4.4.177 build has occurred.
+- Two distinct 196,298,240-byte Debian 13.7 ARM64 archives exist: the preserved artifact at work/artifacts/rootfs/debian-trixie-arm64-rootfs.tar (SHA-256 67ba3022d06670799eb4a3d51d9897655bd1641835e346bf8c6126ed9471f975), matching its recorded sidecar, and the ignored candidate work/debian-trixie-arm64-minbase.tar (SHA-256 a69837bfdffded1e15c8e4e48097506033709e4f945c635acb835042f7838cab), matching its sidecar. They are not hash duplicates; both report 117 installed package records and their dpkg status members have the same SHA-256. Exact tar comparison of the extracted verification tree succeeded against the minbase candidate and not the older preserved TAR.
+- QEMU user-mode execution against the exact minbase extraction succeeded for ARM64 Bash 5.2.37, dpkg/dpkg-query 1.22.22, apt 3.0.3, and systemd 257. The expected init/systemd, fstab, dev, proc, sys, run, and dpkg status paths exist. This validates basic userspace execution and archive extraction only; there has been no QEMU system boot, kernel/rootfs integration, initramfs, boot image, or phone test.
+- The repository unit suite passed 17/17 tests. The phone remains untouched. Next: resolve a supported Codespaces transfer path for the remaining source chunks, verify reconstructed archive SHA-256, then build the supplied 4.4.177 source with the staged toolchain.
+
+
 - Live private GitHub `main` was independently read at `b5f74dd950c3332ec3c67e317b8b142e60158378` before this update; this checkpoint is based on that live tree.
 - GitHub evidence now includes a Samsung A10 Linux 4.4.111 source mirror with ARM64 A10 defconfig/SWA DTS, and a commit-pinned SM-A105F TWRP tree tied to product fingerprint D9CWD2. The tree specifies Android boot header v1, 2048-byte page size, base/offset values, and separate dtb/dtbo partition names. Its prebuilt DTBO was parsed and identified as one `A10 SWA OPEN 00` overlay.
 - Added and tested `scripts/inspect_android_dtbo.py`; 5/5 tests pass. The real community prebuilt parses with expected table header and metadata.
@@ -176,3 +185,10 @@ A public same-version mirror (`topser9/kernel_samsung_universal7885`, `master` c
 ### Modern kernel upstream support check - 2026-09-27
 
 Upstream Linux torvalds/linux snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab has Exynos7885 SoC DTS and a Galaxy A8 2018 / SM-A530F board DTS, but no A10/A105F board DTS in the inspected Exynos directory. Kernel.org listed 7.2.8 as stable and 6.18.54 as longterm on 2026-09-27. Keep 6.18.54 as the first longterm port candidate and evaluate 7.2 separately; neither is A10-ready.
+
+## Host-side verification update — 2026-09-27
+
+- `python3 -m unittest discover -s tests -v`: PASS (17 tests).
+- Generic upstream Linux 6.18.54 ARM64 `Image`: PASS; see `docs/ARTIFACTS.md` for build command, path, and SHA-256.
+- This image is not an SM-A105F candidate. The complete Samsung source archive remains unavailable; current staged Samsung kernel archive material is incomplete (`work/kernel.tar.gz.part-00` only).
+- Physical SM-A105F remains untouched. Device-specific integration, boot-image validation, and hardware validation remain outstanding.
