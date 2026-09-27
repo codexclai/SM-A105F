@@ -37,3 +37,10 @@ Samsung's official Release Center also exposes an [Open Source Inquiry](https://
 - Eureka downstream board recipe (pinned): https://github.com/eurekadevelopment/android_device_samsung_exynos7885/tree/9bc3736454ee43dcdff12ad86189b2a96fdb2678. Reviewed a10/BoardConfig.mk, universal7885-common/BoardConfigCommon.mk, universal7885-common/dtbo/a10.cfg, and dtbo/Android.mk. This is Android ROM build metadata, not stock Samsung boot-image evidence.
 - Linux 6.18.54 official source archive from kernel.org was hashed locally as 9df30b02dd8102bbd0be52556288e1f6889dbbe7f1ddb96fb847d0becf3eacac; source tree contains Exynos7885 common support and jackpotlte DTS, not an A10 DTS.
 - Exact AP firmware archive and Samsung OSS source archive remain unavailable because both Samsung and the credible firmware listing presented human-verification challenges in this browser. No challenge was solved or bypassed. Samsung update metadata identifies A105FDDS9CWB3 but does not prove the handset's installed build.
+
+
+## 2026-09-27 firmware candidate acquisition
+
+The user-supplied Google Drive download yielded `SAMFW.COM_SM-A105F_SLK_A105FDDS9CWB3_fac.zip` (3,839,978,221 bytes), SHA-256 `88e6b6f28c8e913520e660dd4d3f68e72e319812d1d595de899c0657298bda43`. `unzip -t` reported no archive errors. Its AP member is `AP_A105FDDS9CWB3_CL2184546_QB62519790_REV00_user_low_ship_meta_OS11.tar.md5`, with ZIP CRC32 0x79437588. The AP member's final 32 bytes are not a valid MD5 trailer; do not claim AP MD5 authentication. The archive hash is a local integrity fingerprint for the downloaded copy, not a Samsung signature or proof of phone-installed firmware. Extracted proprietary firmware binaries remain outside the repository.
+
+The firmware archive identifies a stock-kernel build string 4.4.177-2184546. The user-recommended `neronewman/A10-A105F-kernel` mirror remains a candidate source snapshot (4.4.111 at recorded commit `ad623e4df6718c2c371eee6d5fa8c4e1108b75bc`); it is not authenticated as the exact source for this firmware build. Exact Samsung OSS source archive and installed handset firmware identity remain unresolved.

@@ -75,3 +75,10 @@ The current Codespace/GitHub source checkpoint is `24af697c7728246677cc07771b4c0
 The host-build outputs and provenance are stored in a private draft prerelease: https://github.com/thamindudenuwarajayasinghe/SM-A105F/releases/tag/untagged-89276aa14e95f9571dda . Release ID 397403676; draft and prerelease flags were verified. Archive: SM-A105F-eureka-r24u-clang14-host-build-20260926-retry1.tar.gz, 25,921,038 bytes, SHA-256 d329705eb201eef4d6c0d91b26bf8617476a783bfa534110128f00c52b8a980b. Its .sha256 sidecar is also attached. Contents include build record, input and resolved configs, Image, vmlinux, System.map, generic Exynos 7885 DTB, seven A10 DTBOs, provenance log, and per-file checksums. All archived file checksums passed at packaging. A fresh release download passed sidecar verification and byte-for-byte cmp against the original; the tar listed 22 entries.
 
 This bundle is not a bootable or flashable package and has not been tested on hardware. Keep the release private and draft pending a separately validated packaging and boot path.
+
+
+## 2026-09-27 additions
+
+- `scripts/inspect_android_boot_layout.py`: standard-library parser for Android boot headers, Android DT tables, and FDT compatible properties.
+- `tests/test_inspect_android_boot_layout.py`: four synthetic-format regression tests.
+- `docs/reports/a105f-cwb3.json`: measured boot, DT, and DTBO layouts and extracted-image hashes from user-supplied candidate firmware. No proprietary firmware binaries or full archive are checked in.

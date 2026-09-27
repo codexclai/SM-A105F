@@ -1,0 +1,107 @@
+{
+  "boot": {
+    "file": "boot.img",
+    "file_size": 37748736,
+    "layout": {
+      "cmdline": "androidboot.selinux=permissive androidboot.selinux=permissive",
+      "file_size": 37748736,
+      "header_size": 1648,
+      "header_version": 1,
+      "kernel_load_address": 268468224,
+      "kernel_size": 29112000,
+      "os_version_raw": 369099122,
+      "page_size": 2048,
+      "product_name": "SRPSA10A009KU",
+      "ramdisk_load_address": 0,
+      "ramdisk_size": 0,
+      "recovery_dtbo_offset": 0,
+      "recovery_dtbo_size": 0,
+      "second_load_address": 0,
+      "second_size": 0,
+      "tags_load_address": 268435712
+    },
+    "sha256": "4dfa2224281458cd0ac3a0aa752681eb6445836fc0d58cea69225dfab113476e"
+  },
+  "dt": {
+    "file": "dt.img",
+    "file_size": 8388608,
+    "layout": {
+      "entries": [
+        {
+          "custom": [
+            0,
+            255,
+            0,
+            0
+          ],
+          "fdt": {
+            "compatible": [
+              "samsung,armv8",
+              "samsung,exynos7885"
+            ],
+            "model": [],
+            "root_node_found": true,
+            "totalsize": 90300,
+            "version": 17
+          },
+          "id": 0,
+          "index": 0,
+          "offset": 64,
+          "revision": 0,
+          "size": 90300
+        }
+      ],
+      "entries_offset": 32,
+      "entry_count": 1,
+      "entry_size": 32,
+      "header_size": 32,
+      "magic": "0xd7b7ab1e",
+      "page_size": 2048,
+      "total_size": 90364,
+      "unreferenced_bytes_in_total_size": 0,
+      "version": 0
+    },
+    "sha256": "829b27e33b9235d6603701a25f21dd0240bd5cb43ddc8bbf3c383d30a353a475"
+  },
+  "dtbo": {
+    "file": "dtbo.img",
+    "file_size": 8388608,
+    "layout": {
+      "entries": [
+        {
+          "custom": [
+            0,
+            255,
+            0,
+            0
+          ],
+          "fdt": {
+            "compatible": [
+              "samsung,A10 SWA OPEN 00",
+              "samsung,EXYNOS7884B"
+            ],
+            "model": [],
+            "root_node_found": true,
+            "totalsize": 89168,
+            "version": 17
+          },
+          "id": 0,
+          "index": 0,
+          "offset": 64,
+          "revision": 0,
+          "size": 89168
+        }
+      ],
+      "entries_offset": 32,
+      "entry_count": 1,
+      "entry_size": 32,
+      "header_size": 32,
+      "magic": "0xd7b7ab1e",
+      "page_size": 2048,
+      "total_size": 89232,
+      "unreferenced_bytes_in_total_size": 0,
+      "version": 0
+    },
+    "sha256": "eb32301133ba5742afe0d782c83db7b75ac040cbb115015a355d902702db7737"
+  }
+}

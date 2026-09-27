@@ -382,3 +382,8 @@ Verified live main at 933ef839a18e3e3821709674b4d293764390edb1 before work. Pinn
 Selected upstream Linux 6.18.54 for the modern LTS compile experiment. Generic ARM64 DTBs completed; kernel Image compilation remains in progress at journal time. Initial Clang 14 and LLD 14 version gates were respected; Clang 18 and LLD 18 were installed from the Codespace distro and the build resumed. This generic compile is not an A105F boot package: upstream lacks an A10/exynos7884B DTS, and Exynos7885 jackpotlte is a different device.
 
 Samsung source portal and SamFW both served human verification. No challenge was solved or bypassed. Exact stock AP firmware and Samsung OSS source remain unacquired; no handset action was performed.
+
+
+## 2026-09-27 boot-layout measurement and parser tests
+
+Downloaded the user's A105FDDS9CWB3 archive into temporary Codespace storage, verified its SHA-256 and outer ZIP integrity, extracted the AP boot/DT/DTBO images without adding firmware binaries to Git, and parsed the Android boot header and standard Android DT table/FDT metadata. Added `scripts/inspect_android_boot_layout.py` and synthetic parser regression tests. The suite now passes 12 tests (8 pre-existing, 4 new). The report is `docs/reports/a105f-cwb3.json`. Stock kernel reports 4.4.177-2184546; stock boot declares no ramdisk. The unknown vendor tail is explicitly left uninterpreted. Firmware is a candidate only; the phone remains untouched.

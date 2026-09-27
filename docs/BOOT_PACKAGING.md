@@ -47,3 +47,20 @@ Unknown from the inspected downstream recipe: boot header version, boot ramdisk 
 ## Acquisition blocker
 
 Samsung source portal and the SamFW listing both presented human-verification challenges in this browser. No challenge was solved or bypassed. Samsung source archive SM-A105F_SWA_RR_Opensource.zip and exact AP archive for SM-A105F/SLK/A105FDDS9CWB3 have not been acquired or hashed. Samsung update notice identifies build A105FDDS9CWB3; that listing does not prove it is the handset installed build. Required next evidence is the original AP archive or extracted stock boot.img + dtbo.img for the handset exact firmware; the Samsung OSS archive is also needed to authenticate the vendor-kernel source baseline.
+
+
+## 2026-09-27: measured user-supplied firmware boot layout
+
+Candidate input: Android 11 firmware archive `A105FDDS9CWB3` supplied by the user. It is not verified as the handset's currently installed build. Parsed image metadata and hashes are persisted in [the machine-readable layout report](reports/a105f-cwb3.json).
+
+| AP image | Measured layout | SHA-256 |
+| --- | --- | --- |
+| `boot.img` | 37,748,736 bytes; Android boot header v1; page 2048; kernel 2,911,200 bytes at 0x10008000; ramdisk 0; second loader 0; tags 0x10000100; Android 11, patch 2023-02 | `4dfa2224281458cd0ac3a0aa752681eb6445836fc0d58cea69225dfab113476e` |
+| `dt.img` | 8,388,608 bytes; Android DT table v0, page 2048, one FDT at offset 64, 90,300 bytes; compatible `samsung,armv8` / `samsung,exynos7885` | `829b27e3b9235d6603701a25f21dd0240bd5cb43ddc8bbf3c383d30a353a475` |
+| `dtbo.img` | 8,388,608 bytes; Android DT table v0, page 2048, one FDT at offset 64, 89,168 bytes; compatible `samsung,A10 SWA OPEN 00` / `samsung,EXYNOS7884B`; entry ID/revision 0/0, custom values [0,255,0,0] | `eb32301133ba5742afe0d782c83bd7b75ac040cbb115015a355d902702db737` |
+
+The stock boot header declares an empty ramdisk. Bytes outside its described kernel/header sections include nonzero, vendor-specific data and a `SEANDROIDENFORCE` marker; the tail has not been classified as a whole. Do not pass that tail off as an initramfs. Debian boot therefore requires an explicit, nonempty Debian initramfs plus a selected kernel and a board-matched DTB/overlay. The firmware candidate provides useful DT/DTBO evidence, but does not identify which overlay the handset selects.
+
+The boot image is exactly 36 MiB, matching the size in the downstream Eureka BoardConfig recipe. That coincidence is not independent proof of the installed boot partition capacity or of the complete partition map. Downstream Eureka offsets (base 0x10000000, kernel 0x8000, ramdisk 0x01000000, tags 0x100) remain candidate recipe values, not all observed stock header values. No flash or device action has occurred.
+
+Stock kernel extracted from the declared kernel payload reports Linux 4.4.177-2184546, build #1 SMP PREEMPT, Wed Feb 22 02:47:35 KST 2023, GCC 4.9. This is distinct from the available Eureka source tree's 4.4.111 baseline. The existing 134-byte Eureka initramfs stub is empty and is not Debian boot media. The 6.18.54 modern source remains a generic Exynos7885 bring-up path without A10/A105F board DTS.
