@@ -72,3 +72,9 @@ The Codespace now contains the populated historical commit `f144eaad5cb268fa4105
 ## Public 4.4.177 mirror cross-check — 2026-09-27
 
 Inspected public repository [`topser9/kernel_samsung_universal7885`](https://github.com/topser9/kernel_samsung_universal7885), branch `master` at `ae3bd5aef8fd81bff8c8807fa9a16ef47970b9c3` (branch commit dated 2022-02-26). The repository Makefile identifies Linux 4.4.177, and `arch/arm64/configs/exynos7885-a10_defconfig` is a Linux/arm64 config with Exynos7885 and A10-specific driver selections. However, that config selects the Android P kernel option, not Android R; the repository DTS listing has no A10/A105F-named board DTS and instead includes generic Universal7885 and other model-family boards. The repository description is multi-device and its commit is unsigned. This is a useful same-version driver/config comparison, but not evidence of the supplied Samsung source archive, exact SM-A105F SWA board composition, or an interchangeable build input.
+
+## Mainline Exynos7885 and current kernel release references - 2026-09-27
+
+Upstream Linux repository torvalds/linux, branch snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab, contains arch/arm64/boot/dts/exynos/exynos7885.dtsi, exynos7885-pinctrl.dtsi, and exynos7885-jackpotlte.dts. The board file identifies the Galaxy A8 2018 / SM-A530F; the inspected Exynos DTS directory has no A10/A105F-named board file. This is upstream SoC and related-board reference material, not an SM-A105F device tree.
+
+The official Linux Kernel Archives (https://www.kernel.org/) snapshot read 2026-09-27 listed stable 7.2.8 dated 2026-09-25 and longterm 6.18.54 dated 2026-09-25. Keep the project's 6.18.54 tree as its current longterm modernization baseline while evaluating newer stable releases independently; no A10 boot support is implied.

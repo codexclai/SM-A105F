@@ -428,3 +428,9 @@ Next: recover/retransfer the user-supplied kernel archive, reconstruct and verif
 ## 2026-09-27 — public same-version kernel mirror audit
 
 Read the public `topser9/kernel_samsung_universal7885` `master` branch through GitHub API at `ae3bd5aef8fd81bff8c8807fa9a16ef47970b9c3`. The Makefile says Linux 4.4.177; `arch/arm64/configs/exynos7885-a10_defconfig` is ARM64 and selects Exynos7885 plus A10-specific display/sensor options. It selects the Android P Kconfig branch, while the Samsung source archive evidence identifies Android 11/R. The Exynos DTS directory listing contains no A10/A105F-named board DTS. The repository is a multi-device community mirror and the inspected tip commit is unsigned. Decision: preserve it as a driver/config reference only, not as a substitute exact-device build source. This source-side inspection does not require or claim a kernel build.
+
+## 2026-09-27 - inspect mainline Exynos7885 and kernel tracks
+
+Inspected torvalds/linux branch snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab via GitHub API. Upstream contains Exynos7885 SoC and pinctrl DTS includes and exynos7885-jackpotlte.dts, whose header/model/compatible identify Samsung Galaxy A8 2018 / SM-A530F. The current Exynos DTS directory contains no SM-A105F/A10 board DTS. This improves the modern port baseline to a supported SoC plus related board, but board-specific A10 wiring/peripherals are still missing.
+
+Read the official kernel.org release listing on 2026-09-27: stable 7.2.8 and longterm 6.18.54, both dated 2026-09-25. Retain the already acquired 6.18.54 tree as the sustained-support candidate and assess a newer stable kernel as a separate track after board support and driver feasibility are understood. Do not call either tree bootable or device-ready.

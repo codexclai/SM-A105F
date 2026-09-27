@@ -172,3 +172,7 @@ The previous Eureka Linux 4.4.302 image is still only a different-source host ar
 ### Mirror audit update — 2026-09-27
 
 A public same-version mirror (`topser9/kernel_samsung_universal7885`, `master` commit `ae3bd5aef8fd81bff8c8807fa9a16ef47970b9c3`) has Linux 4.4.177 and `exynos7885-a10_defconfig`, but that config selects Android P and no A10/A105F DTS appears in its Exynos DTS directory. Retain as a comparison source only; exact supplied Android R kernel build remains blocked on archive transfer.
+
+### Modern kernel upstream support check - 2026-09-27
+
+Upstream Linux torvalds/linux snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab has Exynos7885 SoC DTS and a Galaxy A8 2018 / SM-A530F board DTS, but no A10/A105F board DTS in the inspected Exynos directory. Kernel.org listed 7.2.8 as stable and 6.18.54 as longterm on 2026-09-27. Keep 6.18.54 as the first longterm port candidate and evaluate 7.2 separately; neither is A10-ready.
