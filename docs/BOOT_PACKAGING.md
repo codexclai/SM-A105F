@@ -74,3 +74,10 @@ The D9CWD2 fingerprint is a useful matching AP-firmware search candidate, not th
 ### Kernel path update
 
 The 4.4 vendor path now has both the previously built Eureka R24U candidate (Linux 4.4.302-p6) and a GitHub Samsung-source mirror (Linux 4.4.111) with A10 ARM64 defconfig and board DTS evidence. R24U remains the established host-build track; the 4.4.111 mirror is a distinct provenance/reference source, not a replacement binary. The modern 6.x upstream tree still lacks an A10/7884B DTS; the Samsung A10 DTS provides a concrete hardware-description source to port, but no modern A10 kernel has been built or validated in this session.
+
+
+## TeraBox firmware link attempt — 2026-09-27
+
+The user-supplied TeraBox share visibly identifies `SAMFW.COM_SM-A105F_A105FDDS9CWB3_fac_265315.zip` (dated 2023-10-25). After the user authorized the Google OAuth consent, the consent tab was no longer present when checked; the TeraBox share then opened without the earlier login overlay. Clicking its Download control navigated to a `terabox://transfer/` custom protocol instead of producing a browser download. The browser security policy blocks further access to that protocol, so no transfer/download was verified and no firmware bytes were acquired. No CAPTCHA or bot check was solved or bypassed. The shared AP filename is not proof that this is the handset's installed build.
+
+The DTBO inspector and its existing fixture were rerun in this workspace: 5/5 tests passed, and the community DTBO parsed as one 2 KiB-page SWA candidate (artifact SHA-256 remains `0ab4db461c3d9c7467859d99c23dee7f9da54c9af2f884c4880f5570564a7ad7`). The exact handset-matching stock AP inputs remain the blocker. Next, obtain the confirmed-build AP archive or its `boot.img`, `dtb.img`, and `dtbo.img` as files available for read-only local inspection; then record image/header provenance and capacity before packaging.
