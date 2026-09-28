@@ -208,7 +208,7 @@ The 4.4.177 source now builds successfully with the official historical AOSP GCC
 ## 2026-09-28 Debian 13.7 ARM64 rootfs rebuild
 
 - Rebuilt with sudo -n bash scripts/build-rootfs.sh /workspaces/SM-A105F/work/artifacts/debian13-trixie-minbase-arm64-20260928-hosts.tar; mmdebstrap completed successfully in 292.8296 seconds using the registered AArch64 qemu-user binfmt handler and Debian Trixie repositories.
-- Archive size: 196,298,240 bytes. SHA-256: 15ace8db2a2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d; the generated sidecar passed sha256sum -c from work/artifacts/.
+- Archive size: 196,298,240 bytes. SHA-256: 15acec8dba2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d; the generated sidecar passed sha256sum -c from work/artifacts/.
 - The archive contains /etc/hosts with 127.0.0.1 localhost and ::1 localhost ip6-localhost ip6-loopback, produced by the customize hook in scripts/build-rootfs.sh.
 - Extracted archive reports Debian GNU/Linux 13 (trixie), VERSION 13. dpkg --audit returned 0 with no output. qemu-aarch64-static -L <rootfs> <rootfs>/usr/lib/systemd/systemd --version ran and reported systemd 257.13-1~deb13u1. This is AArch64 user-mode execution, not a system boot.
-- Build log: work/logs/rootfs-build-hosts-20260928.log. Archive, sidecar, and log remain in ignored Codespace work/ pending private release preservation. Rootfs remains unprovisioned; mount discovery, initramfs integration, console/network boot, Samsung boot behavior, and physical-device validation remain unverified. The phone is untouched.
+- Build log: work/logs/rootfs-build-hosts-20260928.log. Archive, sidecar, and log are attached to private draft GitHub release rootfs-trixie-arm64-20260928; tar and sidecar readback was byte-identical. Rootfs remains unprovisioned; mount discovery, initramfs integration, console/network boot, Samsung boot behavior, and physical-device validation remain unverified. The phone is untouched.
