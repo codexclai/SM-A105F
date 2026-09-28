@@ -145,3 +145,12 @@ Supplied firmware evidence measures header v1, 2048-byte pages, kernel load addr
 Codex CLI read-only review identified and we fixed an early init ordering defect: virtual filesystem mount attempts had preceded creation of /dev/console, devtmpfs failure had been ignored, and console redirection came later. The init now mounts devtmpfs first, falls back to console/null nodes on failure, establishes the console before diagnostics, treats proc/sys/tmpfs mount failures as emergency-shell conditions, and only then resolves/mounts root and switch_roots. Required BusyBox mknod applet is confirmed in the Trixie static binary. The archive was rebuilt and host checks rerun. Superseding archive SHA-256: f4112366306b8b26c295a715350398e96a737b4e817425ffd73f010b565729e0.
 
 The kernel build log's duplicate target warnings are in scripts/Makefile.fwinst for duplicate /lib/firmware/tsp_melfas/mss100_a30.fw and mss100_a30_old.fw install targets. Saved config has both CONFIG_TOUCHSCREEN_MELFAS_MSS100 and CONFIG_TOUCHSCREEN_MELFAS_MSS100_A30KOR unset. Warnings are firmware install-rule duplication, not compile or module link failures; no source change made.
+
+
+## Debian ARM64 rootfs host validation (2026-09-28)
+
+Read-only validation of the staged Debian 13.7 ARM64 minbase archive and extraction at `work/rootfs-verify.Gm1DH4` found 117 package records, all reporting the `ii` (installed/configured) status when queried as root. `dpkg --audit --root=work/rootfs-verify.Gm1DH4` emitted no audit findings. The archive SHA-256 is `a69837bfddfed1e15c84ee480097506033709e4f945c635acb835042f7838cab`.
+
+The ARM64 systemd executable was identified as an AArch64 ELF using the rootfs dynamic loader, and `qemu-aarch64-static -L work/rootfs-verify.Gm1DH4 .../usr/lib/systemd/systemd --version` executed successfully, reporting systemd 257 (257.13-1~deb13u1). This validates userspace executable/loader compatibility under QEMU user emulation only; it does not boot the rootfs or validate Samsung hardware.
+
+Presence checks found `/etc/fstab`, `/etc/hostname`, `/etc/resolv.conf`, systemd, the SSH service unit and a tty1 getty enablement link. The extraction lacks `/etc/hosts`; the fstab and network configuration still need review/population for the eventual target. SSH policy, actual network interfaces, root-device discovery and full system boot remain unvalidated. The rootfs has no confirmed device-specific root UUID yet.
