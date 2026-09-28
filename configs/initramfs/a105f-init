@@ -1,0 +1,63 @@
+#!/bin/sh
+export PATH=/bin
+mkdir -p /dev /proc /sys /run /newroot
+mount -t devtmpfs devtmpfs /dev 2>/dev/null || true
+mount -t proc proc /proc 2>/dev/null || true
+mount -t sysfs sysfs /sys 2>/dev/null || true
+mount -t tmpfs -o mode=0755 tmpfs /run 2>/dev/null || true
+exec </dev/console >/dev/console 2>&1
+echo 'SM-A105F Debian initramfs: early boot'
+mkdir -p /dev /proc /sys /run /newroot
+[ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
+[ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
+exec </dev/console >/dev/console 2>&1
+mount -t devtmpfs devtmpfs /dev || { echo 'devtmpfs mount failed'; exec sh; }
+mount -t proc proc /proc || { echo 'proc mount failed'; exec sh; }
+mount -t sysfs sysfs /sys || { echo 'sysfs mount failed'; exec sh; }
+mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run || { echo 'tmpfs /run mount failed'; exec sh; }
+ROOT=
+FSTYPE=ext4
+for arg in $(cat /proc/cmdline); do
+  case "$arg" in
+    root=*) ROOT="${arg#root=}" ;;
+    rootfstype=*) FSTYPE="${arg#rootfstype=}" ;;
+  esac
+done
+emergency() {
+  echo "INITRAMFS ERROR: $1"
+  echo 'Kernel command line:'
+  cat /proc/cmdline
+  echo 'Available block devices:'
+  cat /proc/partitions
+  blkid 2>/dev/null || true
+  echo 'Emergency shell: type exit to halt or inspect manually.'
+  exec sh
+}
+[ -n "$ROOT" ] || emergency 'missing root= kernel parameter'
+resolve_root() {
+  case "$ROOT" in
+    UUID=*) blkid -U "${ROOT#UUID=}" 2>/dev/null ;;
+    PARTUUID=*) blkid -t "PARTUUID=${ROOT#PARTUUID=}" -o device 2>/dev/null | head -n 1 ;;
+    *) echo "$ROOT" ;;
+  esac
+}
+ROOTDEV=
+n=0
+while [ "$n" -lt 30 ]; do
+  ROOTDEV=$(resolve_root)
+  [ -n "$ROOTDEV" ] && [ -b "$ROOTDEV" ] && break
+  n=$((n + 1))
+  sleep 1
+done
+[ -n "$ROOTDEV" ] && [ -b "$ROOTDEV" ] || emergency "root device not found: $ROOT"
+echo "Mounting $ROOTDEV as $FSTYPE"
+mount -t "$FSTYPE" -o rw "$ROOTDEV" /newroot || emergency "cannot mount $ROOTDEV"
+[ -x /newroot/sbin/init ] || emergency 'root filesystem lacks /sbin/init'
+mkdir -p /newroot/dev /newroot/proc /newroot/sys /newroot/run
+mount -o move /dev /newroot/dev || emergency 'cannot move /dev'
+mount -o move /proc /newroot/proc || emergency 'cannot move /proc'
+mount -o move /sys /newroot/sys || emergency 'cannot move /sys'
+mount -o move /run /newroot/run || emergency 'cannot move /run'
+echo 'Switching to Debian init'
+exec switch_root /newroot /sbin/init
+emergency 'switch_root returned unexpectedly'
