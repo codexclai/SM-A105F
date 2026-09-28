@@ -138,3 +138,10 @@ tests/test_a105f_initramfs.sh passes: host and ARM64 BusyBox shell syntax, stati
 ## Android boot-v1 packaging boundary
 
 Supplied firmware evidence measures header v1, 2048-byte pages, kernel load address 0x10008000, tags address 0x10000100, and a 29,112,000-byte kernel; stock candidate boot.img has no ramdisk and reports ramdisk_addr=0. It does not establish an acceptable nonempty-ramdisk load address, boot partition capacity, Samsung footer/signature handling, AVB acceptance, or bootloader behavior. The file length (37,748,736 bytes) is not a partition-capacity measurement. Therefore the initramfs remains a host artifact and must not be packaged for flashing using generic load-address defaults. Base DTB and overlay remain separate Samsung table images: measured dt.img contains one 90,300-byte FDT and dtbo.img one 89,168-byte FDT, each table v0 with 2048-byte pages and separate 8 MiB candidate files.
+
+
+### Independent review correction — 2026-09-28
+
+Codex CLI read-only review identified and we fixed an early init ordering defect: virtual filesystem mount attempts had preceded creation of /dev/console, devtmpfs failure had been ignored, and console redirection came later. The init now mounts devtmpfs first, falls back to console/null nodes on failure, establishes the console before diagnostics, treats proc/sys/tmpfs mount failures as emergency-shell conditions, and only then resolves/mounts root and switch_roots. Required BusyBox mknod applet is confirmed in the Trixie static binary. The archive was rebuilt and host checks rerun. Superseding archive SHA-256: f4112366306b8b26c295a715350398e96a737b4e817425ffd73f010b565729e0.
+
+The kernel build log's duplicate target warnings are in scripts/Makefile.fwinst for duplicate /lib/firmware/tsp_melfas/mss100_a30.fw and mss100_a30_old.fw install targets. Saved config has both CONFIG_TOUCHSCREEN_MELFAS_MSS100 and CONFIG_TOUCHSCREEN_MELFAS_MSS100_A30KOR unset. Warnings are firmware install-rule duplication, not compile or module link failures; no source change made.

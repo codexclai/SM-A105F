@@ -1,20 +1,29 @@
 #!/bin/sh
-export PATH=/bin
+export PATH=/bin:$PATH
 mkdir -p /dev /proc /sys /run /newroot
-mount -t devtmpfs devtmpfs /dev 2>/dev/null || true
-mount -t proc proc /proc 2>/dev/null || true
-mount -t sysfs sysfs /sys 2>/dev/null || true
-mount -t tmpfs -o mode=0755 tmpfs /run 2>/dev/null || true
-exec </dev/console >/dev/console 2>&1
-echo 'SM-A105F Debian initramfs: early boot'
-mkdir -p /dev /proc /sys /run /newroot
+emergency() {
+  echo "INITRAMFS ERROR: $1"
+  echo 'Kernel command line:'
+  cat /proc/cmdline 2>/dev/null || true
+  echo 'Available block devices:'
+  cat /proc/partitions 2>/dev/null || true
+  blkid 2>/dev/null || true
+  echo 'Emergency shell: type exit to halt or inspect manually.'
+  exec sh
+}
+if ! mount -t devtmpfs devtmpfs /dev; then
+  [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
+  [ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
+  [ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
+  emergency 'devtmpfs mount failed'
+fi
 [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
 [ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
 exec </dev/console >/dev/console 2>&1
-mount -t devtmpfs devtmpfs /dev || { echo 'devtmpfs mount failed'; exec sh; }
-mount -t proc proc /proc || { echo 'proc mount failed'; exec sh; }
-mount -t sysfs sysfs /sys || { echo 'sysfs mount failed'; exec sh; }
-mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run || { echo 'tmpfs /run mount failed'; exec sh; }
+echo 'SM-A105F Debian initramfs: early boot'
+mount -t proc proc /proc || emergency 'proc mount failed'
+mount -t sysfs sysfs /sys || emergency 'sysfs mount failed'
+mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run || emergency 'tmpfs /run mount failed'
 ROOT=
 FSTYPE=ext4
 for arg in $(cat /proc/cmdline); do
@@ -23,24 +32,14 @@ for arg in $(cat /proc/cmdline); do
     rootfstype=*) FSTYPE="${arg#rootfstype=}" ;;
   esac
 done
-emergency() {
-  echo "INITRAMFS ERROR: $1"
-  echo 'Kernel command line:'
-  cat /proc/cmdline
-  echo 'Available block devices:'
-  cat /proc/partitions
-  blkid 2>/dev/null || true
-  echo 'Emergency shell: type exit to halt or inspect manually.'
-  exec sh
-}
-[ -n "$ROOT" ] || emergency 'missing root= kernel parameter'
 resolve_root() {
   case "$ROOT" in
-    UUID=*) blkid -U "${ROOT#UUID=}" 2>/dev/null ;;
-    PARTUUID=*) blkid -t "PARTUUID=${ROOT#PARTUUID=}" -o device 2>/dev/null | head -n 1 ;;
+    UUID=*) busybox blkid -U "${ROOT#UUID=}" 2>/dev/null ;;
+    PARTUUID=*) busybox blkid -t "PARTUUID=${ROOT#PARTUUID=}" -o device 2>/dev/null | head -n 1 ;;
     *) echo "$ROOT" ;;
   esac
 }
+[ -n "$ROOT" ] || emergency 'missing root= kernel parameter'
 ROOTDEV=
 n=0
 while [ "$n" -lt 30 ]; do
