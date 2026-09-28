@@ -216,3 +216,10 @@ The 4.4.177 source now builds successfully with the official historical AOSP GCC
 ### Rootfs provisioning follow-up (2026-09-28)
 
 A read-only audit of the published Debian 13.7 ARM64 rootfs archive (196,298,240 bytes; SHA-256 `15acec8dba2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d`) confirmed 117 installed package records and `/etc/fstab` still contains the unconfigured base-system placeholder. `/etc/hostname` contains the Codespace-generated value `codespaces-1ab46f`; replace it with an intentional target hostname during rootfs generation/provisioning before preparing any boot candidate. The corrected localhost `/etc/hosts` is present. Target root-device/fstab entries and networking configuration remain unprovisioned. No source or artifact changed during this audit; this archive is still a host-validated candidate and has not booted.
+
+
+### Rootfs hostname remediation (2026-09-28)
+
+The mmdebstrap builder now explicitly writes hostname a10 rather than inheriting the Codespace name. Rebuild completed in 324.2584 seconds. New archive debian13-trixie-minbase-arm64-20260928-hostname.tar: 196,298,240 bytes; SHA-256 29d42b57730c4976b9c3c599b79cd9ecdf33c7017033cdb50d107bfb4323cc. The checksum sidecar verifies when checked from work/artifacts because its recorded path is basename-relative. TAR inspection confirms hostname a10, deterministic localhost entries, 117 installed package records and the still-unconfigured fstab placeholder. Extraction, dpkg --audit, and AArch64 systemd 257.13 execution under qemu-user completed without errors. This remains host-only; root-device mapping, networking and boot validation are open.
+
+Modern-kernel source check: upstream Linux includes an Exynos7885 sibling board DTS for Samsung Galaxy A8 2018 / SM-A530F, compatible samsung,jackpotlte and samsung,exynos7885. It uses the Exynos7885 SoC include and describes board memory, serial aliases, GPIO keys and eMMC. This is useful reuse evidence, not an SM-A105F DTS; A10 SWA base/overlay differences must be reconciled before a mainline board port.

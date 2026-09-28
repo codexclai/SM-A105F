@@ -112,3 +112,10 @@ Configuration audit output: `.config` 145,302-byte Samsung A10 config generated 
 | File | Purpose and scope | Size / SHA-256 | Provenance and verification | Location |
 |---|---|---|---|---|
 | debian13-trixie-minbase-arm64-20260928-hosts.tar | Unprovisioned Debian 13.7 ARM64 minbase rootfs archive | 196,298,240 bytes / 15acec8dba2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d | Built by scripts/build-rootfs.sh with mmdebstrap and Debian Trixie ARM64; sidecar checksum verified; /etc/hosts checked; package audit clean; systemd 257.13 executed with qemu-aarch64-static user-mode emulation. No boot test. | Ignored Codespace work/artifacts/; build log at work/logs/rootfs-build-hosts-20260928.log; private draft GitHub release rootfs-trixie-arm64-20260928; tar and sidecar readback was byte-identical. |
+
+
+### Debian 13.7 ARM64 rootfs with deterministic hostname (2026-09-28)
+
+- Archive: work/artifacts/debian13-trixie-minbase-arm64-20260928-hostname.tar, 196,298,240 bytes, SHA-256 29d42b57730c4976b9c3c599b79cd9ecdf33c7017033cdb50d107bfb4323cc.
+- Private draft GitHub release tag: rootfs-trixie-arm64-hostname-20260928. Assets: archive, checksum sidecar and build log. Host validation only; no phone boot.
+- Verified hostname a10; fstab remains the unconfigured base-system placeholder. Archive and systemd userspace checks passed. The prior 15acec8d rootfs archive is historical; this corrected archive supersedes it for future host packaging.

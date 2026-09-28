@@ -459,3 +459,12 @@ The rootfs builder now writes standard localhost entries through a mmdebstrap cu
 ## 2026-09-28 rootfs provisioning audit
 
 Read-only TAR inspection of `debian13-trixie-minbase-arm64-20260928-hosts.tar` confirmed SHA-256 `15acec8dba2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d`, 117 installed package records, the corrected localhost hosts file, and an unconfigured `/etc/fstab`. The archive hostname is `codespaces-1ab46f`, inherited from the build environment. Set an intentional hostname in the reproducible builder and regenerate the candidate before boot-chain integration. Root-device mapping and target networking remain open; no handset test occurred.
+
+
+## 2026-09-28 deterministic rootfs hostname and upstream Exynos7885 evidence
+
+Rootfs archive inspection found that the build environment's Codespace hostname had been embedded in /etc/hostname. Added an explicit mmdebstrap customization hook writing a10. A fresh build completed in 324.2584 s; archive 196,298,240 bytes, SHA-256 29d42b57730c4976b9c3c599b79cd9ecdf33c7017033cdb50d107bfb4323cc. Sidecar check passed from work/artifacts. Host checks: 117 installed package records, fstab placeholder remains, corrected localhost hosts, dpkg audit clean, qemu-aarch64-static ran systemd 257.13. No full-system or phone boot.
+
+Codex CLI read-only review agreed the repeated mmdebstrap hooks and order are valid; it also observed no test specifically covers the hostname hook. Direct verification remains the archive contents plus bash -n and full tests (19/19).
+
+For Linux 6.x, checked upstream torvalds/linux file arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts at commit bf1aee1ad1c087ffda617207890dc92042a28c96 (commit date 2026-08-01). The DTS identifies Galaxy A8 2018 SM-A530F and compatibles samsung,jackpotlte / samsung,exynos7885 and includes exynos7885.dtsi. Board nodes cover memory, serial aliases, GPIO keys and eMMC. Use it as sibling SoC/board evidence while deriving an SM-A105F SWA DTS from the exact Samsung 4.4.177 source; do not treat it as a drop-in A10 tree. Source URL: https://github.com/torvalds/linux/blob/bf1aee1ad1c087ffda617207890dc92042a28c96/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
