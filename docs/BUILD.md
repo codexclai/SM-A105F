@@ -183,3 +183,12 @@ The current Work session cannot access the user-supplied `SM-A105F_SWA_RR_Openso
 ### Public 4.4.177 mirror disposition — 2026-09-27
 
 The `topser9/kernel_samsung_universal7885` public mirror is a Linux 4.4.177 tree with an A10-labelled ARM64 defconfig, but its inspected branch selects Android P and has no A10/A105F-named DTS in the Exynos DTS directory. Keep it as a driver/config reference; do not substitute it for the user-supplied Android 11/R SWA source.
+
+
+## Verified Samsung Android 11 kernel build (2026-09-28)
+
+The supplied Samsung Linux 4.4.177 tree completed an in-tree build with official AOSP GCC 4.9.2 AArch64. Parameters: ARCH=arm64, PLATFORM_VERSION=11, ANDROID_MAJOR_VERSION=r, exynos7885-a10_defconfig, CROSS_COMPILE=/workspaces/SM-A105F/work/toolchains/aosp-aarch64-gcc49/bin/aarch64-linux-android-, HOSTCFLAGS+=-fcommon, make -j4 Image dtbs modules. In-tree mode follows build_kernel.sh and is required by init/uh.S relative .incbin. -fcommon resolves legacy host DTC duplicate yylloc on modern host GCC.
+
+Toolchain repository https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9, commit 1182d9bbb6902eb7a5650143dc2d56f520bc2a2a, parent of b4a601f binary rename. GCC payload aarch64-linux-android-gcc-4.9.x reports GCC 4.9.2 20150123 prerelease, target aarch64-linux-android, SHA256 d0778e4c07ba17c6d56859d74317c810a32497c31a72de630766f2bff727c867. AOSP canonical compiler at this tree is a deprecation wrapper; ignored checkout preserves it and symlinks canonical name to actual compiler payload. Android 11 tags checked were already post-removal.
+
+Build exited 0. Outputs: Image, vmlinux, System.map, exynos7885.dtb, exynos7884B-a10_swa_open_00.dtbo, kutf.ko. .config SHA256 27f3714948ad986331949100e702834fac8d08e917cf5e891c6dc6defe4261a3. Artifacts and SHA256SUMS are in ignored work/artifacts/samsung-4.4.177-a105f-gcc49; full sources/logs remain in ignored work/. Module phase printed duplicate firmware target warnings; outputs are host-built only. No phone/boot validation was performed.
