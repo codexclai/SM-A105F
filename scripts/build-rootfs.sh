@@ -49,6 +49,7 @@ SOURCES
 
 mmdebstrap --mode=root --architectures=arm64 --variant=minbase --format=tar \
     --include=systemd-sysv,openssh-server,iproute2,ca-certificates,kmod \
+    --customize-hook='printf "127.0.0.1 localhost\\n::1 localhost ip6-localhost ip6-loopback\\n" > "$1/etc/hosts"' \
     trixie "$staged_output" "$sources"
 (cd -- "$staging_dir" && sha256sum -- "$output_name" > "$output_name.sha256")
 

@@ -1,6 +1,6 @@
 # Artifact inventory
 
-Current status: a user-supplied candidate stock firmware archive and Samsung SM-A105F SWA source archive have been acquired and hash-recorded; the firmware AP tar.md5 trailer is invalid and neither input is cryptographically authenticated. An experimental third-party-source kernel and DTB/DTBO host build and two distinct Debian ARM64 rootfs TARs are recorded below. No initramfs, boot image or phone image has been built. Historical entries below remain for provenance.
+Current status: a user-supplied candidate stock firmware archive and Samsung SM-A105F SWA source archive have been acquired and hash-recorded; the firmware AP tar.md5 trailer is invalid and neither input is cryptographically authenticated. An experimental third-party-source kernel and DTB/DTBO host build and two distinct Debian ARM64 rootfs TARs are recorded below. A nonempty initramfs and Android boot-v1 packaging candidate are recorded below as host-side structural candidates. They have not been tested on the phone, and no device deployment has occurred. Historical entries below remain for provenance. Historical entries below remain for provenance.
 
 | File | Purpose and scope | Size / SHA-256 | Provenance and verification | Location |
 | --- | --- | --- | --- | --- |
@@ -106,3 +106,9 @@ Configuration audit output: `.config` 145,302-byte Samsung A10 config generated 
 - Build command: `make -C work/sources/linux-6.18.54 O=work/build/linux-6.18.54-arm64 ARCH=arm64 LLVM=1 LD=ld.lld-18 -j4 Image`. Log: `work/logs/linux-6.18.54-arm64-image.log`.
 - Scope: generic upstream baseline only. It does not establish SM-A105F device support, Samsung boot-image compatibility, or phone bootability. Do not flash this image.
 - Samsung source archive: not staged. Only `work/kernel.tar.gz.part-00` (32 MiB) is present; no complete Samsung ZIP/tar was found. The attached file reference could not be resolved by the available file download service, My Drive search returned no match, and Samsung's official portal presents a Cloudflare human-verification page in this browser.
+
+## Debian ARM64 rootfs artifact - 2026-09-28
+
+| File | Purpose and scope | Size / SHA-256 | Provenance and verification | Location |
+|---|---|---|---|---|
+| debian13-trixie-minbase-arm64-20260928-hosts.tar | Unprovisioned Debian 13.7 ARM64 minbase rootfs archive | 196,298,240 bytes / 15ace8db2a2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d | Built by scripts/build-rootfs.sh with mmdebstrap and Debian Trixie ARM64; sidecar checksum verified; /etc/hosts checked; package audit clean; systemd 257.13 executed with qemu-aarch64-static user-mode emulation. No boot test. | Ignored Codespace work/artifacts/; build log at work/logs/rootfs-build-hosts-20260928.log; to be preserved in private release. |

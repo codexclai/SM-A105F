@@ -190,9 +190,25 @@ Upstream Linux torvalds/linux snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab 
 
 - `python3 -m unittest discover -s tests -v`: PASS (17 tests).
 - Generic upstream Linux 6.18.54 ARM64 `Image`: PASS; see `docs/ARTIFACTS.md` for build command, path, and SHA-256.
-- This image is not an SM-A105F candidate. The complete Samsung source archive remains unavailable; current staged Samsung kernel archive material is incomplete (`work/kernel.tar.gz.part-00` only).
+- This image is not an SM-A105F candidate. The original Samsung source archive is not kept in Git; the extracted build source is staged at `work/sources/samsung-a105f` in the Codespace.
 - Physical SM-A105F remains untouched. Device-specific integration, boot-image validation, and hardware validation remain outstanding.
 
 ## 2026-09-28 verified Samsung kernel build
 
 The 4.4.177 source now builds successfully with the official historical AOSP GCC 4.9.2 toolchain. The in-tree Android 11 build produced Image, base DTB, matching A10 SWA DTBO, vmlinux, System.map and one KUTF module. Config SHA-256: 27f3714948ad986331949100e702834fac8d08e917cf5e891c6dc6defe4261a3. See BUILD.md for compiler provenance, exact parameters, host workaround and artifact paths. Host-only result; no phone boot/action.
+
+## 2026-09-28 host verification follow-up
+
+- Re-ran project checks: `python3 -m unittest discover -s tests -v` passed 19 tests; `bash -n scripts/build-rootfs.sh` and `python3 -m py_compile scripts/inventory-archive.py` also passed.
+- Upstream Linux 6.18.54 `dtbs` completed with `make -C work/sources/linux-6.18.54 ARCH=arm64 -j4 dtbs`. The verified `exynos7885-jackpotlte.dtb` is 20,923 bytes with SHA-256 `752c7932361b4b81e2f849c2a13d5687e221d3dea49f648e99a26b5259721261`; it is the Galaxy A8 (2018) reference board, not an A10 image.
+- The current rootfs staging snapshot at `work/rootfs-verify.Gm1DH4` is 200 MiB and reports Debian GNU/Linux 13 (trixie), 117 installed packages, and an empty `dpkg --audit`. AArch64 systemd 257.13 runs under `qemu-aarch64-static`; this is a userspace execution check, not a boot test. `/etc/hosts` is missing, so this snapshot is not ready to boot as a system root.
+- The host-only boot candidate archive `work/artifacts/SM-A105F-host-only-boot-candidate-20260928.tar.gz` has SHA-256 `f28d6a29369a5ea06750123a4ed9af0a9c5f19b0f7ef6c125c98a71e87cfd98a`. It remains a structural candidate without verified handset partition/signing/bootloader compatibility.
+- No physical-device action was performed; the phone remains untouched.
+
+## 2026-09-28 Debian 13.7 ARM64 rootfs rebuild
+
+- Rebuilt with sudo -n bash scripts/build-rootfs.sh /workspaces/SM-A105F/work/artifacts/debian13-trixie-minbase-arm64-20260928-hosts.tar; mmdebstrap completed successfully in 292.8296 seconds using the registered AArch64 qemu-user binfmt handler and Debian Trixie repositories.
+- Archive size: 196,298,240 bytes. SHA-256: 15ace8db2a2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d; the generated sidecar passed sha256sum -c from work/artifacts/.
+- The archive contains /etc/hosts with 127.0.0.1 localhost and ::1 localhost ip6-localhost ip6-loopback, produced by the customize hook in scripts/build-rootfs.sh.
+- Extracted archive reports Debian GNU/Linux 13 (trixie), VERSION 13. dpkg --audit returned 0 with no output. qemu-aarch64-static -L <rootfs> <rootfs>/usr/lib/systemd/systemd --version ran and reported systemd 257.13-1~deb13u1. This is AArch64 user-mode execution, not a system boot.
+- Build log: work/logs/rootfs-build-hosts-20260928.log. Archive, sidecar, and log remain in ignored Codespace work/ pending private release preservation. Rootfs remains unprovisioned; mount discovery, initramfs integration, console/network boot, Samsung boot behavior, and physical-device validation remain unverified. The phone is untouched.

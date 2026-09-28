@@ -451,3 +451,7 @@ Read the official kernel.org release listing on 2026-09-27: stable 7.2.8 and lon
 - Confirmed this is only a generic baseline, not a device-ready SM-A105F kernel.
 - Tried the supplied Samsung source attachment through the authorized file download path; the file reference could not be resolved. Drive connector and signed-in Drive UI searches found no archive. Samsung Open Source portal is currently presenting Cloudflare human verification in the browser, so it was not interacted with.
 - The Codespace still has only the first 32-MiB Samsung kernel archive chunk, not a complete source archive. No flash, phone modification, or hardware test was performed.
+
+## 2026-09-28 - Debian ARM64 rootfs rebuild and host checks
+
+The rootfs builder now writes standard localhost entries through a mmdebstrap customize hook. The new Debian 13.7 ARM64 minbase archive completed successfully in 292.8296 seconds. Its checksum sidecar passed, the extracted package database audit was clean, and AArch64 systemd 257.13 ran under qemu-aarch64-static user-mode emulation. These checks validate archive integrity and userspace execution only; they do not validate a boot, Samsung integration, or the phone. Archive SHA-256: 15ace8db2a2c2ef535d721221d3a049f7ea243c46c8c2a9a4cadaf2ba6b5bb2d.
