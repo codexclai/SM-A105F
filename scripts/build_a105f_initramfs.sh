@@ -3,9 +3,11 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 BUSYBOX_STATIC=${BUSYBOX_STATIC:?set BUSYBOX_STATIC to a verified ARM64 static BusyBox}
 OUT=${OUT:-$ROOT/work/initramfs/a105f-debian-initramfs.cpio.gz}
+[[ "$OUT" = /* ]] || OUT="$ROOT/$OUT"
+mkdir -p "$ROOT/work/initramfs" "$(dirname "$OUT")"
 STAGE=$(mktemp -d "$ROOT/work/initramfs/stage.XXXXXX")
 trap 'rm -rf "$STAGE"' EXIT
-mkdir -p "$(dirname "$OUT")" "$STAGE/bin" "$STAGE/dev" "$STAGE/proc" "$STAGE/sys" "$STAGE/run" "$STAGE/newroot"
+mkdir -p "$STAGE/bin" "$STAGE/dev" "$STAGE/proc" "$STAGE/sys" "$STAGE/run" "$STAGE/newroot"
 install -m 0755 "$BUSYBOX_STATIC" "$STAGE/bin/busybox"
 for applet in sh mount switch_root blkid sleep mkdir cat head; do ln -s busybox "$STAGE/bin/$applet"; done
 install -m 0755 "$ROOT/configs/initramfs/a105f-init" "$STAGE/init"

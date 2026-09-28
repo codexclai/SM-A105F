@@ -14,12 +14,12 @@ emergency() {
 if ! mount -t devtmpfs devtmpfs /dev; then
   [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
   [ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
-  [ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
+  [ -c /dev/console ] && [ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
   emergency 'devtmpfs mount failed'
 fi
 [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
 [ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
-exec </dev/console >/dev/console 2>&1
+[ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
 echo 'SM-A105F Debian initramfs: early boot'
 mount -t proc proc /proc || emergency 'proc mount failed'
 mount -t sysfs sysfs /sys || emergency 'sysfs mount failed'
