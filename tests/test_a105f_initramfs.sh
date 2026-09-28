@@ -1,13 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd "$(dirname "$0")/.."
-archive=work/initramfs/a105f-debian-initramfs.cpio.gz
-init=configs/initramfs/a105f-init
-busybox=work/initramfs/skeleton/usr/bin/busybox
-test -s "$archive"; test -x "$busybox"; gzip -t "$archive"; bash -n "$init"
-qemu-aarch64-static "$busybox" sh -n "$init"
-readelf -h "$busybox" | grep -q AArch64
-entries=$(gzip -dc "$archive" | cpio -it 2>/dev/null)
-for path in init bin/busybox bin/mount bin/switch_root bin/blkid bin/sh dev proc sys run newroot; do grep -qx "$path" <<<"$entries" || { echo "missing entry: $path" >&2; exit 1; }; done
-echo 'initramfs structure and ARM64 init syntax validated'
-sha256sum "$archive" "$busybox"
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+ARCHIVE=${INITRAMFS_ARCHIVE:-"$ROOT/work/initramfs/a105f-debian-initramfs.cpio.gz"}
+BUSYBOX=${BUSYBOX_STATIC:-"$ROOT/work/initramfs/skeleton/usr/bin/busybox"}
+QEMU=${QEMU_AARCH64_STATIC:-qemu-aarch64-static}
+INIT=$ROOT/configs/initramfs/a105f-init
+command -v gzip >/dev/null
+command -v cpio >/dev/null
+command -v readelf >/dev/null
+command -v "$QEMU" >/dev/null
+test -s "$ARCHIVE"
+test -x "$BUSYBOX"
+gzip -t "$ARCHIVE"
+readelf -h "$BUSYBOX" | grep -q 'Machine:.*AArch64'
+if readelf -l "$BUSYBOX" | grep -q INTERP; then echo 'BusyBox must be statically linked' >&2; exit 1; fi
+sh -n "$INIT"
+"$QEMU" "$BUSYBOX" sh -n "$INIT"
+TMP=$(mktemp -d)
+trap 'rm -rf -- "$TMP"' EXIT
+gzip -dc "$ARCHIVE" | (cd "$TMP" && cpio -id --quiet --no-absolute-filenames)
+test -x "$TMP/bin/busybox"
+cmp -- "$BUSYBOX" "$TMP/bin/busybox"
+APPLET_LIST=$("$QEMU" "$BUSYBOX" --list)
+for applet in mount switch_root sleep mkdir cat head sh; do
+  grep -Fxq "$applet" <<<"$APPLET_LIST" || { echo "missing BusyBox applet: $applet" >&2; exit 1; }
+  test -L "$TMP/bin/$applet"
+  test "$(readlink -- "$TMP/bin/$applet")" = busybox
+done
+for path in init bin/busybox bin/mount bin/switch_root bin/sleep bin/mkdir bin/cat bin/head bin/sh dev proc sys run newroot; do
+  gzip -dc "$ARCHIVE" | cpio -it --quiet | grep -Fxq "$path" || { echo "missing archive entry: $path" >&2; exit 1; }
+done
+echo 'initramfs archive extraction, BusyBox static ARM64 identity, applets, and init shell syntax validated'
+sha256sum "$ARCHIVE" "$BUSYBOX"
