@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (root selector and power safety review)
+
+Verified private `main` starting point: `93aa5e8b228f94719fb01eaccd9ab22f6e1782e7`. The initramfs explicit eMMC root selector fix is committed and focused-tested. It accepts a measured `/dev/mmcblk0pN` path and does not scan or select partitions; UUID/PARTUUID continue to require symlinks that the current builder does not create.
+
+Exact Samsung battery/charger/fuel-gauge source review now establishes that charging state, temperature/swelling response, OVP/UVLO response, charge disable/current/float-voltage changes, and fuel-gauge capacity scaling are implemented in Samsung kernel code and depend on Samsung PMIC/ADC callbacks. Linux 6.18's TMU match table lacks `samsung,exynos7885-tmu`. Source-level details and hashes are in [the battery/thermal review](reports/linux-6.18.54-a10-battery-thermal-review-20260929.md). The acquired Platform archive contains no A10 Android service/init source matching these functions, so service names and sysfs consumers remain unresolved.
+
+Exact Samsung-built Image, corrected initramfs, boot DTB/DTBO remain unavailable; GitHub Actions reports zero workflow runs. Corrected cpio creation and Android boot-v1 validation remain blocked on exact verified boot artifacts. No A10 DTS changes or physical operations occurred.
+
+Next: recover existing exact binaries, then continue focused Linux 6.18 mappings without enabling unsupported PMIC/TMU paths. No guessed root identifier. No handset operation authorized or performed.
+
+---
+
 # Current checkpoint — 2026-09-29 (explicit eMMC root selector)
 
 This checkpoint is based on private `main` at `7e9ef4cf4fc104652df34e00f624d7b4e8842dbc`. A source-level initramfs fix now accepts a measured explicit `/dev/mmcblk0pN` root path and rejects other device paths; it never scans or chooses a partition. UUID/PARTUUID remain accepted only when matching `/dev/disk` symlinks already exist; the initramfs builder still does not create those links, so use of those identifiers remains unresolved until a real resolver is added and verified. This does not guess a physical partition number.

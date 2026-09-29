@@ -512,3 +512,11 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Extended archive integrity tests to require the resolver library in the cpio archive and added focused Python/shell tests. Two focused unittest cases passed; POSIX shell and Bash syntax checks passed.
 - Corrected initramfs cpio generation and boot-v1 candidate parsing were not run because exact static ARM64 BusyBox and other verified boot artifacts are still unavailable. UUID/PARTUUID link creation remains a documented limitation.
 - No handset operation occurred.
+
+
+## 2026-09-29 — Battery/charging/TMU source review
+
+- Traced exact Samsung `sec_battery.c`, `sec_charger.c`, `sec_fuelgauge.c`, A10 battery profile, and thermal source. The Samsung kernel implements temperature/swelling and OVP/UVLO charge protection and delegates actual charger/fuel-gauge IO to board-specific callbacks.
+- Compared upstream Linux 6.18 Exynos TMU driver match table: no `samsung,exynos7885-tmu` entry. Did not enable sensor or thermal zones.
+- Inspected the acquired Platform archive filename inventory; A10 Android battery/health/thermal/charger services and init configuration are not present. Exact service names remain unverified.
+- No DTS change or hardware test occurred. Phone remains untouched.
