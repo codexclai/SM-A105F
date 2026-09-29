@@ -30,7 +30,7 @@ The candidate preserves the exact sample and drive values in Linux's required SD
 
 ## Candidate implementation and validation state
 
-Candidate patch: `patches/linux-6.18.54/0002-arm64-dts-exynos-enable-a10-emmc-uart.patch`. It only targets the board DTS and uses existing SoC labels. Patch text is recorded; it has **not** been applied to a Linux checkout, built into a DTB, schema-checked, or direct-validated. The previous SD2 DTB hash `da3ce7e7e3a4d4d6d2a802b1c0b8a88d47886db8269eedc863ecf9f8419d9db30e` is from the preceding commit and does not include this candidate.
+Candidate patch: `patches/linux-6.18.54/0002-arm64-dts-exynos-enable-a10-emmc-uart.patch`. It only targets the board DTS and uses existing SoC labels. Patch text is recorded; it has **not** been applied to a Linux checkout, built into a DTB, schema-checked, or direct-validated. The previous SD2 DTB hash `da3ce7e3a4d4d6d2a802b1c0b8a88d47886db8269eedc863ecf9f8419d9db30e` is from the preceding commit and does not include this candidate.
 
 The 6.18 source checkout used for the previous SD2 milestone is not present in this active workspace; the prior browser runtime is gone and Codespace was already budget-blocked. The next executable validation is to stage the pinned 6.18.54 checkout in an available Linux build environment, apply patch 0001 then 0002, build `exynos7885-a10.dtb`, run the MMC and UART targeted schema checks and `dt-validate`, then inspect emitted DT properties and hash the DTB. Do not call this patch verified until that succeeds.
 
