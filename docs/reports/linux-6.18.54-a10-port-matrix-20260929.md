@@ -37,9 +37,9 @@ This validation is host-side DT compilation/schema checking only. The SD2-only D
 
 ## Root handoff and first-boot selector
 
-The committed initramfs currently accepts only `root=UUID=...` or `root=PARTUUID=...`, but its builder installs only BusyBox shell/mount/switch_root/sleep/mkdir/cat/head applets and does not create `/dev/disk/by-uuid` or `/dev/disk/by-partuuid` symlinks. That resolver therefore has no mechanism to create the paths it checks. This is a concrete initramfs defect to fix before regenerating the corrected archive.
+The current initramfs accepts only an explicit `root=/dev/mmcblk0pN` path, validates the numeric partition suffix, waits for that block device, mounts ext4 read-write, and requires executable `/sbin/init`. It rejects UUID/PARTUUID as well as removable SD and non-eMMC paths. The A10 DT aliases map internal eMMC to MMC host index 0, but the physical partition number remains unmeasured. This resolver was fixed to be sourced by `/init`; see `docs/reports/initramfs-root-helper-fix-20260929.md`.
 
-Do not guess a root UUID/PARTUUID. Keep the future measured identifier injectable through the boot command line. To reduce dependence on it safely, a later selector may accept an explicitly provisioned filesystem label plus a unique marker file, enumerate only fixed internal eMMC partition candidates, and fail if zero or multiple candidates match. It must never choose the first arbitrary block device or removable SD. Until the initramfs has a tested resolver and the actual storage layout is read safely, no automatic discovery mode is enabled.
+Do not guess a root UUID/PARTUUID. Keep the eventual measured eMMC partition path injectable via the boot command line. A possible opt-in discovery mode would require a paired install-specific marker and expected value, read-only/no-journal probes limited to eMMC, an exact-one-match rule, and fail-closed handling. It is not implemented: the corrected BusyBox/initramfs artifact is unavailable for verifying mount options and unmount behavior. See `docs/reports/root-device-discovery-assessment-20260929.md`.
 
 ## Battery, charging and thermal blocker
 
@@ -75,3 +75,8 @@ Exact-source transport, register-access, regulator and IRQ findings are document
 ## USB DRD and PHY detail
 
 The exact Samsung-to-upstream review is in [`linux-6.18.54-a10-usb-drd-review-20260929.md`](linux-6.18.54-a10-usb-drd-review-20260929.md). Samsung's A10 parent uses `samsung,exynos-dwusb`, one `hsdrd` clock and nested DWC3, while its PHY uses `samsung,exynos-usbdrd-phy`, three register regions, five clocks, PMU offsets and custom revision/reference/tuning properties. The 4.4 PHY explicitly sets a 50 MHz reference clock for Exynos7885. Linux 6.18.54 has no matching glue/PHY compatible or Exynos7885 PHY data; its Exynos DWC3 binding requires supply wiring. No USB node was enabled, and no Exynos7870/850 compatible was copied.
+
+
+## Latest clean rebuild state — 2026-09-29
+
+The validated A10 DTB was rebuilt from clean pinned Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d` after sequential application of the corrected tracked patch series. Its current SHA-256 is `36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f` (21,555 bytes). Focused MMC/UART/GPIO-key/pinctrl/Samsung-board binding checks and direct validation pass. Unfiltered validation has one inherited diagnostic: `osc-clock` is missing required `clock-frequency`; no A10 frequency has been inferred from Jackpot LTE. The Exynos-enabled aggregate generated 20 arm64 DTBs and logged this diagnostic plus assembler/Kconfig noise; it is not claimed as a clean aggregate schema pass. Detailed log and commands are in `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
