@@ -155,3 +155,12 @@ The exact A10 USB glue and PHY drivers were traced against Linux 6.18.54; eviden
 ## 2026-09-29 — Boot-v1 and DT selector evidence reconciliation
 
 Documented the exact CWB3 candidate header and separate DT/DTBO table facts, plus remaining footer/signing, AVB, selector, capacity, rollback and recovery unknowns in `docs/BOOT_PACKAGING.md`. The measured stock header has no ramdisk; the candidate 0x11000000 ramdisk address remains community-derived. The former host candidate embeds an older initramfs and is not the corrected candidate. No artifact was regenerated, and no phone action occurred.
+
+
+---
+
+## Current continuation — 2026-09-29 (exact watchdog source verification)
+
+The three authorized Samsung source archive chunks were fetched through Drive's scoped raw streams into the Colab runtime, concatenated, and verified at 229,817,794 bytes with SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`. Extracted `drivers/watchdog/s3c2410_wdt.c` matches the recorded Samsung-file SHA-256. Exact Exynos8 semantics are now recorded in `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md`: PMU offsets 0x0408/0x040c/0x0404, bit 24, only PMU mask-reset and PMU reset-status quirks, reset-status label A53 WDTRESET; old clock names map to OSCCLK at 26 MHz and WDT1 PCLK in modern Linux. No adjacent Exynos variant bits/quirks were copied.
+
+**Implementation remains pending:** no Linux 6.18 driver, binding, or A10 DTS patch was completed or validated in this continuation. Do not describe the watchdog as supported. Next step is the narrow upstream-style Exynos8 extension with two clocks, PMU syscon and a disabled SoC watchdog node enabled only in the A10 DTS; run the watchdog binding and DT checks plus the driver object compile. Continue immediately into the evidence-backed PMIC/regulator boot path gap after that. The phone remains untouched; no flashing or other device operation occurred.
