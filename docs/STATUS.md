@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (A10 board compatible and focused DTB validation)
+
+Private `main` was at `88c9f18bfad1b7e1f22a5556f1c75e9a3a9edad0` after updating the A10 validation report. Patch 0001 now uses model-specific `samsung,sm-a105f`; patch 0004’s DTS context agrees; new patch 0005 registers that compatible in the Exynos7885 board schema. The schema change passed binding validation, A10 `CHECK_DTBS=y`, direct board-schema validation, and an equivalent schema patch reverse/apply round trip on the reconstructed tree.
+
+Corrected A10 DTB: 21,555 bytes, SHA-256 `36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f`. Full direct `dt-validate` now reports only the inherited Exynos7885 `osc-clock` missing required `clock-frequency`; that value is left unresolved pending exact A10 evidence. Focused MMC, UART, GPIO-key, and Samsung pinctrl checks remain clean. Full-tree `dtbs_check` is incomplete. Kconfig prompt output still appeared during target setup, though commands were isolated and returned 0; stabilize and save config for a reproducible build.
+
+Drive has source ZIP parts and old Eureka artifacts but no exact 4.4.177 output bundle. GitHub release metadata confirms an older 12,118,381-byte candidate (`f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`); the authorized connector here cannot retrieve private binary asset bytes. Candidate was not extracted or regenerated. A binary-capable authorized route is still needed for the round-trip checks.
+
+Phone untouched. No physical-device action occurred.
+
+---
+
 # Current checkpoint — 2026-09-29 (pinned A10 DTB validation)
 
 Private `main` was at `9b3639a08620e5e2dfa6be0d2f8d791b28f262e3` after adding `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`. From clean upstream Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d`, the recovered Colab edits were re-created with board timings kept in the board DTS, not the SoC DTSI. A10 DTB build and focused CHECK_DTBS/schema checks for MMC, UART, GPIO keys, and Samsung pinctrl returned 0; direct per-schema dt-validate was clean. DTB: 21,563 bytes, SHA-256 `3e059201353c87f4c310109f83f9bec8bbd4fcff3bcbb69057223d6031663549`.
