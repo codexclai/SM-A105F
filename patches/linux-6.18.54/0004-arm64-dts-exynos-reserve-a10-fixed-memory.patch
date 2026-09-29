@@ -1,42 +1,36 @@
 From: SM-A105F Linux 6.18.54 board port
 Subject: [PATCH] arm64: dts: exynos: reserve fixed A10 memory regions
 
-Carry forward the exact fixed physical ranges declared by the Samsung 4.4.177
-Exynos7885/A10 memory sources. The standard reserved-memory reg entries keep
-these ranges out of ordinary Linux allocation. The separate memreserve entry
-is retained as supplied.
+Carry forward the exact fixed physical ranges declared by the Samsung
+4.4.177 Exynos7885/A10 memory sources, plus its explicit memreserve entry.
+Do not infer no-map/reusable or vendor pool semantics.
 
-Do not copy vendor ION/secure compatibles or attach consumers: their Linux
-6.18 semantics are not mapped. Dynamic pools are also omitted. No no-map or
-reusable property is inferred from the vendor driver's naming.
-
-Validated against Linux 6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d.
-The A10 DTB built with CHECK_DTBS=y and the reserved-memory binding check
-passed. Direct dt-validate reported the existing A10 root-compatible and
-osc-clock fixed-clock issues, with no reserved-memory diagnostics. The DTB
-SHA-256 is ea5b3131cfa55e02472d6f74815082282f0e3b8940471311545e558d380905b7.
-This is host-side source/schema evidence only.
+Validated on Linux 6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d:
+focused binding and direct validation for MMC, UART, GPIO keys, pinctrl, and
+A10 board compatibility pass. The 21,555-byte A10 DTB SHA-256 is
+36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f. Unfiltered
+direct validation reports only the inherited osc-clock missing clock-frequency.
 
 ---
  arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-index 000000000000..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-@@ -2,6 +2,7 @@
- /dts-v1/;
+@@ -3,6 +3,7 @@
+ 
  #include <dt-bindings/gpio/gpio.h>
  #include <dt-bindings/input/input.h>
 +/memreserve/ 0xe0000000 0xd00000;
  #include "exynos7885.dtsi"
  
  / {
-@@ -9,6 +10,22 @@
- 	compatible = "samsung,sm-a105f", "samsung,exynos7885";
- 	memory@80000000 { device_type = "memory"; reg = <0x0 0x80000000 0x3da00000>; };
- 	memory@c0000000 { device_type = "memory"; reg = <0x0 0xc0000000 0x40000000>; };
+@@ -17,6 +18,21 @@
+ 	memory@c0000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0xc0000000 0x40000000>;
++	};
 +	reserved-memory {
 +		#address-cells = <2>;
 +		#size-cells = <1>;
@@ -51,8 +45,6 @@ index 000000000000..000000000000 100644
 +		modem@f5400000 { reg = <0x0 0xf5400000 0x8800000>; };
 +		cp-ram-logging@fdc00000 { reg = <0x0 0xfdc00000 0x2000000>; };
 +		gnss@ffc00000 { reg = <0x0 0xffc00000 0x400000>; };
-+	};
-+
- 	aliases {
- 		mmc0 = &mmc_0;
- 		mmc1 = &mmc_2;
+ 	};
+ };
+ 
