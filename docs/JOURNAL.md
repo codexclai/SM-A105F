@@ -494,3 +494,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - MMC and Samsung UART binding checks, target A10 `CHECK_DTBS=y` builds, direct `dt-validate`, and `git diff --check` passed. Schema tooling reported only that optional `yamllint` was missing. This is not boot or console-output evidence. Jackpot LTE remains sibling-only.
 - Exact Samsung archive SHA-256 is `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; Kernel archive `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`; Platform archive `de94b5e95ee1182435064f4cce1e1c940a1eb529aa35b4a5456692f6af503d1c`.
 - Missing exact Samsung-built Image, corrected initramfs and stock DT/DTBO binaries remain a separate artifact-acquisition blocker. No physical device operation occurred.
+
+
+## 2026-09-29 — A10 RTC/watchdog/reserved-memory evidence review
+
+- Compared exact Samsung A10 overlay and Exynos7885 DTS against upstream Linux 6.18.54.
+- Deferred ABOX reserved memory because the Samsung-only compatible/consumer semantics are not present in the Linux port; did not invent no-map or reusable behavior.
+- Confirmed the upstream Exynos7885 DTSI has no RTC/watchdog nodes. Samsung 4.4 RTC/watchdog entries differ from available Exynos850 siblings in compatible, address/IRQ, clocks, and sequencing evidence, so neither was enabled.
+- Confirmed the initramfs UUID/PARTUUID symlink lookup has no symlink-populating utility in the committed builder. A safe source/test fix remains executable once the resolver contract is selected.
+- GitHub Actions returned zero workflow runs; exact kernel/initramfs/DTB/DTBO remain unrecovered. No phone operation occurred.

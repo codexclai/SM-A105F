@@ -1,3 +1,17 @@
+# Current checkpoint — 2026-09-29 (A10 subsystem evidence review)
+
+Verified private `main` starting point: `93286b7cd57cf4cf923887e99512be9b027edc25`. The last code-bearing A10 milestone is the validated SD2 + conservative eMMC/UART2 patch set; this continuation made no DTS changes because the exact Samsung RTC, watchdog, and ABOX reserved-memory semantics do not yet map safely to Linux 6.18. Findings and file-level provenance are in [the RTC/watchdog/memory review](reports/linux-6.18.54-a10-rtc-watchdog-memory-review-20260929.md).
+
+Verified source: Samsung ZIP SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; A10 ABOX region DTSI SHA-256 `043800953207d58aa7005841fe7b774cb58e678dfc763e35396a4a8b3b09afc6`. Upstream comparison: Linux `v6.18.54`, commit `1b357ecb321392158d507b04672ffee57bfa071d`. Current Exynos7885 upstream DTSI has no RTC/watchdog nodes. The A10 Samsung Exynos8 RTC/watchdog tuples cannot be copied from Exynos850 sibling nodes.
+
+Artifact recovery: GitHub Actions has zero workflow runs. The exact Samsung-built kernel Image, corrected initramfs, boot DTB/DTBO remain absent from active Colab; no boot-v1 candidate regeneration or checksum verification occurred in this continuation. The committed initramfs UUID/PARTUUID paths are not created by its current builder, so correcting source and tests remains an independent actionable task before candidate regeneration.
+
+No full-tree `dtbs_check` or expanded suite was run because this continuation changed documentation only. No A10 DTB was changed. No physical-device operation occurred; the phone remains untouched.
+
+Next: fix and test the initramfs identifier resolution without a guessed UUID/PARTUUID, then continue from the exact Samsung thermal/battery drivers and the upstream 6.18 interfaces. Resume artifact acquisition only through existing assets or verified exact binaries; do not rebuild known-good artifacts unnecessarily.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 eMMC/UART validation)
 
 Verified starting point: private `main` at `0bed01913c18b38a4705f1ea61643b354f5152e2`. The Linux 6.18.54 A10 board patch now adds the verified eMMC wiring/timing baseline and UART2 console selection on top of the already-validated SD2 host patch.
