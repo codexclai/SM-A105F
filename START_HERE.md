@@ -1,6 +1,6 @@
 # Resume this project
 
-This is the cross-session entry point for the Samsung Galaxy A10 **SM-A105F** effort. The objective is a genuine native **Debian 13 Trixie ARM64** system with a minimal, headless, CLI-only userspace and the maximum useful hardware support that can be verified safely. The phone has not been modified.
+This is the cross-session entry point for the Samsung Galaxy A10 **SM-A105F** effort. The objective is a genuine native **Debian 13 Trixie ARM64** system with a minimal, headless, CLI-only userspace and the maximum useful hardware support that can be verified safely. The phone has not been modified. See the [2026-09-29 engineering checkpoint](docs/engineering-20260929.md) for the latest boot-extraction tooling, current candidate limitations, A10-to-upstream mappings, and next exact tasks.
 
 ## Fresh-session procedure
 
