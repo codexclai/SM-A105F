@@ -64,3 +64,6 @@ The exact A10 common overlay source `arch/arm64/boot/dts/exynos/dtbo/exynos7884B
 Updated tracked patch 0002 carries the board-level oscillator property. All five tracked A10 patches apply in order to a clean pinned checkout; the patched DTS and board schema compare byte-for-byte with the tested tree, and `git diff --check` passes. Final A10 DTB is 21,587 bytes, SHA-256 `44a77aa2c6ce133def05a8a4986181328c32962a4e7c564fdb2e24e7d6358166`.
 
 After this change, the five-schema A10 `CHECK_DTBS=y` build, focused direct `dt-validate -l`, and unfiltered direct `dt-validate` all complete with no schema diagnostics. A new full Exynos-enabled `dtbs_check` invocation generated 20 arm64 DTBs and logged only the host assembler warning about broken `.inst`; no Kconfig prompt noise or schema diagnostics remain in that captured log. The invocation returned 0. The earlier aggregate result with the missing `osc-clock` property is superseded.
+
+
+Final binding documentation checks after oscillator mapping: `dt_binding_check` over the five selected schemas, `dt-doc-validate`, and `yamllint` all returned 0 with empty diagnostics. This supplements the final clean focused and unfiltered DTB validation above.
