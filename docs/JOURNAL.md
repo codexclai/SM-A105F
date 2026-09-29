@@ -1,3 +1,13 @@
+## 2026-09-29 — Recovered Colab tree and focused A10 DTB validation
+
+- Inspected the temporary Linux 6.18.54 edits, restored the Makefile and SoC DTSI from pinned upstream, then recreated intended board changes in the correct board DTS and target. No misplaced board timing tuples remain in the SoC DTSI.
+- Rebuilt against upstream v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d`. A10 DTB output was 21,563 bytes, SHA-256 `3e059201353c87f4c310109f83f9bec8bbd4fcff3bcbb69057223d6031663549`.
+- `CHECK_DTBS=y` and focused per-schema build/direct validation for MMC, UART, GPIO keys, and Samsung pinctrl returned 0. Direct all-schema validation surfaced the root marketing string as an unsupported DT compatible and the inherited `osc-clock` as missing required `clock-frequency`. The tree has reserved-memory .txt documentation, not reserved-memory.yaml; direct validation had no reserved-memory diagnostic.
+- The sibling Jackpot LTE DTS sets 26 MHz for the Exynos7885 oscillator. This is SoC-sibling evidence only; no A10-specific frequency mapping was inferred. Whole-tree `dtbs_check` remains incomplete. The initial targeted invocation emitted Kconfig prompts; repeat with config stabilized before claiming fully reproducible build logs.
+- Drive folder listing found source ZIP parts and prior Eureka artifacts but no 4.4.177 build outputs. GitHub release API reports the old host-only boot candidate (12,118,381 bytes, SHA-256 `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`); current connector provides metadata but not the private asset bytes. Candidate was not extracted or regenerated. No physical-device operation occurred.
+- Evidence: `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
+- Commits: `9b3639a08620e5e2dfa6be0d2f8d791b28f262e3` (report), `df48e9fdecafc9b0ab7b3cf587aef533a0848f0a` (checkpoint), both on private main.
+
 ## 2026-09-26 — Rootfs artifact persisted and read back
 
 - GitHub CLI in the Codespace was already authenticated to the private project repository. Created a private draft prerelease tagged `rootfs-trixie-arm64-20260926` at the verified documentation commit; uploaded the rootfs TAR (196,298,240 bytes) and 97-byte `.sha256` sidecar. The release is explicitly marked prerelease/draft and describes the artifact as unprovisioned, not bootable, and not device-tested.
