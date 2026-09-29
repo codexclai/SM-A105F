@@ -11,14 +11,14 @@ command -v readelf >/dev/null
 command -v "$QEMU" >/dev/null
 test -s "$ARCHIVE"
 test -x "$BUSYBOX"
-gzip -t "$ARCHIVE"
+gzip -t -- "$ARCHIVE"
 readelf -h "$BUSYBOX" | grep -q 'Machine:.*AArch64'
 if readelf -l "$BUSYBOX" | grep -q INTERP; then echo 'BusyBox must be statically linked' >&2; exit 1; fi
 sh -n "$INIT"
 "$QEMU" "$BUSYBOX" sh -n "$INIT"
 TMP=$(mktemp -d)
 trap 'rm -rf -- "$TMP"' EXIT
-gzip -dc "$ARCHIVE" | (cd "$TMP" && cpio -id --quiet --no-absolute-filenames)
+gzip -dc -- "$ARCHIVE" | (cd "$TMP" && cpio -id --quiet --no-absolute-filenames)
 test -x "$TMP/bin/busybox"
 cmp -- "$BUSYBOX" "$TMP/bin/busybox"
 APPLET_LIST=$("$QEMU" "$BUSYBOX" --list)
@@ -27,8 +27,9 @@ for applet in mount switch_root sleep mkdir cat head sh; do
   test -L "$TMP/bin/$applet"
   test "$(readlink -- "$TMP/bin/$applet")" = busybox
 done
+ARCHIVE_ENTRIES=$(gzip -dc -- "$ARCHIVE" | cpio -it --quiet | sed 's#^\./##')
 for path in init bin/busybox bin/mount bin/switch_root bin/sleep bin/mkdir bin/cat bin/head bin/sh dev proc sys run newroot; do
-  gzip -dc "$ARCHIVE" | cpio -it --quiet | grep -Fxq "$path" || { echo "missing archive entry: $path" >&2; exit 1; }
+  grep -Fxq "$path" <<<"$ARCHIVE_ENTRIES" || { echo "missing archive entry: $path" >&2; exit 1; }
 done
 echo 'initramfs archive extraction, BusyBox static ARM64 identity, applets, and init shell syntax validated'
-sha256sum "$ARCHIVE" "$BUSYBOX"
+sha256sum -- "$ARCHIVE" "$BUSYBOX"
