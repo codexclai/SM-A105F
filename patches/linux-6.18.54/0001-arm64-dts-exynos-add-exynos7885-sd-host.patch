@@ -1,13 +1,14 @@
 From: SM-A105F Linux 6.18.54 board port
 Subject: [PATCH] arm64: dts: exynos: describe Exynos7885 removable SD host
 
-Add the second DesignWare MMC host used for removable SD on A10-family
-Exynos7884B systems. Register, IRQ, clock routing, CIU divider, and legacy
-timing parameters are sourced from the public geckyn Exynos7885/A10
-downstream tree. Keep the shared SoC node disabled; board DTS must supply
-the pins, card detect and power controls.
+Describe the disabled second DesignWare MMC host at the community-reported
+A10 Exynos7885 address/IRQ, using upstream clock handles and current binding
+shape. The legacy four-cell Samsung timing tuples are converted to upstream
+(sample, drive) two-cell tuples: legacy fields are divider, fine-drive,
+drive, sample. The divider is represented separately as required upstream.
 
-This is a host-tested porting fragment, not a bootable A10 board DTS.
+The host stays disabled because exact Samsung-source confirmation, board
+pinctrl, card detect, supplies, and physical validation are still pending.
 ---
  arch/arm64/boot/dts/exynos/exynos7885.dtsi | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
@@ -18,7 +19,7 @@ diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/ex
 @@ -310,6 +310,22 @@
  			status = "disabled";
  		};
- 
+
 +		/* Optional removable SD host; board DTS supplies pins and slot details. */
 +		mmc_2: mmc@13550000 {
 +			compatible = "samsung,exynos7-dw-mshc";
@@ -31,9 +32,9 @@ diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/ex
 +			clock-names = "biu", "ciu";
 +			fifo-depth = <0x40>;
 +			samsung,dw-mshc-ciu-div = <3>;
-+			samsung,dw-mshc-sdr-timing = <3 0 2 0>;
-+			samsung,dw-mshc-ddr-timing = <3 0 2 1>;
++			samsung,dw-mshc-sdr-timing = <0 2>;
++			samsung,dw-mshc-ddr-timing = <1 2>;
 +			status = "disabled";
 +		};
-+
+
  		serial_0: serial@13800000 {
