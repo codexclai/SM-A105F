@@ -11,7 +11,7 @@ Subject: [PATCH] arm64: dts: exynos: add A10 GPIO keys
  #include "exynos7885.dtsi"
  
  / {
-@@ -16,12 +17,41 @@
+@@ -16,11 +17,40 @@
  	chosen {
  		stdout-path = &serial_2;
  	};
