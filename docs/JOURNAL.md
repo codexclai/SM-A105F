@@ -556,3 +556,13 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Watchdog: exact A10-family `samsung,exynos8-wdt` is at 0x10060000/SPI 233, uses OSCCLK and WDT cluster1 gate, and vendor driver uses PMU bit 24. Linux 6.18 lacks that compatible/binding and its Exynos7885 clock provider does not expose the old WDT gate ID. No unsafe DTS-only enablement was made.
 - Added report `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md` with source hashes and limits; updated RTC/watchdog entries in the port matrix. This remains source/schema review, not runtime evidence.
 - Next independent work: inspect current Exynos7885 clock-controller/PMU support for a driver-plus-binding extension, and continue the PMIC/regulator and missing exact binary artifact investigations. Phone remains untouched.
+
+
+## 2026-09-29 — Exact A10 PMIC transport review
+
+- Traced the exact `samsung,s2mpu08mfd` overlay and Samsung 4.4 core, IRQ and regulator sources; source SHA-256 values are recorded in the S2MPU08 review report.
+- Confirmed register read/write paths use private Exynos ACPM helpers; the core also creates PMIC/RTC/close/codec dummy I2C clients and registers S2MPU08-specific MFD children.
+- Confirmed regulator behavior includes a BUCK5 enable/disable special case and revision-0 LDO35/LDO36 coupling workaround.
+- Compared with Linux 6.18 SEC PMIC support: current SEC I2C match set does not include S2MPU08; current SEC ACPM driver supports a different PMIC family. No upstream compatible alias or safe regulator-only node exists.
+- Kept the PMIC and its rails out of DTS. Required work includes ACPM transport/service availability, MFD/regmap/IRQ port, regulator/RTC bindings and validated consumers. eMMC high-speed voltage switching and charging remain blocked.
+- Published report and matrix detail on private `main`. No phone operation occurred.
