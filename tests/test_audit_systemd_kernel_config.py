@@ -1,4 +1,9 @@
+import json
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts.audit_systemd_kernel_config import audit_config, parse_config
 
@@ -37,6 +42,35 @@ class SystemdKernelConfigAuditTests(unittest.TestCase):
         result = audit_config({"CONFIG_UEVENT_HELPER_PATH": "/sbin/hotplug"})
         self.assertEqual(result["legacy_hotplug_helpers_configured"],
                          ["CONFIG_UEVENT_HELPER_PATH"])
+
+    def test_cli_passes_core_requirements_and_emits_feature_gaps(self):
+        root = Path(__file__).resolve().parents[1]
+        tool = root / "scripts" / "audit_systemd_kernel_config.py"
+        required = (
+            "CONFIG_DEVTMPFS", "CONFIG_CGROUPS", "CONFIG_INOTIFY_USER",
+            "CONFIG_SIGNALFD", "CONFIG_TIMERFD", "CONFIG_EPOLL", "CONFIG_UNIX",
+            "CONFIG_NET", "CONFIG_SYSFS", "CONFIG_PROC_FS", "CONFIG_FHANDLE")
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / ".config"
+            config.write_text("\n".join(f"{name}=y" for name in required) +
+                              "\n# CONFIG_NET_NS is not set\n# CONFIG_USER_NS is not set\n")
+            result = subprocess.run([sys.executable, str(tool), str(config)],
+                                    capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        self.assertTrue(output["core_requirements_pass"])
+        self.assertEqual(output["service_sandbox_gaps"], ["CONFIG_NET_NS", "CONFIG_USER_NS"])
+
+    def test_cli_fails_when_core_option_is_missing(self):
+        root = Path(__file__).resolve().parents[1]
+        tool = root / "scripts" / "audit_systemd_kernel_config.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / ".config"
+            config.write_text("# CONFIG_FHANDLE is not set\n")
+            result = subprocess.run([sys.executable, str(tool), str(config)],
+                                    capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("CONFIG_FHANDLE", result.stdout)
 
 
 if __name__ == "__main__":
