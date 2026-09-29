@@ -33,7 +33,7 @@ index 000000000000..000000000000 100644
  #include "exynos7885.dtsi"
  
  / {
-@@ -9,6 +10,21 @@
+@@ -9,6 +10,22 @@
  	compatible = "samsung,sm-a105f", "samsung,exynos7885";
  	memory@80000000 { device_type = "memory"; reg = <0x0 0x80000000 0x3da00000>; };
  	memory@c0000000 { device_type = "memory"; reg = <0x0 0xc0000000 0x40000000>; };
