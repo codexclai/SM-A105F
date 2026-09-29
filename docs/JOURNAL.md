@@ -574,3 +574,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Queried private GitHub release metadata. The draft host-only candidate archive is listed as 12,118,381 bytes with reported SHA-256 `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`; the bytes were not accessible through the connector, so this value is not readback verification.
 - The prior browser release download route ended in a browser error and was not retried; no authentication workaround was used. Recorded the current route/blocker in `docs/reports/artifact-retrieval-audit-20260929.md` and updated `docs/ARTIFACTS.md`.
 - No substitute kernel was built and no boot candidate was regenerated. Phone remains untouched.
+
+
+## 2026-09-29 — Exact A10 USB DRD/PHY review
+
+- Traced the exact Samsung 4.4.177 DWC3 glue and Exynos USB PHY source against the A10 SoC DTS and common overlay. Their SHA-256 values and property/clock semantics are recorded in the dedicated report.
+- The A10 glue compatible is `samsung,exynos-dwusb` with one `hsdrd` clock; its PHY uses three register regions, five clocks, PMU control and Samsung-specific reference/tuning fields. The legacy PHY explicitly sets the Exynos7885 reference clock to 50 MHz.
+- Linux 6.18.54's DWC3 Exynos compatible/binding does not include this glue compatible. Its Samsung PHY match table has no A10 compatible or Exynos7885 data entry. Existing Exynos7870/850 entries do not prove register/calibration equivalence; the DWC3 binding also requires regulator supplies.
+- Left all USB nodes disabled/absent. PMIC/regulator support remains a prerequisite, but a PHY/glue implementation and safe VBUS/role path are also required.
+- Added the exact-source review and expanded the port matrix. No USB or phone hardware was tested.
