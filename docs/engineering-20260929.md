@@ -71,3 +71,9 @@ The Debian rootfs records systemd 257.13. The upstream v257 README lists Linux 3
 For v257, upstream lists `CONFIG_DEVTMPFS`, `CONFIG_CGROUPS`, `CONFIG_INOTIFY_USER`, `CONFIG_SIGNALFD`, `CONFIG_TIMERFD`, `CONFIG_EPOLL`, `CONFIG_UNIX`, `CONFIG_SYSFS`, `CONFIG_PROC_FS`, and `CONFIG_FHANDLE` as kernel config requirements; `CONFIG_NET_NS` and `CONFIG_USER_NS` are needed by common `PrivateNetwork=` and `PrivateUsers=` service settings. Optional but recommended items include IPv6, tmpfs/ext4 ACL and xattr support, seccomp/filter and kcmp. The exact successful Samsung 4.4.177 generated config is not present in this Work filesystem, so no option is asserted present/absent here. Run a config audit against the exact generated config and systemd's own requirements after restoring the Codespace; then host-test representative Debian service units under QEMU. Avoid enabling security-sensitive kernel features blindly.
 
 Source: upstream systemd v257 README, versioned source: https://github.com/systemd/systemd/blob/v257/README
+
+## Reusable systemd kernel config auditor
+
+Added executable `scripts/audit_systemd_kernel_config.py` and four focused tests. It parses standard Linux `.config` enabled/unset records and audits them against upstream systemd v257's published config requirements: core required options, options expected disabled, service sandbox namespace gaps, recommended options, and a nonempty legacy hotplug helper. It exits nonzero for missing core requirements or incorrectly enabled required-off options, while reporting feature/recommended gaps separately. The audit logic is grounded in the versioned upstream `systemd v257 README` referenced above.
+
+The project Python suite now passes **29/29**, and `py_compile` passes for tracked scripts/tests. This session did not have the exact generated Samsung 4.4.177 `.config`, so the tool was tested using fixtures only; no conclusion about the actual kernel config has been made.
