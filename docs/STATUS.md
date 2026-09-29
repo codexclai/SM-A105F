@@ -9,7 +9,7 @@
 - Target-specific crosswalk: downstream `dwmmc_0` at 0x13500000 / IRQ 146 matches upstream Exynos7885 `mmc_0`; downstream removable `dwmmc_2` at 0x13550000 / IRQ 147 has no upstream node/pinctrl group. The downstream `samsung,exynos7885-tmu` compatible and A10 `samsung,s2mpu08mfd` have no direct upstream matches in the inspected Linux source. TMU, battery/charging/PMIC and USB PHY remain first-boot safety/support gaps; no speculative aliases were added. Details are in the engineering checkpoint.\n- The Codespace was not reachable from this Work runtime: its browser tab redirected to GitHub login, and a separate remote desktop device was offline. GitHub connector access still allowed source reads and repository commits. No credentials or human verification were attempted.
 - Physical phone remains untouched. No flash, boot, Download Mode, partition read, or other device operation occurred.
 
-See [engineering checkpoint 2026-09-29](engineering-20260929.md) for method, source pins, artifact limitations, and exact next tasks.
+- Boot capacity evidence conflicts: Eureka build configuration claims 37,748,736 bytes (36 MiB); a pinned A105F TWRP tree claims 55,574,528 bytes (53 MiB). TWRP AVB/test-key settings do not prove stock acceptance. Neither config establishes physical partition size or installed-firmware behavior; Download Mode, rollback and restore procedure remain open.\n\nSee [engineering checkpoint 2026-09-29](engineering-20260929.md) for method, source pins, artifact limitations, and exact next tasks.
 
 ---
 
