@@ -1,3 +1,17 @@
+# Current checkpoint — 2026-09-29 (initramfs root-selection path fixed)
+
+Remote `main` was verified at `34b56921898172f5d99f845db9a7810b5b0cca8f` before this checkpoint update. The initramfs `/init` previously called root resolver functions without sourcing the staged `/lib/root-device.sh`. It now sources the helper before root selection. The archive test asserts the source line and requires extracted `/init` to match its source. Evidence is in `docs/reports/initramfs-root-helper-fix-20260929.md`.
+
+Validation against files read back from remote `main`: `sh -n` passed for init and resolver; `bash -n` passed for both test scripts; `tests/test_root_device_selector.sh` passed, allowing only an explicitly supplied `/dev/mmcblk0pN` and rejecting UUID/PARTUUID guesses and all other devices. Full archive/QEMU validation is still blocked by the absent verified ARM64 static BusyBox and corrected archive. No binary hash or bootability claim is made.
+
+The subsystem matrix and exact-source reports now cover fixed RAM reservations, GPIO keys, eMMC/UART, RTC/watchdog, S2MPU08/rails, USB DRD/PHY and battery/thermal. No unsafe DTS-only mappings were added for PMIC, RTC/watchdog or USB. A full-tree `dtbs_check` is running in the pinned Linux 6.18.54 Colab checkout; the last observation was 7m26s with no captured diagnostics yet. Existing focused A10 MMC/UART checks remain distinct from that full-tree run.
+
+Exact Samsung-built kernel, corrected initramfs binary, and matching stock A10 DTB/DTBO binaries remain unavailable through the audited local/Drive/GitHub routes. Do not regenerate the Android boot-v1 candidate until verified inputs are present. Ramdisk load address remains community-derived; bootloader acceptance, DTBO selector semantics, AVB/footer/rollback and exact partition capacities remain unresolved. Phone remains untouched.
+
+Next: capture the full-tree check result if it finishes; otherwise stop the slow aggregate check only after focused A10 state is preserved, then advance the highest-supported independent port slice. Continue the exact binary acquisition and boot-chain evidence work without physical-device actions.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 RTC/watchdog source mapping)
 
 This checkpoint records the A10 fixed-memory milestone committed to private `main` at `352253a68217d55d2c4d21ed9c72b7e074257b9f`; this status/journal checkpoint is committed immediately after that source milestone.
