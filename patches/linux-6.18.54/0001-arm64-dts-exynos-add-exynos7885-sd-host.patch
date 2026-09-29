@@ -68,7 +68,7 @@ index 000000000000..000000000000
 +
 +/ {
 +	model = "Samsung Galaxy A10 (SM-A105F)";
-+	compatible = "samsung,A10 SWA OPEN 00", "samsung,exynos7885";
++	compatible = "samsung,sm-a105f", "samsung,exynos7885";
 +
 +	memory@80000000 {
 +		device_type = "memory";
