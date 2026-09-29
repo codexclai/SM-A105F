@@ -1,0 +1,49 @@
+From: SM-A105F Linux 6.18.54 board port
+Subject: [PATCH] arm64: dts: exynos: enable A10 eMMC and UART
+
+Enable the existing Exynos7885 embedded MSHC and UART2 on the A10 board.
+Use only the 8-bit non-removable storage wiring and conservative legacy
+SDR timing. Preserve the Samsung 4.4 DDR and HS200/HS400 settings in the
+port matrix until voltage supplies and mode-specific behavior are mapped.
+
+This patch has not yet been applied to a full Linux source checkout or
+compiled in this workspace. It is an implementation candidate pending
+focused DTB/schema validation.
+
+---
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+index 000000000000..000000000000 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+@@ -49,3 +49,25 @@
+ 	samsung,dw-mshc-ddr-timing = <1 2>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &a10_sd_cd>;
+ };
++
++&mmc_0 {
++	status = "okay";
++	non-removable;
++	bus-width = <8>;
++	cap-mmc-highspeed;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_rdqs &sd0_bus1
++		     &sd0_bus4 &sd0_bus8>;
++	/*
++	 * Samsung 4.4 A10 base SDR tuple is <3 0 4 0>:
++	 * divider, fine-drive, drive, sample. Linux 6.18 reads
++	 * sample/drive in the timing array and divider separately.
++	 * HS200 and HS400 remain disabled pending their voltage path
++	 * and mode-specific timing validation.
++	 */
++	samsung,dw-mshc-ciu-div = <3>;
++	samsung,dw-mshc-sdr-timing = <0 4>;
++	samsung,dw-mshc-ddr-timing = <2 4>;
++};
++
++&serial_2 {
++	status = "okay";
++};
