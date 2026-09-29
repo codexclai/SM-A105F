@@ -24,5 +24,5 @@ diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b
                - samsung,jackpotlte              # Samsung Galaxy A8 (2018)
 +              - samsung,sm-a105f                # Samsung Galaxy A10 (SM-A105F)
            - const: samsung,exynos7885
-
-      - description: Exynos850 based boards
+ 
+       - description: Exynos850 based boards
