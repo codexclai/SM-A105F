@@ -1,0 +1,54 @@
+# A10 Linux 6.18 subsystem port matrix — 2026-09-29
+
+## Scope and source identity
+
+This matrix compares the acquired Samsung SM-A105F SWA source archive and its A10 overlay with Linux 6.18.54 at `gregkh/linux` tag `v6.18.54` (base DT nodes/bindings/drivers). The Samsung ZIP SHA-256 is `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; embedded `Kernel.tar.gz` SHA-256 is `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`. This is exact user-supplied source provenance, not an independently signed Samsung release. Source paths and hashes are recorded in `docs/SOURCES.md` and `docs/ARTIFACTS.md`.
+
+This is a source/binding crosswalk. It does not establish hardware operation or bootability. No physical-device operation occurred.
+
+## Porting matrix
+
+| Subsystem | Exact A10 4.4 evidence | Linux 6.18 mapping | Decision |
+| --- | --- | --- | --- |
+| SD2 | `dwmmc_2`, 0x13550000, SPI 147; SD2 clock/cmd/data pins; GPA0-7 external active-low detect | Existing A10 patch adds Exynos7 DW-MSHC node; upstream generic GPIO, pinctrl, and Samsung MMC binding | Already implemented and focused-validated in prior milestone. Do not redo. |
+| eMMC | `dwmmc_0`, 0x13500000/SPI 146, clocks MMC_EMBD; 8-bit, non-removable; base SDR `<3 0 4 0>`, DDR `<3 0 4 2>`, HS200 `<3 0 3 0>`, HS400 `<1 0 2 0>`; HS400 delay `0x60`; several Samsung-only tuning/QoS/CMDQ settings | Existing upstream `mmc_0` is `samsung,exynos7885-dw-mshc-smu` with matching address/IRQ/clocks. Linux 6.18 binding requires two-cell SDR and DDR arrays plus CIU divider. Driver reads two cells and builds CLKSEL using sample, drive, divider. | Candidate patch enables only 8-bit, non-removable, legacy MMC high-speed and records timing arrays. Do not enable DDR/HS200/HS400: exact PMIC voltage supplies and per-mode timing/tuning equivalence are not established. Do not emit downstream CMDQ/QoS/fine-drive/delay-line properties. Candidate not yet compiled. |
+| UART2 | `serial_2` at 0x13820000, SPI 279; A10 common overlay enables it and uses UART2 bus pins | Existing upstream `serial_2` Exynos7885 UART node and pinctrl group | Candidate patch enables the existing node. This does not set `/chosen/stdout-path` or prove boot-console output. Candidate not yet compiled. |
+| Pinctrl/GPIO | Exact overlay uses Samsung pin states; GPA0-7 is SD card detect in EINT mode; power/volume key pins are GPA1 5/6/7 | Upstream Exynos7885 pinctrl/GPIO and generic `gpio-keys` bindings | SD2 subset mapped in prior validated milestone. Keys are a next low-risk candidate after checking exact GPIO polarity, pull and wake behavior. Keep Samsung-only fields out. |
+| RAM/reserved memory | SoC/A10 DTSI has two populated banks, base memreserve and fixed/dynamic vendor pools; some vendor regions overlap populated banks or cover addresses whose reserved-memory semantics need confirmation | Generic `memory`, `/memreserve/`, `reserved-memory`; no automatic equivalence for Android ION/secure pools | No new reservations. Produce an interval map for the exact A10 overlay and reconcile every region with actual Linux-visible banks before changing DT. |
+| PMIC/regulators | A10 overlay uses `samsung,s2mpu08mfd`, Samsung ACPM fields, a GPA2 IRQ and named rails including `vqmmc`/`vmmc` | No matching upstream S2MPU08 MFD/regulator driver found in the pinned 6.18 source; generic regulator bindings alone cannot replace driver/transport semantics | Blocked. Do not alias another S2MPSxx PMIC or replace rails with dummy fixed regulators. This also gates eMMC high-speed modes, SD UHS, USB PHY and other loads. |
+| RTC | SoC source contains Exynos8 RTC node; A10 PMIC subtree also includes RTC child and Samsung first-boot date behavior | Upstream Exynos RTC and generic RTC framework need exact compatible/clock mapping; PMIC RTC cannot bind absent S2MPU08 | Keep SoC RTC disabled until its 6.18 node is cross-checked. Do not copy Samsung first-boot RTC writes into Linux DTS. |
+| Watchdog/reboot/poweroff | Exynos8 watchdog at 0x10060000/SPI 233 with OSCCLK, gate clock, 30s timeout, PMU syscon; PMIC handles board power paths | Mainline S3C/Exynos watchdog and syscon APIs exist, but A10 reset/poweroff sequencing and the exact register/clock tuple still require matching | Inspect upstream SoC watchdog node/driver before enabling. Never infer PMIC poweroff from vendor policy strings. |
+| USB | Samsung parent UDC at 0x13600000 with DWC3 child and Exynos7885 custom USB DRD PHY at 0x135d0000 plus PHY subregions; A10 requests OTG, high-speed | Upstream 6.18 tree has no matching Exynos7885 DWC3 glue/PHY topology | Blocked pending a supported PHY/glue implementation. Do not add only the generic DWC3 child; missing PHY/regulator/role path is material. |
+| Thermal/power | Three vendor TMUs at 0x10070000/0x10074000, custom `samsung,exynos7885-tmu`; Android battery/charger/fuel-gauge policy and thermal zones | No direct 6.18 match for that TMU compatible in current tree; upstream Exynos thermal driver requires compatible/register-layout mapping. Android SEC battery/charger daemons are userspace companions, not substitutes for kernel thermal protection | Blocked for safe port until TMU sensor semantics/calibration and charging path exist. Do not advertise thermal zones without sensors. |
+| Wi-Fi/BT/touch/audio/modem | Samsung SCSC, SEC touchscreen, audio, sensors, modem/IPC nodes and Android services | Most are vendor-only or need exact-chip upstream matches | Later optional work after boot, storage, console, PMIC, thermal and charging. Jackpot LTE may inform shared Exynos7885 SoC pieces only; it is not A10 evidence. |
+
+## eMMC timing semantics
+
+Exact Samsung `dw_mmc-exynos.h` defines the legacy tuple as `(div, fine_drive, drive, sample)`. The legacy eMMC base values are therefore divider 3, fine-drive 0, drive 4 and sample 0 for SDR; divider 3, fine-drive 0, drive 4 and sample 2 for DDR. Linux 6.18 `dw_mmc-exynos.h` defines CLKSEL fields for sample bits 0..2, drive bits 16..18 and divider bits 24..26. Its parser calls `SDMMC_CLKSEL_TIMING(timing[0], timing[1], div)`; the current binding describes the two array cells as TX and RX phase values. The code field names establish the modern positional contract, but naming equivalence across both drivers does not prove electrical equivalence of the A10 board.
+
+The candidate preserves the exact sample and drive values in Linux's required SDR/DDR arrays and separates the divider. It does not advertise MMC DDR, HS200, or HS400 in DT. Samsung's separate HS200 timing property has no Linux 6.18 field; HS400 has a current field, but its A10 tuple and `hs400-delay-line` value need a dedicated old-versus-new register-semantics review and voltage-path proof. The 6.18 driver advertises some host capabilities internally, so the DT flags alone are not treated as evidence that these modes are safe. Revisit these limits after PMIC/regulator support is available.
+
+## Candidate implementation and validation state
+
+Candidate patch: `patches/linux-6.18.54/0002-arm64-dts-exynos-enable-a10-emmc-uart.patch`. It only targets the board DTS and uses existing SoC labels. Patch text is recorded; it has **not** been applied to a Linux checkout, built into a DTB, schema-checked, or direct-validated. The previous SD2 DTB hash `da3ce7e7e3a4d4d6d2a802b1c0b8a88d47886db8269eedc863ecf9f8419d9db30e` is from the preceding commit and does not include this candidate.
+
+The 6.18 source checkout used for the previous SD2 milestone is not present in this active workspace; the prior browser runtime is gone and Codespace was already budget-blocked. The next executable validation is to stage the pinned 6.18.54 checkout in an available Linux build environment, apply patch 0001 then 0002, build `exynos7885-a10.dtb`, run the MMC and UART targeted schema checks and `dt-validate`, then inspect emitted DT properties and hash the DTB. Do not call this patch verified until that succeeds.
+
+## Root handoff and first-boot selector
+
+The committed initramfs currently accepts only `root=UUID=...` or `root=PARTUUID=...`, but its builder installs only BusyBox shell/mount/switch_root/sleep/mkdir/cat/head applets and does not create `/dev/disk/by-uuid` or `/dev/disk/by-partuuid` symlinks. That resolver therefore has no mechanism to create the paths it checks. This is a concrete initramfs defect to fix before regenerating the corrected archive.
+
+Do not guess a root UUID/PARTUUID. Keep the future measured identifier injectable through the boot command line. To reduce dependence on it safely, a later selector may accept an explicitly provisioned filesystem label plus a unique marker file, enumerate only fixed internal eMMC partition candidates, and fail if zero or multiple candidates match. It must never choose the first arbitrary block device or removable SD. Until the initramfs has a tested resolver and the actual storage layout is read safely, no automatic discovery mode is enabled.
+
+## Battery, charging and thermal blocker
+
+The exact downstream source includes `sec_battery.c`, `sec_battery_data.c`, `sec_charger.c`, and `sec_fuelgauge.c`, and the A10 DTS has S2MPU08 rails/IRQ and battery platform data. These kernel drivers expose low-level measurements/controls; Android's BatteryService, health HAL, vendor daemons and policy are userspace components that Debian must replace for userspace charging status, health reporting, charge policy and suspend coordination. Linux kernel thermal and regulator protection must be available independently; userspace policy is not a thermal safety substitute.
+
+Before any physical boot test, establish that the upstream kernel has working battery voltage/current/temperature readings, charge enable/current controls, thermal sensor calibration and safe over-temperature behavior, plus a userspace status/policy replacement. The exact active Samsung thermal/battery device configuration and daemon-to-driver interface remain to be traced. No charging or thermal behavior is claimed for Linux 6.18.
+
+## Exact Linux 6.18 sources consulted
+
+- `arch/arm64/boot/dts/exynos/exynos7885.dtsi` at `gregkh/linux` `v6.18.54`: existing `mmc_0` (0x13500000/SPI 146, Exynos7885 SMU compatible and embedded clocks), `serial_2`, pinctrl.
+- `Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml`: compatible list, required SDR/DDR arrays, CIU divider requirement, cell meanings and phase ranges.
+- `drivers/mmc/host/dw_mmc-exynos.c`, `dw_mmc-exynos.h`: parser, HS400 path, capabilities, clock divider and timing register field positions.
+- Samsung exact source: `arch/arm64/boot/dts/exynos/dtbo/exynos7885.dts`, `exynos7884B-a10_common.dtsi`, `exynos7884B-a10_swa_open_00.dts`, `exynos7884B-a10_swa_open_gpio_00.dtsi`, `drivers/mmc/host/dw_mmc-exynos.{c,h}`, `drivers/regulator/s2mpu08.c`, `drivers/mfd/s2mpu08_core.c`, `drivers/thermal/samsung/exynos_tmu.c`, and battery drivers.
