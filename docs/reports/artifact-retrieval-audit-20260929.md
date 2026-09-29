@@ -11,3 +11,12 @@
 The exact Samsung kernel, corrected initramfs binary, and stock A10 DT/DTBO binaries remain absent from the active workspace. The existing release candidate's metadata digest must not be treated as verification of its content. A supported binary transfer/readback route is still required (for example, a user-authorized artifact attachment or normal authenticated download from the existing environment); once bytes are present, verify each against its original recorded SHA-256 and inspect internal manifests before packaging.
 
 No replacement build was made from third-party kernel sources. No Android boot candidate was regenerated. No proprietary firmware binary was added to Git. The phone remains untouched.
+
+
+## 2026-09-29 connector transfer recheck
+
+The project Drive folder was listed again. It still contains the three original Samsung source ZIP chunks (80 MiB, 80 MiB, and 62,045,634 bytes), the checkpoint, older Eureka bundles/configs, and small Git bundles; no exact Samsung-built 4.4.177 kernel output, corrected initramfs archive, or stock A10 DT/DTBO image appeared. Targeted Drive searches for the kernel, corrected initramfs, and DT/DTBO also returned only the checkpoint.
+
+The supported Drive raw-file stream produced a file reference for source part-02, but the executor transfer rejected the 62,045,634-byte file because its per-file transfer limit is 32 MiB. No truncated local file was created. This validates why the full source cannot be rehydrated through this executor path; a larger existing environment must retrieve all source chunks and verify the original combined archive hash before use. The existing source remains documented by its original hash in the port matrix.
+
+No release candidate bytes or unverified binaries were treated as recovered. No boot-v1 artifact was regenerated. Phone remains untouched.
