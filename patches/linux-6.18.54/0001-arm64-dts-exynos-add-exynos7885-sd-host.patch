@@ -13,22 +13,22 @@ path is not mapped.
 ---
  arch/arm64/boot/dts/exynos/Makefile          |  1 +
  arch/arm64/boot/dts/exynos/exynos7885.dtsi   | 14 +++++
- arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 39 +++++++++++++
- 3 files changed, 54 insertions(+)
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
 index bcca63136557..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/Makefile
 +++ b/arch/arm64/boot/dts/exynos/Makefile
 @@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
- 	exynos7870-a2corelte.dtb\t\\
- 	exynos7870-j6lte.dtb\t\t\\
- 	exynos7870-on7xelte.dtb\t\t\\
- 	exynos7885-jackpotlte.dtb\t\\
-+	exynos7885-a10.dtb\t\t\\
- 	exynos850-e850-96.dtb\t\t\\
- 	exynos8895-dreamlte.dtb\t\t\\
- 	exynos9810-starlte.dtb\t\t\\
+ 	exynos7870-a2corelte.dtb	\
+ 	exynos7870-j6lte.dtb		\
+ 	exynos7870-on7xelte.dtb		\
+ 	exynos7885-jackpotlte.dtb	\
++	exynos7885-a10.dtb		\
+ 	exynos850-e850-96.dtb		\
+ 	exynos8895-dreamlte.dtb		\
+ 	exynos9810-starlte.dtb		\
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
 index 008228fb319a..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
@@ -59,7 +59,7 @@ new file mode 100644
 index 000000000000..000000000000
 --- /dev/null
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,49 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/dts-v1/;
 +
