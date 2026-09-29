@@ -1,18 +1,25 @@
 From: SM-A105F Linux 6.18.54 board port
-Subject: [PATCH] arm64: dts: exynos: enable A10 eMMC and UART
+Subject: [PATCH] arm64: dts: exynos: enable A10 eMMC and UART2
 
 Enable the existing Exynos7885 embedded MSHC and UART2 on the A10 board.
-Use only the 8-bit non-removable storage wiring and conservative legacy
-SDR timing. Preserve the Samsung 4.4 DDR and HS200/HS400 settings in the
-port matrix until voltage supplies and mode-specific behavior are mapped.
+Use the exact Samsung 4.4 8-bit non-removable eMMC wiring and retain only
+the legacy base SDR/DDR CLKSEL sample/drive field values with the divider
+separate. Do not enable HS200/HS400 or voltage switching while the A10 PMIC
+and mode-specific electrical behavior remain unmapped.
 
-This patch has not yet been applied to a full Linux source checkout or
-compiled in this workspace. It is an implementation candidate pending
-focused DTB/schema validation.
+Select UART2 as the standard serial2 and stdout-path, matching the upstream
+Exynos7885 sibling board convention. This enables the console path in DT but
+does not establish runtime console output.
+
+Validated against Linux 6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d
+in the existing Colab checkout after SD2 patch 0001. MMC and Samsung UART
+binding checks, targeted A10 DTB schema builds, and direct dt-validate passed.
+The resulting DTB SHA-256 is
+599938bfe2cbbc441bc0bb1220e56a44f3e17f96e4432151919803d0049b99d9.
 
 ---
- arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 22 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 23 +++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 index 000000000000..000000000000 100644
@@ -24,24 +31,28 @@ index 000000000000..000000000000 100644
  	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &a10_sd_cd>;
  };
 +
++/ {
++	aliases {
++		mmc0 = &mmc_0;
++		mmc1 = &mmc_2;
++		serial2 = &serial_2;
++	};
++	chosen {
++		stdout-path = &serial_2;
++	};
++};
++
++/* Samsung A10 enables non-removable 8-bit eMMC; base CLKSEL fields only. */
 +&mmc_0 {
 +	status = "okay";
 +	non-removable;
 +	bus-width = <8>;
 +	cap-mmc-highspeed;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_rdqs &sd0_bus1
-+		     &sd0_bus4 &sd0_bus8>;
-+	/*
-+	 * Samsung 4.4 A10 base SDR tuple is <3 0 4 0>:
-+	 * divider, fine-drive, drive, sample. Linux 6.18 reads
-+	 * sample/drive in the timing array and divider separately.
-+	 * HS200 and HS400 remain disabled pending their voltage path
-+	 * and mode-specific timing validation.
-+	 */
 +	samsung,dw-mshc-ciu-div = <3>;
 +	samsung,dw-mshc-sdr-timing = <0 4>;
 +	samsung,dw-mshc-ddr-timing = <2 4>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_rdqs &sd0_bus1 &sd0_bus4 &sd0_bus8>;
 +};
 +
 +&serial_2 {

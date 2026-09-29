@@ -484,3 +484,13 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Identified that the current initramfs UUID/PARTUUID resolver depends on /dev/disk symlinks that its BusyBox-only builder does not create. Correct resolver and host tests are next before corrected initramfs regeneration; no identifier is guessed.
 - This workspace contains no Linux 6.18 checkout, dtc/dt-validate or live Colab/Codespace. The next validation task is to stage pinned Linux 6.18.54 in an available build environment, apply SD2 patch 0001 then candidate 0002, build the A10 DTB, run targeted dtbs_check/direct dt-validate, and revise any genuine schema issues.
 - No exact Samsung-built kernel, corrected initramfs, firmware DT/DTBO binary or internally verified boot image was recovered. The candidate was not regenerated. Phone remains untouched.
+
+
+## 2026-09-29 Linux 6.18 A10 eMMC and UART validation
+
+- Continued the A10 DT work in the existing Colab checkout at upstream Linux `1b357ecb321392158d507b04672ffee57bfa071d` (6.18.54, GCC 13.3.0); no vendor-kernel rebuild was performed.
+- Exact Samsung 4.4 A10 source maps the embedded host as 8-bit/non-removable and provides legacy SDR `<3 0 4 0>` and DDR `<3 0 4 2>` words. Driver trace shows the old sample/drive fields and new Linux timing-array inputs occupy matching CLKSEL bitfields with divider separated. The current binding names these cells TX/RX phase, so the mapping is recorded as register-field preservation only, not an electrical-equivalence claim. HS200/HS400, UHS voltage switching and Samsung-only tuning properties remain absent pending PMIC and per-mode evidence.
+- Added the eMMC host configuration and SD0 pin groups; enabled UART2 and set `serial2` plus `/chosen/stdout-path` in accordance with the Exynos7885 sibling DTS convention. The final A10 DTB SHA-256 is `599938bfe2cbbc441bc0bb1220e56a44f3e17f96e4432151919803d0049b99d9`.
+- MMC and Samsung UART binding checks, target A10 `CHECK_DTBS=y` builds, direct `dt-validate`, and `git diff --check` passed. Schema tooling reported only that optional `yamllint` was missing. This is not boot or console-output evidence. Jackpot LTE remains sibling-only.
+- Exact Samsung archive SHA-256 is `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; Kernel archive `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`; Platform archive `de94b5e95ee1182435064f4cce1e1c940a1eb529aa35b4a5456692f6af503d1c`.
+- Missing exact Samsung-built Image, corrected initramfs and stock DT/DTBO binaries remain a separate artifact-acquisition blocker. No physical device operation occurred.

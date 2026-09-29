@@ -95,3 +95,10 @@ Pinned source paths:
 - https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/usb/dwc3/dwc3-exynos.c
 - https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/phy/samsung/phy-exynos5-usbdrd.c
 - https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/iio/accel/st_accel_i2c.c
+
+
+## Follow-up — validated A10 eMMC and UART
+
+Applied the conservative eMMC/UART board change in the existing Colab Linux 6.18.54 tree (commit `1b357ecb321392158d507b04672ffee57bfa071d`). Exact legacy tuple parsing and current `dw_mmc-exynos.c` packing were compared. This supports preserving base SDR/DDR sample and drive field values plus the independent divider. Since Linux binding terminology describes TX/RX phase, treat that as field-layout correspondence only. High-speed HS200/HS400 modes and voltage switching remain omitted pending the S2MPU08/regulator path and board-specific tuning review.
+
+The A10 node enables eMMC and UART2, adds standard aliases and UART2 `stdout-path`, and uses the Samsung SD0 pin group. MMC and Samsung UART binding generation, targeted A10 `CHECK_DTBS=y` builds, direct `dt-validate`, and whitespace checks passed. Final DTB SHA-256: `599938bfe2cbbc441bc0bb1220e56a44f3e17f96e4432151919803d0049b99d9`. The DTS compiled and validated; there was no boot or physical console test.

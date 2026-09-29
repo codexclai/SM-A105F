@@ -56,3 +56,10 @@ AOSP documents dt_table_entry id/rev/custom fields as optional hardware IDs that
 
     make -s -j2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs
     git diff --check
+
+
+## Validated eMMC/UART continuation — 2026-09-29
+
+In the existing checkout `/content/SM-A105F-colab/linux-6.18` (upstream `1b357ecb321392158d507b04672ffee57bfa071d`, 6.18.54, GCC 13.3.0), applied the A10 eMMC/UART extension after the SD2 work. Added non-removable 8-bit eMMC using `sd0_clk`, `sd0_cmd`, `sd0_rdqs`, `sd0_bus1`, `sd0_bus4`, `sd0_bus8`; enabled UART2 and set aliases `mmc0`, `mmc1`, `serial2` plus `stdout-path`. The legacy timing conversion is restricted to matching CLKSEL field positions; no electrical behavior equivalence is claimed and HS200/HS400/voltage switching remain disabled.
+
+Validation passed: MMC binding check; UART binding check; targeted A10 DTB builds with each matching binding and `CHECK_DTBS=y`; direct `dt-validate` for both bindings; `git diff --check`. Optional `yamllint` was not installed. Final DTB SHA-256: `599938bfe2cbbc441bc0bb1220e56a44f3e17f96e4432151919803d0049b99d9`. The sibling Jackpot LTE DTB is not A10 evidence.
