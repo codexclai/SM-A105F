@@ -547,3 +547,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Direct validation still prints the unrelated A10 root compatible and osc-clock missing clock-frequency findings; no reserved-memory-specific warning appears. Full-tree validation was not run.
 - The first draft patch hunk did not match the A10 DTS line context. Rebuilt the hunk from a unified diff and verified git apply --check plus application in an isolated worktree; output DTS matched the built source byte-for-byte. Corrected patch/report and matrix are on main in 352253a68217d55d2c4d21ed9c72b7e074257b9f.
 - No hardware or phone was accessed.
+
+
+## 2026-09-29 — Exact-source RTC/watchdog mapping
+
+- Verified the active source archive SHA-256 against `docs/SOURCES.md` and examined the exact Samsung 4.4.177 Exynos7885 DTS plus RTC and watchdog drivers.
+- RTC: the vendor `samsung,exynos8-rtc` is at 0x11c90000 with three interrupts and no clock property; the old driver explicitly selects dedicated Exynos8 RTC data. Linux 6.18 driver/binding do not support that compatible. The Exynos850 node is a different sibling design and was not copied.
+- Watchdog: exact A10-family `samsung,exynos8-wdt` is at 0x10060000/SPI 233, uses OSCCLK and WDT cluster1 gate, and vendor driver uses PMU bit 24. Linux 6.18 lacks that compatible/binding and its Exynos7885 clock provider does not expose the old WDT gate ID. No unsafe DTS-only enablement was made.
+- Added report `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md` with source hashes and limits; updated RTC/watchdog entries in the port matrix. This remains source/schema review, not runtime evidence.
+- Next independent work: inspect current Exynos7885 clock-controller/PMU support for a driver-plus-binding extension, and continue the PMIC/regulator and missing exact binary artifact investigations. Phone remains untouched.
