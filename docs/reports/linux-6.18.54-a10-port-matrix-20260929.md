@@ -80,3 +80,10 @@ The exact Samsung-to-upstream review is in [`linux-6.18.54-a10-usb-drd-review-20
 ## Latest clean rebuild state — 2026-09-29
 
 The validated A10 DTB was rebuilt from clean pinned Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d` after sequential application of the corrected tracked patch series. Its current SHA-256 is `36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f` (21,555 bytes). Focused MMC/UART/GPIO-key/pinctrl/Samsung-board binding checks and direct validation pass. Unfiltered validation has one inherited diagnostic: `osc-clock` is missing required `clock-frequency`; no A10 frequency has been inferred from Jackpot LTE. The Exynos-enabled aggregate generated 20 arm64 DTBs and logged this diagnostic plus assembler/Kconfig noise; it is not claimed as a clean aggregate schema pass. Detailed log and commands are in `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
+
+
+## Fixed oscillator mapping completed — 2026-09-29
+
+Samsung A10 overlay `arch/arm64/boot/dts/exynos/dtbo/exynos7884B-a10_common.dtsi` (SHA-256 `b3f7ae8a2cfb47fcc0171f8797fa2110c15182643cb26e814208e2c2be625083`) defines the board fixed-rate `oscclk` as 26 MHz. Samsung Exynos7885 base DTS independently uses 26 MHz for the ARMv8 timer. The upstream Exynos7885 `oscclk` is already a standard `fixed-clock`; setting its standard `clock-frequency` in the A10 board DTS is the direct binding mapping. Patch 0002 now carries this A10-only property. Jackpot LTE was not used as A10 evidence.
+
+The resulting 21,587-byte A10 DTB SHA-256 is `44a77aa2c6ce133def05a8a4986181328c32962a4e7c564fdb2e24e7d6358166`. Focused A10 schemas, focused and unfiltered direct `dt-validate`, and the fresh Exynos-enabled aggregate (20 arm64 DTBs; assembler warning only) completed without schema diagnostics. Full details and archive hashes are in `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
