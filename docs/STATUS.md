@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (initramfs fix; full-tree validation still active)
+
+Private `main` was verified at `1147777099c1085b75edceda67a2f2bad87f9a54` before this checkpoint update. The initramfs root resolver load defect is fixed and covered by source/archive assertions; the fail-closed root discovery assessment is documented. Reconstructed offline tests from remote main pass 33/33. Full archive/QEMU validation remains blocked on missing verified ARM64 BusyBox/archive binaries.
+
+A pinned Linux 6.18.54 full-tree `dtbs_check` is still active in Colab after 25m09s. Its Python cell buffers complete output and has emitted no diagnostics yet; it has not been stopped. After completion, apply the already-reviewed A10 GPIO-key and fixed-reserved-memory patches to the Colab board DTS, then run focused A10 binding checks/build and record the actual full-tree and focused diagnostics separately. The A10 SD/MMC/UART checks previously passed; Jackpot LTE remains sibling-only evidence.
+
+Exact Samsung-built kernel, corrected initramfs and matching stock A10 DTB/DTBO remain unavailable through audited sources. No host boot-v1 image was regenerated. Bootloader acceptance, DTBO selector, signing/rollback and exact partition-capacity evidence remain unresolved. Phone remains untouched.
+
+Next: capture the aggregate validator result; apply/validate GPIO-key and fixed-memory A10 patches; continue source-backed platform mapping and artifact retrieval. No physical-device action is authorized or performed.
+
+---
+
 # Current checkpoint — 2026-09-29 (initramfs resolver fix and offline tests)
 
 Remote `main` was verified at `8e5cc3d8dc9c605286e57cbb17556223cb5f0fa6` before this checkpoint update. The initramfs `/init` previously called root resolver functions without sourcing staged `/lib/root-device.sh`; it now loads the helper before root selection. The archive test checks this source statement and requires extracted `/init` to match source. Review: `docs/reports/initramfs-root-helper-fix-20260929.md`.
