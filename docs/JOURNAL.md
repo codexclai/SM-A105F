@@ -566,3 +566,11 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Compared with Linux 6.18 SEC PMIC support: current SEC I2C match set does not include S2MPU08; current SEC ACPM driver supports a different PMIC family. No upstream compatible alias or safe regulator-only node exists.
 - Kept the PMIC and its rails out of DTS. Required work includes ACPM transport/service availability, MFD/regmap/IRQ port, regulator/RTC bindings and validated consumers. eMMC high-speed voltage switching and charging remain blocked.
 - Published report and matrix detail on private `main`. No phone operation occurred.
+
+
+## 2026-09-29 — Artifact retrieval audit
+
+- Enumerated all 24 children in the authorized project Drive folder. Exact Samsung source chunks are present, but the exact built kernel Image, corrected initramfs binary, and stock A10 DTB/DTBO binary set are not.
+- Queried private GitHub release metadata. The draft host-only candidate archive is listed as 12,118,381 bytes with reported SHA-256 `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`; the bytes were not accessible through the connector, so this value is not readback verification.
+- The prior browser release download route ended in a browser error and was not retried; no authentication workaround was used. Recorded the current route/blocker in `docs/reports/artifact-retrieval-audit-20260929.md` and updated `docs/ARTIFACTS.md`.
+- No substitute kernel was built and no boot candidate was regenerated. Phone remains untouched.
