@@ -22,6 +22,11 @@ def make_v1(kernel=b"KERNEL!", ramdisk=b"RAMDISK"):
     image.extend(bytes((-len(kernel)) % page))
     image.extend(ramdisk)
     image.extend(bytes((-len(ramdisk)) % page))
+    digest = hashlib.sha1()
+    for payload in (kernel, ramdisk, b"", b""):
+        digest.update(payload)
+        digest.update(struct.pack("<I", len(payload)))
+    image[576:608] = digest.digest() + bytes(12)
     return bytes(image)
 
 
@@ -38,6 +43,12 @@ class BootSectionExtractionTests(unittest.TestCase):
     def test_rejects_truncated_kernel_payload(self):
         with self.assertRaisesRegex(ValueError, "kernel section"):
             extract(make_v1()[:2048 + 3])
+
+    def test_rejects_mismatched_android_header_id(self):
+        image = bytearray(make_v1())
+        image[576] ^= 1
+        with self.assertRaisesRegex(ValueError, "header ID does not match"):
+            extract(bytes(image))
 
     def test_rejects_non_v1_header(self):
         data = bytearray(make_v1())
