@@ -127,3 +127,8 @@ The exact three existing project Drive chunks were fetched into the active scrat
 Active location during the 2026-09-29 session: `/workspace/scratch/6e31273246b9/artifacts/source/`. This is transient workspace storage and is not durable or committed. The kernel archive includes the exact 4.4.177 DTS and driver source used for the new port matrix. The source archive does not include built kernel artifacts.
 
 The exact Samsung-built Image, corrected initramfs bytes, A10 base DTB/DTBO set, and an internally verified boot candidate were not recovered in this session. The prior private release digest is metadata only; it does not substitute for reading back and hashing its contents. The initramfs SHA recorded in the earlier checkpoint is not available bytes in this workspace. No candidate was regenerated.
+
+
+## 2026-09-29 binary artifact retrieval audit
+
+The authorized Drive folder currently lists 24 direct children, with no next-page token. It contains the already hash-verified exact Samsung source ZIP chunks and historical Git/third-party Eureka bundles, but no exact Samsung-built kernel Image, corrected initramfs binary, or stock A10 DTB/DTBO set. The connected private GitHub release API exposes a draft host-only candidate archive by metadata (12,118,381 bytes; reported digest `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`); that digest has not been verified against downloaded bytes or its contents. The available connector cannot retrieve binary release assets, and the prior browser route ended in a download error, so it was not repeated. Full retrieval outcome and safe next route: `docs/reports/artifact-retrieval-audit-20260929.md`.
