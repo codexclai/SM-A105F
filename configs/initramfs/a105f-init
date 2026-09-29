@@ -23,6 +23,7 @@ echo 'SM-A105F Debian initramfs: early boot'
 mount -t proc proc /proc || emergency 'proc mount failed'
 mount -t sysfs sysfs /sys || emergency 'sysfs mount failed'
 mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run || emergency 'tmpfs /run mount failed'
+. /lib/root-device.sh || emergency 'root-device resolver unavailable'
 ROOT=
 FSTYPE=ext4
 for arg in $(cat /proc/cmdline); do
