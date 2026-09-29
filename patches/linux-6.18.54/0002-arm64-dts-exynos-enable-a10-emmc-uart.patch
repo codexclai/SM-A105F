@@ -25,7 +25,7 @@ diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts
 index 000000000000..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-@@ -46,4 +46,28 @@
+@@ -46,4 +46,32 @@
  	samsung,dw-mshc-ddr-timing = <1 2>;
  	pinctrl-names = "default";
  	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &a10_sd_cd>;
