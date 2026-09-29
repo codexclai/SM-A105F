@@ -32,7 +32,7 @@ diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts
 --- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 @@ -8,3 +8,3 @@
- / {
+/ {
  	model = "Samsung Galaxy A10 (SM-A105F)";
 -	compatible = "samsung,A10 SWA OPEN 00", "samsung,exynos7885";
 +	compatible = "samsung,sm-a105f", "samsung,exynos7885";
