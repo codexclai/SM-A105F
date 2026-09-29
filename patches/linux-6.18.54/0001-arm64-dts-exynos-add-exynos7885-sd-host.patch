@@ -20,7 +20,7 @@ diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Ma
 index bcca63136557..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/Makefile
 +++ b/arch/arm64/boot/dts/exynos/Makefile
-@@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
+@@ -10,7 +10,8 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
  	exynos7870-a2corelte.dtb	\
  	exynos7870-j6lte.dtb		\
  	exynos7870-on7xelte.dtb		\
