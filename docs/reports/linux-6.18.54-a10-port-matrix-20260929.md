@@ -65,3 +65,8 @@ Focused Linux 6.18.54 result for this milestone: `dt_binding_check` on the reser
 ## RTC and watchdog decision
 
 Exact Samsung RTC/watchdog source semantics and the reasons neither node is currently supportable in Linux 6.18 are recorded in `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md`. These devices remain excluded from the DTS pending driver, binding, and clock mapping work.
+
+
+## S2MPU08 transport detail
+
+Exact-source transport, register-access, regulator and IRQ findings are documented in [`linux-6.18.54-a10-s2mpu08-transport-review-20260929.md`](linux-6.18.54-a10-s2mpu08-transport-review-20260929.md). The Samsung 4.4 core routes PMIC register access through Exynos ACPM, creates logical dummy I²C clients for four address spaces, and supplies S2MPU08-specific IRQ/MFD children. Linux 6.18 SEC I2C support covers neighboring SEC PMICs but does not contain this compatible or S2MPU08 register data; SEC ACPM support targets another PMIC family. The A10 S2MPU08 node and dependent regulator claims therefore remain excluded until transport availability, MFD/regmap/IRQ support, regulator semantics and safe voltage consumers are established.
