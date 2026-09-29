@@ -25,3 +25,7 @@ Commit `5c03c3c8dd1c74f2d2198b13e530486896751bd7` strengthens `tests/test_a105f_
 - Full archive extraction and ARM64 BusyBox/QEMU checks were not run because this runtime has no verified ARM64 static BusyBox or corrected archive. No new initramfs binary or hash is claimed.
 
 This fixes a host-side source-level defect. It does not establish root-partition identity, initramfs bootability, or physical-device behavior. The phone remains untouched.
+
+## Expanded host test run
+
+The repository's offline Python suite was reconstructed from the current authorized GitHub `main` test and script files in the active workspace. `PYTHONPATH=. python3 -m unittest discover -s tests -v` passed 33/33 tests, including the root-device selector. Python compilation for the reconstructed scripts and Bash/POSIX syntax checks also passed. The artifact-dependent `tests/test_a105f_initramfs.sh` was not included in this run because the verified ARM64 BusyBox and initramfs archive are unavailable; this is not recorded as a pass.
