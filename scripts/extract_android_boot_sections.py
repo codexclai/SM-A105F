@@ -49,8 +49,12 @@ def extract(data: bytes) -> tuple[dict, dict[str, bytes]]:
     page = header["page_size"]
     if page < 512 or page & (page - 1):
         raise ValueError("page size must be a power of two")
+    if not 1648 <= header["header_size"] <= page:
+        raise ValueError("boot header size is outside the first page")
     if len(data) < page:
         raise ValueError("truncated first boot page")
+    if header["kernel_size"] == 0:
+        raise ValueError("kernel section is empty")
 
     sections: dict[str, tuple[int, int]] = {}
     kernel_off = page
@@ -111,6 +115,10 @@ def main() -> None:
     parser.add_argument("output_dir", type=Path)
     parser.add_argument("--expected-kernel", type=Path)
     parser.add_argument("--expected-ramdisk", type=Path)
+    parser.add_argument("--expect-page-size", type=lambda v: int(v, 0))
+    parser.add_argument("--expect-kernel-address", type=lambda v: int(v, 0))
+    parser.add_argument("--expect-ramdisk-address", type=lambda v: int(v, 0))
+    parser.add_argument("--expect-tags-address", type=lambda v: int(v, 0))
     args = parser.parse_args()
     manifest, payloads = extract(args.boot.read_bytes())
     for label, expected in (("kernel", args.expected_kernel),
@@ -119,6 +127,13 @@ def main() -> None:
             got = manifest["sections"].get(label, {}).get("sha256")
             if got != sha(expected):
                 raise SystemExit(f"{label} payload does not match {expected}")
+    for argument, key in (("expect_page_size", "page_size"),
+                          ("expect_kernel_address", "kernel_load_address"),
+                          ("expect_ramdisk_address", "ramdisk_load_address"),
+                          ("expect_tags_address", "tags_load_address")):
+        expected = getattr(args, argument)
+        if expected is not None and manifest[key] != expected:
+            raise SystemExit(f"{key} is 0x{manifest[key]:x}; expected 0x{expected:x}")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for name, payload in payloads.items():
         (args.output_dir / f"{name}.bin").write_bytes(payload)
