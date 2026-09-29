@@ -583,3 +583,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Linux 6.18.54's DWC3 Exynos compatible/binding does not include this glue compatible. Its Samsung PHY match table has no A10 compatible or Exynos7885 data entry. Existing Exynos7870/850 entries do not prove register/calibration equivalence; the DWC3 binding also requires regulator supplies.
 - Left all USB nodes disabled/absent. PMIC/regulator support remains a prerequisite, but a PHY/glue implementation and safe VBUS/role path are also required.
 - Added the exact-source review and expanded the port matrix. No USB or phone hardware was tested.
+
+
+## 2026-09-29 — Boot-v1 and DT/DTBO selector evidence reconciliation
+
+- Reviewed the saved measured CWB3 candidate layout. Boot v1/page 2048, kernel load address 0x10008000, tags 0x10000100, kernel section 29,112,000 bytes, empty ramdisk, and separate 8 MiB dt.img/dtbo.img table images are measured from that candidate AP only, not a handset dump.
+- The A10 SWA overlay entry carries id/revision 0/0 and custom tuple [0,255,0,0]. Bootloader selector semantics remain unverified; the table tuple does not prove handset selection.
+- Kept the 0x11000000 ramdisk address labelled as a community BoardConfig hypothesis because stock ramdisk_size/address are both zero.
+- Marked the earlier host boot-v1 package as stale for current use: its embedded initramfs predates the explicit eMMC path-only resolver correction. Corrected initramfs regeneration remains gated by unavailable verified BusyBox and exact binary inputs.
+- Recorded unresolved Samsung footer/signature, AVB, rollback, partition capacity/layout, recovery and Download Mode questions in `docs/BOOT_PACKAGING.md`. No flash/deployment or device operation occurred.
