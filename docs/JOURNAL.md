@@ -528,3 +528,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Two focused selector tests passed; shell syntax checks passed.
 - The private GitHub release page exposed the draft boot candidate asset name and digest but the browser download action was blocked by URL policy. No alternate browser route was attempted. The Actions API has zero workflow runs, and release binary content is unavailable through the GitHub connector.
 - Exact Samsung kernel/initramfs/DTB/DTBO remain unavailable, so no boot candidate was regenerated. Phone remains untouched.
+
+
+## 2026-09-29 — Evidence-based A10 GPIO keys
+
+- Traced the exact A10 overlay and Samsung 4.4 `gpio_keys.c`: volume-down GPA1-6 / code 114, volume-up GPA1-5 / code 115, power GPA1-7 / code 116; flags `0xf`; legacy direct IRQ tuple has three cells; power is wake-enabled.
+- The vendor consumer tests only `OF_GPIO_ACTIVE_LOW` bit 0 from the flags and treats `gpio-key,wakeup` as a boolean. Current Linux 6.18 gpio-keys obtains a GPIO descriptor and derives its IRQ with `gpiod_to_irq()` when `interrupts` is omitted. Current Exynos7885 GPA1 has a two-cell GPIO specifier and two-cell interrupt-controller binding, so the old three-cell child IRQ tuple was omitted.
+- Mapped bit 0 as standard `GPIO_ACTIVE_LOW`, Samsung EINT 0xf as `EXYNOS_PIN_FUNC_EINT`, and pull 0 as `EXYNOS_PIN_PULL_NONE`. Set `wakeup-source` only on the power key. Left drive-strength 0 and vendor flag bits 2/3 unmapped.
+- Patch 0003 passed `git apply --check` in the Linux 6.18.54 checkout and produced the validated DTS byte-for-byte. Targeted GPIO keys and pinctrl schema checks plus direct validation passed; A10 DTB SHA-256 `bb72f8b3769407d8aa2b61e2b057efc9a62328affea411ab9645174c9d208ab4`.
+- Published the patch, review report and port-matrix update as commit `eb310ccc33c56b2678b105685ae0a7ceddb6adc7`; this checkpoint/journal refresh is being committed directly after it. No phone operations occurred.
