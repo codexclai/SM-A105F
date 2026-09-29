@@ -620,3 +620,11 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Kept the pinned Linux 6.18.54 `dtbs_check` run active in Colab to capture real aggregate diagnostics. At last observation it had run 25m09s; output is buffered and no diagnostics are available until completion.
 - Next when the notebook releases: apply GPIO-key and fixed-memory patches to the current A10 DTS, run the focused schemas/build and distinguish the A10 output from full-tree noise.
 - Root resolver init fix remains verified; 33 offline Python tests passed. No physical-device operations occurred.
+
+
+## 2026-09-29 — Colab aggregate-check observability checkpoint
+
+- Rechecked the saved Colab notebook URL from a fresh cloud-browser session. Google displayed a signed-out account chooser; after the account choice, the password step expired with the page message “Your session ended because there was no activity.” No authenticated Colab notebook or kernel was reached in this runtime.
+- The last saved record says the full Linux 6.18.54 `dtbs_check` was still executing at 25m09s with Python-buffered output. Its completion and diagnostics are unknown here; no success or failure is claimed.
+- The already committed A10 GPIO-key and fixed-reserved-memory patches and their separate focused checks remain supported by prior repo evidence. They were not reapplied or revalidated in this runtime. The pending combined A10/full-tree result is a runtime-access gap, not new evidence of a source defect.
+- Updated `docs/STATUS.md` to replace the stale “still active” claim with this observable state. The exact Samsung kernel/initramfs/stock DT artifacts remain unavailable; no boot candidate was regenerated and no physical-device operation occurred.
