@@ -1,3 +1,13 @@
+## 2026-09-29 — A10 compatible schema correction
+
+- Replaced the downstream root compatible containing spaces with `samsung,sm-a105f`, preserving `samsung,exynos7885` fallback and model text. Added the model to the existing Exynos7885 board enum.
+- Updated the DTS source in patch 0001, matching context in patch 0004, and added patch 0005 for the upstream board schema. The schema patch was round-tripped through reverse-check, reverse-apply, and apply on the reconstructed Linux 6.18.54 tree.
+- Samsung board-schema `dt_binding_check`, A10 `CHECK_DTBS=y`, focused board-schema `dt-validate`, and full direct validation returned 0. Full direct validation now shows only inherited `osc-clock` missing `clock-frequency`. This stays unresolved without exact A10 evidence.
+- Current A10 DTB: 21,555 bytes, SHA-256 `36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f`. Kconfig prompt chatter remains during target setup, although commands were isolated and returned 0. Whole-tree `dtbs_check` remains incomplete.
+- Drive inventory confirms source ZIP parts and old Eureka bundles but no exact Samsung 4.4.177 output bundle. GitHub release metadata exposes the prior host-only candidate checksum, but the current connector cannot retrieve its private bytes; no binary was treated as verified.
+- Evidence: `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
+- Commits: `ede5bfd70b7461a8aedd5ca2f7fe7dcaf6029a85` (board DTS patch), `6a96c5350c8ef6231161a12a01c7513e56a10778` (schema patch, then corrected), `88c9f18bfad1b7e1f22a5556f1c75e9a3a9edad0` (validation report), `c13d0366e8491c2233bcf19be6e9cd81e9aeece8` (checkpoint).
+
 ## 2026-09-29 — Recovered Colab tree and focused A10 DTB validation
 
 - Inspected the temporary Linux 6.18.54 edits, restored the Makefile and SoC DTSI from pinned upstream, then recreated intended board changes in the correct board DTS and target. No misplaced board timing tuples remain in the SoC DTSI.
