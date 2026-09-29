@@ -1,3 +1,13 @@
+# Current checkpoint — 2026-09-29 (clean pinned rebuild and Exynos aggregate)
+
+Private `main` includes refreshed patch contexts for GPIO keys and fixed memory; the tracked A10 patch series now applies sequentially to clean Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d`. Patch application was verified in a clean worktree, with final A10 DTS and schema byte-identical to the validated build tree. The malformed Colab Makefile target and temporary shared-DTSI timing edits were discarded.
+
+The rebuilt A10 DTB is 21,555 bytes, SHA-256 `36f1effe96b5fa41912d1a06c604de8a97f5d5243527aa6cf689321e78bfa05f`. Focused five-schema binding validation, dt-doc-validate, yamllint, targeted CHECK_DTBS, and focused direct dt-validate passed. Unfiltered direct validation reports the one inherited Exynos7885 `osc-clock` missing `clock-frequency`; no value was guessed. Full Exynos-enabled aggregate generated 20 arm64 DTBs; log has that same schema diagnostic, assembler warning, and Kconfig restart prompt noise. It is recorded as completed with a diagnostic, not as a clean full-tree schema pass. Details: `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`.
+
+Next engineering work remains artifact retrieval and verified host candidate regeneration, subsystem implementation from exact Samsung semantics, and exact A105F bootloader/recovery/partition plus battery/charging/thermal research. Root selection remains explicit `/dev/mmcblk0pN`; UUID/PARTUUID and partition discovery are not guessed. No phone action occurred.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 board compatible and focused DTB validation)
 
 Private `main` was at `88c9f18bfad1b7e1f22a5556f1c75e9a3a9edad0` after updating the A10 validation report. Patch 0001 now uses model-specific `samsung,sm-a105f`; patch 0004’s DTS context agrees; new patch 0005 registers that compatible in the Exynos7885 board schema. The schema change passed binding validation, A10 `CHECK_DTBS=y`, direct board-schema validation, and an equivalent schema patch reverse/apply round trip on the reconstructed tree.
