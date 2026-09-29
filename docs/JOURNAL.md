@@ -614,3 +614,9 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - `PYTHONPATH=. python3 -m unittest discover -s tests -v`: 33/33 passed, including two root-device selector tests. Python compilation and Bash/POSIX shell syntax checks passed.
 - Did not run the full initramfs archive/QEMU test because its verified static ARM64 BusyBox/archive inputs remain unavailable.
 - Full-tree `dtbs_check` remains running in Colab; at the last poll it had been executing for 17m18s without exposing captured output. Focused A10 evidence is preserved and separately validated.
+
+## 2026-09-29 — Full-tree validation still running
+
+- Kept the pinned Linux 6.18.54 `dtbs_check` run active in Colab to capture real aggregate diagnostics. At last observation it had run 25m09s; output is buffered and no diagnostics are available until completion.
+- Next when the notebook releases: apply GPIO-key and fixed-memory patches to the current A10 DTS, run the focused schemas/build and distinguish the A10 output from full-tree noise.
+- Root resolver init fix remains verified; 33 offline Python tests passed. No physical-device operations occurred.
