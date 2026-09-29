@@ -1,3 +1,17 @@
+# Current checkpoint — 2026-09-29 (initramfs resolver loading and root discovery assessment)
+
+Remote `main` was verified at `2075cbffba8868d0e449fed11abd1426e43819fb` before this status update. The initramfs `/init` previously called root resolver functions without sourcing staged `/lib/root-device.sh`; it now sources the helper before root selection. The archive test checks this source statement and requires extracted `/init` to match the source file. See `docs/reports/initramfs-root-helper-fix-20260929.md`.
+
+Readback checks passed: POSIX shell syntax for init/resolver, Bash syntax for both initramfs and selector tests, and explicit eMMC path selector tests. The full ARM64 archive/QEMU test remains unrun because no verified static BusyBox/archive is present. Root discovery assessment recommends retaining explicit `root=/dev/mmcblk0pN`: no UUID/PARTUUID or partition number is guessed. A future scan would require a paired installation marker, read-only/no-journal probe, exact-one-match rule and fail-closed behavior; it is not implemented. See `docs/reports/root-device-discovery-assessment-20260929.md`.
+
+The subsystem matrix and exact-source reports cover fixed RAM reservations, GPIO keys, eMMC/UART, RTC/watchdog, S2MPU08/rails, USB DRD/PHY and battery/thermal. No unsafe DTS-only mappings were added for PMIC, RTC/watchdog or USB. A full-tree `dtbs_check` is still running in the pinned Linux 6.18.54 Colab checkout at last observation (13m28s); the command captures output until completion, so there are no real diagnostics captured yet. Prior focused A10 MMC/UART schema validation remains separate.
+
+Exact Samsung-built kernel, corrected initramfs binary and matching stock A10 DTB/DTBO binaries remain unavailable through the audited local/Drive/GitHub routes. Do not regenerate the Android boot-v1 candidate until verified inputs are present. The ramdisk load address remains community-derived; bootloader acceptance, DTBO selector semantics, AVB/footer/rollback and exact partition capacities remain unresolved. Phone remains untouched.
+
+Next: capture the full-tree check result if it completes, while preserving the focused A10 work. Continue independent exact binary acquisition and source-to-upstream port mapping. No physical-device operation is authorized or performed.
+
+---
+
 # Current checkpoint — 2026-09-29 (initramfs root-selection path fixed)
 
 Remote `main` was verified at `34b56921898172f5d99f845db9a7810b5b0cca8f` before this checkpoint update. The initramfs `/init` previously called root resolver functions without sourcing the staged `/lib/root-device.sh`. It now sources the helper before root selection. The archive test asserts the source line and requires extracted `/init` to match its source. Evidence is in `docs/reports/initramfs-root-helper-fix-20260929.md`.
