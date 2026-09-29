@@ -119,3 +119,11 @@ Configuration audit output: `.config` 145,302-byte Samsung A10 config generated 
 - Archive: work/artifacts/debian13-trixie-minbase-arm64-20260928-hostname.tar, 196,298,240 bytes, SHA-256 29d42b57730c4976b9c3c599b79cd9ecdf33c7017033cdb50d107bfb4323cc.
 - Private draft GitHub release tag: rootfs-trixie-arm64-hostname-20260928. Assets: archive, checksum sidecar and build log. Host validation only; no phone boot.
 - Verified hostname a10; fstab remains the unconfigured base-system placeholder. Archive and systemd userspace checks passed. The prior 15acec8d rootfs archive is historical; this corrected archive supersedes it for future host packaging.
+
+## Exact Samsung source reassembled in Work Mode — 2026-09-29
+
+The exact three existing project Drive chunks were fetched into the active scratch workspace and reassembled in order. ZIP integrity check passed. Source ZIP: 229,817,794 bytes, SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`. Embedded `Kernel.tar.gz`: 202,050,103 bytes, SHA-256 `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`. Embedded `Platform.tar.gz`: 28,872,812 bytes, SHA-256 `de94b5e95ee1182435064f4cce1e1c940a1eb529aa35b4a5456692f6af503d1c`.
+
+Active location during the 2026-09-29 session: `/workspace/scratch/6e31273246b9/artifacts/source/`. This is transient workspace storage and is not durable or committed. The kernel archive includes the exact 4.4.177 DTS and driver source used for the new port matrix. The source archive does not include built kernel artifacts.
+
+The exact Samsung-built Image, corrected initramfs bytes, A10 base DTB/DTBO set, and an internally verified boot candidate were not recovered in this session. The prior private release digest is metadata only; it does not substitute for reading back and hashing its contents. The initramfs SHA recorded in the earlier checkpoint is not available bytes in this workspace. No candidate was regenerated.
