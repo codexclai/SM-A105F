@@ -87,6 +87,19 @@ def extract(data: bytes) -> tuple[dict, dict[str, bytes]]:
         payloads[name] = data[start:end]
         previous_end = end
 
+    # AOSP mkbootimg computes the legacy header ID as SHA-1 over each
+    # payload followed by its little-endian byte length. Header v1 includes
+    # the recovery_dtbo section in addition to kernel/ramdisk/second.
+    image_id = hashlib.sha1()
+    for name in ("kernel", "ramdisk", "second", "recovery_dtbo"):
+        payload = payloads.get(name, b"")
+        image_id.update(payload)
+        image_id.update(struct.pack("<I", len(payload)))
+    expected_id = image_id.digest()
+    header_id = data[576:608]
+    if header_id[:20] != expected_id or header_id[20:] != bytes(12):
+        raise ValueError("Android boot header ID does not match v1 payloads")
+
     manifest = {
         "image_size": len(data),
         "header_version": 1,
@@ -95,6 +108,7 @@ def extract(data: bytes) -> tuple[dict, dict[str, bytes]]:
         "ramdisk_load_address": header["ramdisk_load_address"],
         "tags_load_address": header["tags_load_address"],
         "cmdline": header["cmdline"],
+        "android_header_id_sha1": expected_id.hex(),
         "sections": {
             name: {"offset": sections[name][0], "size": len(payload),
                    "sha256": hashlib.sha256(payload).hexdigest()}
