@@ -53,3 +53,14 @@ A real Exynos-enabled aggregate was run after setting `CONFIG_ARCH_EXYNOS=y`; 20
 The container lacked system /tmp and package state. Required build/schema tools were obtained or installed into workspace-local directories; no host packages or tracked source were modified for this setup.
 
 The current artifact acquisition and boot-chain gaps remain as documented above. No physical device was accessed.
+
+
+## Exact-source oscillator mapping — 2026-09-29
+
+Recovered all three Samsung source ZIP chunks from the existing Drive folder using the connector’s signed raw-file URLs streamed with `curl` into the workspace. Concatenated archive: 229,817,794 bytes, SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931` (matches the recorded original). Embedded `Kernel.tar.gz`: 202,050,103 bytes, SHA-256 `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`. ZIP integrity test passed. Nothing from these binaries was committed to Git.
+
+The exact A10 common overlay source `arch/arm64/boot/dts/exynos/dtbo/exynos7884B-a10_common.dtsi` (SHA-256 `b3f7ae8a2cfb47fcc0171f8797fa2110c15182643cb26e814208e2c2be625083`) defines `fixed-rate-clocks/oscclk`, compatible `samsung,exynos7884B-oscclk`, with `clock-frequency = <26000000>`. The exact Samsung Exynos7885 base DTS (SHA-256 `9d6b88c24a05ba20cf49de666f9775a9437df6911459902017e92f8bb8264f79`) also sets the ARMv8 timer clock frequency to 26 MHz. Linux 6.18's inherited `oscclk` node is a standard `fixed-clock`; the A10 DTS now supplies this supported standard property in the board file. This mapping uses A10-specific Samsung evidence; no Jackpot LTE value was used.
+
+Updated tracked patch 0002 carries the board-level oscillator property. All five tracked A10 patches apply in order to a clean pinned checkout; the patched DTS and board schema compare byte-for-byte with the tested tree, and `git diff --check` passes. Final A10 DTB is 21,587 bytes, SHA-256 `44a77aa2c6ce133def05a8a4986181328c32962a4e7c564fdb2e24e7d6358166`.
+
+After this change, the five-schema A10 `CHECK_DTBS=y` build, focused direct `dt-validate -l`, and unfiltered direct `dt-validate` all complete with no schema diagnostics. A new full Exynos-enabled `dtbs_check` invocation generated 20 arm64 DTBs and logged only the host assembler warning about broken `.inst`; no Kconfig prompt noise or schema diagnostics remain in that captured log. The invocation returned 0. The earlier aggregate result with the missing `osc-clock` property is superseded.
