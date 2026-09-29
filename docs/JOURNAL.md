@@ -648,3 +648,8 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - The last saved record says the full Linux 6.18.54 `dtbs_check` was still executing at 25m09s with Python-buffered output. Its completion and diagnostics are unknown here; no success or failure is claimed.
 - The already committed A10 GPIO-key and fixed-reserved-memory patches and their separate focused checks remain supported by prior repo evidence. They were not reapplied or revalidated in this runtime. The pending combined A10/full-tree result is a runtime-access gap, not new evidence of a source defect.
 - Updated `docs/STATUS.md` to replace the stale “still active” claim with this observable state. The exact Samsung kernel/initramfs/stock DT artifacts remain unavailable; no boot candidate was regenerated and no physical-device operation occurred.
+
+
+## 2026-09-29 — A10 ABOX reservation cross-check
+
+Reassembled the three existing Drive source chunks by HTTP range and verified the complete user-supplied ZIP (229,817,794 bytes; SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`) and embedded Kernel archive (SHA-256 `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`). Exact A10 DTS inspection confirms the A10 common overlay includes the 4 MiB ABOX fixed range and enables the ABOX block; the SoC tree's ABOX debug consumer references that range. This resolves a contradictory later review note: keep the existing generic reserved-memory reservation in patch 0004, but do not claim upstream audio support or infer no-map/reusable semantics. Updated the memory review and current checkpoint. Source archives remain in this Work scratch session and were not added to Git. Device remains untouched.

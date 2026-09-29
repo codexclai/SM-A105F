@@ -1,3 +1,9 @@
+## Current continuation — 2026-09-29 (ABOX reservation clarification)
+
+A re-read of the hash-verified Samsung 4.4.177 A10 overlay confirms that `exynos7884B-a10_common.dtsi` includes `exynos7884-rmem_7884.dtsi`, enables `&abox`, and defines its fixed `abox_rmem` at 0xE9400000/4 MiB. The inherited Exynos7885 DTS has an `abox_debug` child with `memory-region = <&abox_rmem>`. This resolves the ABOX reservation uncertainty: existing Linux 6.18 patch 0004's generic reg-only reservation is supported and should remain; the ABOX driver/audio function remain unported, and no `no-map`/reusable semantics are inferred. See the appended clarification in `docs/reports/linux-6.18.54-a10-rtc-watchdog-memory-review-20260929.md`. No kernel rebuild was possible in this Work runtime; the existing Codespace is stopped by its out-of-budget notice. Phone untouched.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 fixed clock and exact source recovery)
 
 Starting from the preceding verified main `908d1e0ca0dceb643174150c8c5881f8055b76f5`, the exact Samsung source chunks were streamed from the existing Drive folder into the workspace and reassembled. The full 229,817,794-byte source ZIP matches SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; the embedded 202,050,103-byte `Kernel.tar.gz` matches `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`. ZIP integrity passed. These source archives remain workspace-only, not committed.
