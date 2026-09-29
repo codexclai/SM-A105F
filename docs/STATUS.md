@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (A10 fixed clock and exact source recovery)
+
+Starting from the preceding verified main `908d1e0ca0dceb643174150c8c5881f8055b76f5`, the exact Samsung source chunks were streamed from the existing Drive folder into the workspace and reassembled. The full 229,817,794-byte source ZIP matches SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`; the embedded 202,050,103-byte `Kernel.tar.gz` matches `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`. ZIP integrity passed. These source archives remain workspace-only, not committed.
+
+Exact A10 common DTS evidence sets `oscclk` to 26 MHz. Linux 6.18 uses a standard `fixed-clock`, so patch 0002 now applies that value in the A10 board DTS. The clean five-patch series applies in order to pinned Linux commit `1b357ecb321392158d507b04672ffee57bfa071d`, and the resulting DTS/schema match the tested tree byte-for-byte. The 21,587-byte A10 DTB SHA-256 is `44a77aa2c6ce133def05a8a4986181328c32962a4e7c564fdb2e24e7d6358166`. Focused binding build and focused plus unfiltered direct `dt-validate` are diagnostic-free. A fresh Exynos-enabled aggregate generated 20 arm64 DTBs with only the assembler `.inst` warning; no schema diagnostics or Kconfig prompt noise were logged. The earlier inherited fixed-clock warning is resolved.
+
+Exact Samsung-built Image/initramfs and stock A10 DT/DTBO binaries are still unavailable, so no Android boot candidate was regenerated. The initramfs keeps explicit measured `/dev/mmcblk0pN` selection; no UUID/PARTUUID or partition discovery is guessed. Details: `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`, `docs/reports/linux-6.18.54-a10-port-matrix-20260929.md`, and `docs/reports/artifact-retrieval-audit-20260929.md`.
+
+Phone remains untouched; no physical operation occurred.
+
+---
+
 # Current checkpoint — 2026-09-29 (artifact stream boundary)
 
 The preceding build/matrix checkpoint was verified at `a574c56fe0181596ed4bc0c3b7ea3cae671eb5cc`; this checkpoint then records the Drive recheck and transfer limit in subsequent commits. Drive recheck found no exact built Samsung kernel, corrected initramfs, or stock A10 DT/DTBO. The original three Samsung source ZIP chunks remain in Drive. A supported raw stream returned a reference for the 62,045,634-byte final chunk, but workspace transfer is rejected at the executor’s 32 MiB per-file limit; no partial file was created. Do not treat the source as active-workspace data until all chunks can be fetched and combined hash-verified in a larger existing environment. Details: `docs/reports/artifact-retrieval-audit-20260929.md`.
