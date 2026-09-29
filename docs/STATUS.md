@@ -24,3 +24,8 @@ Recorded the exact Samsung PMIC contract and upstream support gap in `docs/repor
 ## 2026-09-29 — Binary artifact retrieval audit
 
 The Drive folder's 24 direct children were enumerated; no exact Samsung-built kernel Image, corrected initramfs, or stock A10 DTB/DTBO set was present. The private GitHub API lists a draft host-only boot-candidate asset, but the available connector returns metadata only; its reported digest has not been checked against bytes. The previous browser release-asset attempt errored, so it was not repeated. Full route findings are in `docs/reports/artifact-retrieval-audit-20260929.md`. Do not regenerate the candidate until its required verified inputs are present.
+
+
+## 2026-09-29 — USB DRD/PHY support gap
+
+The exact A10 USB glue and PHY drivers were traced against Linux 6.18.54; evidence and hashes are in `docs/reports/linux-6.18.54-a10-usb-drd-review-20260929.md`. The A10 glue/PHY compatibles, Exynos7885 50 MHz reference behavior, multi-region PHY, five clocks, PMU isolation and custom calibration are not represented by a matching upstream glue/PHY binding/driver data set. USB remains disabled; no sibling SoC compatible was substituted.
