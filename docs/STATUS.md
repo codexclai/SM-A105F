@@ -29,3 +29,8 @@ The Drive folder's 24 direct children were enumerated; no exact Samsung-built ke
 ## 2026-09-29 — USB DRD/PHY support gap
 
 The exact A10 USB glue and PHY drivers were traced against Linux 6.18.54; evidence and hashes are in `docs/reports/linux-6.18.54-a10-usb-drd-review-20260929.md`. The A10 glue/PHY compatibles, Exynos7885 50 MHz reference behavior, multi-region PHY, five clocks, PMU isolation and custom calibration are not represented by a matching upstream glue/PHY binding/driver data set. USB remains disabled; no sibling SoC compatible was substituted.
+
+
+## 2026-09-29 — Boot-v1 and DT selector evidence reconciliation
+
+Documented the exact CWB3 candidate header and separate DT/DTBO table facts, plus remaining footer/signing, AVB, selector, capacity, rollback and recovery unknowns in `docs/BOOT_PACKAGING.md`. The measured stock header has no ramdisk; the candidate 0x11000000 ramdisk address remains community-derived. The former host candidate embeds an older initramfs and is not the corrected candidate. No artifact was regenerated, and no phone action occurred.
