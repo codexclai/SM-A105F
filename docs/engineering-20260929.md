@@ -4,7 +4,7 @@
 
 The verified starting point was private `main` at `c6f15a3c562714a229b238c88eebba5e5977b60e`. This session added `scripts/extract_android_boot_sections.py` and `tests/test_extract_android_boot_sections.py` to make the next boot-v1 package check repeatable. The extractor validates Android boot header v1, page size, section offsets, payload bounds and alignment; extracts kernel and ramdisk bytes; records sizes, load addresses and SHA-256 values in JSON; and can compare extracted payload hashes against supplied source files.
 
-The tests cover valid aligned extraction, truncation, unsupported header versions, CLI output, byte-for-byte source comparison and manifest hashes. The CLI also checks expected page size, kernel, ramdisk and tags addresses; address mismatches fail validation. The complete tracked Python suite passed **25/25** when reconstructed from the verified GitHub tree at this revision. `py_compile` passed for the project Python scripts/tests; `bash -n` passed for the initramfs and rootfs builders. This run did not have the Codespace build filesystem or the private release archive bytes, so no kernel, DTB, DTBO, initramfs or boot image was rebuilt here.
+The tests cover valid aligned extraction, truncation, unsupported header versions, CLI output, byte-for-byte source comparison and manifest hashes. The CLI also checks expected page size, kernel, ramdisk and tags addresses; address mismatches fail validation. It recomputes the Android header v1 SHA-1 ID over each kernel, ramdisk, second and recovery-DTBO payload followed by its little-endian size, and rejects a mismatch (algorithm cross-checked against AOSP `mkbootimg.py`). The complete tracked Python suite passed **25/25** when reconstructed from the verified GitHub tree at this revision. `py_compile` passed for the project Python scripts/tests; `bash -n` passed for the initramfs and rootfs builders. This run did not have the Codespace build filesystem or the private release archive bytes, so no kernel, DTB, DTBO, initramfs or boot image was rebuilt here.
 
 ## Candidate artifact state
 
@@ -60,5 +60,5 @@ Samsung's Knox technical note describes signature validation along the boot chai
 Sources:
 - TeamWin A10 device page, updated 2026-09-28: https://twrp.me/samsung/samsunggalaxya10.html
 - Samsung Knox boot-time protections technical note: https://kp-cdn.samsungknox.com/b9821c47b3ef1cce894325a61a6fcdac.pdf
-- AOSP boot header and DTBO format references: https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions
+- AOSP boot header and DTBO format references: https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions\n- AOSP mkbootimg header-ID algorithm source, commit 808d42e197506319ee65eb078d3defd9602e2ac2: https://android.googlesource.com/platform/system/tools/mkbootimg/+/808d42e197506319ee65eb078d3defd9602e2ac2/mkbootimg.py\n- https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions
 
