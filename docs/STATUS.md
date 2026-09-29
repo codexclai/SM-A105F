@@ -1,13 +1,12 @@
-# Current checkpoint — 2026-09-29 (initramfs fix; full-tree validation still active)
+# Current checkpoint — 2026-09-29 (A10 source milestone preserved; aggregate log unavailable)
 
-Private `main` was verified at `1147777099c1085b75edceda67a2f2bad87f9a54` before this checkpoint update. The initramfs root resolver load defect is fixed and covered by source/archive assertions; the fail-closed root discovery assessment is documented. Reconstructed offline tests from remote main pass 33/33. Full archive/QEMU validation remains blocked on missing verified ARM64 BusyBox/archive binaries.
+Private `main` was verified at `11c904b0d427111cabaeb8ca8f2ad963977fffc3` before this checkpoint update. The initramfs root resolver load defect is fixed and covered by source/archive assertions; fail-closed root discovery is documented. Reconstructed offline tests from remote main pass 33/33. Full archive/QEMU validation remains blocked on missing verified ARM64 BusyBox/archive binaries.
 
-A pinned Linux 6.18.54 full-tree `dtbs_check` is still active in Colab after 25m09s. Its Python cell buffers complete output and has emitted no diagnostics yet; it has not been stopped. After completion, apply the already-reviewed A10 GPIO-key and fixed-reserved-memory patches to the Colab board DTS, then run focused A10 binding checks/build and record the actual full-tree and focused diagnostics separately. The A10 SD/MMC/UART checks previously passed; Jackpot LTE remains sibling-only evidence.
+A pinned Linux 6.18.54 full-tree `dtbs_check` was running in Colab at the last saved observation (25m09s, output buffered). This runtime’s browser is signed out and the Colab page now reports “You’re not signed in” / “Your session ended because there was no activity.” The aggregate log cannot currently be retrieved; completion and diagnostics are unknown. Keep its result unclaimed. The A10 GPIO-key and fixed-reserved-memory patches are already committed in private main and their separate focused validations are recorded in their patch/review evidence. Re-run the aggregate check only when a kernel tree/runtime is available, then capture its actual output.
 
 Exact Samsung-built kernel, corrected initramfs and matching stock A10 DTB/DTBO remain unavailable through audited sources. No host boot-v1 image was regenerated. Bootloader acceptance, DTBO selector, signing/rollback and exact partition-capacity evidence remain unresolved. Phone remains untouched.
 
-Next: capture the aggregate validator result; apply/validate GPIO-key and fixed-memory A10 patches; continue source-backed platform mapping and artifact retrieval. No physical-device action is authorized or performed.
-
+Next: recover an authorized active Linux build runtime or source tree; run focused combined A10 checks and capture aggregate diagnostics; continue source-backed platform work and artifact retrieval. No physical-device action is authorized or performed.
 ---
 
 # Current checkpoint — 2026-09-29 (initramfs resolver fix and offline tests)
