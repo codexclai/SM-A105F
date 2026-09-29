@@ -1,0 +1,39 @@
+From: SM-A105F Linux 6.18.54 board port
+Subject: [PATCH] arm64: dts: exynos: add SM-A105F board compatible
+
+Give the A10 board a valid, model-specific compatible and register it in
+the existing Exynos7885 board schema. Preserve the marketing description
+in model, and keep the SoC compatible as the fallback. The downstream
+" A10 SWA OPEN 00 " string contains spaces and is not a valid compatible.
+
+Validated against Linux v6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d:
+Samsung board-schema dt_binding_check, A10 CHECK_DTBS build, and focused
+and full direct dt-validate. The compatible diagnostic is cleared. The
+remaining full-validator finding is the inherited osc-clock missing
+clock-frequency; no value is inferred here.
+
+---
+ Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml | 1 +
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts                    | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+--- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+@@ -1,6 +1,7 @@
+       - description: Exynos7885 based boards
+         items:
+           - enum:
+               - samsung,jackpotlte              # Samsung Galaxy A8 (2018)
++              - samsung,sm-a105f                # Samsung Galaxy A10 (SM-A105F)
+           - const: samsung,exynos7885
+
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+--- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+@@ -8,3 +8,3 @@
+ / {
+ 	model = "Samsung Galaxy A10 (SM-A105F)";
+-	compatible = "samsung,A10 SWA OPEN 00", "samsung,exynos7885";
++	compatible = "samsung,sm-a105f", "samsung,exynos7885";
+  memory@80000000 { device_type = "memory"; reg = <0x0 0x80000000 0x3da00000>; };
