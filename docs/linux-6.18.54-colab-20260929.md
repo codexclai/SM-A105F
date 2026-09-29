@@ -19,6 +19,16 @@ Patch: patches/linux-6.18.54/0001-arm64-dts-exynos-add-exynos7885-sd-host.patch
 - A targeted dtbs_check was started in Colab against the first revision, before the two-cell conversion; it had not returned by the latest inspection. Re-run it after applying the corrected patch. The initial schema failure (if any) must not be reported as validation of this corrected candidate.
 - This is a DTB host build only. No A10 board DTB was built and no handset boot/device validation is claimed.
 
+
+
+## Independent timing-source audit — 2026-09-29
+
+The pinned community driver header confirms the legacy macro is `SDMMC_CLKSEL_TIMING(div, f_drv, drv, sample)`: divider occupies bits 24–26, fine-drive bits 22–23, drive bits 16–18, and sample bits 0–2. Its A10 common overlay sets SD2 divider 3, SDR `<3 0 2 0>`, DDR `<3 0 2 1>`. Upstream Linux 6.18.54 instead parses exactly two timing cells and builds the register fields as sample, drive, divider; the binding's prose names the pair TX then RX, while the driver implementation places the first cell in sample and the second in drive. The candidate translation therefore follows the actual register-field implementation (`<0 2>` / `<1 2>`, separate divider `<3>`), but the difference between the binding's TX/RX wording and driver's sample/drive implementation is recorded as a semantic uncertainty. The legacy fine-drive value 0 has no representation in the two-cell binding. No claim of electrical equivalence is made.
+
+The same A10 community overlay describes GPA0-7 as card-detect, four-bit removable SD and UHS modes, but uses downstream-only properties and pinctrl state names. These values remain board-level comparative evidence. The new SoC host stays disabled; no A10 board DTS or card-detect/supply configuration is asserted.
+
+Independent sources inspected: pinned geckyn header at commit `ad10da74b6b2fcccdb2a2cfdb5d02aaa79b5a282`; upstream `dw_mmc-exynos.c`, `dw_mmc-exynos.h`, and `samsung,exynos-dw-mshc.yaml` in torvalds/linux; and AOSP Android boot image / DTO documentation. TeamWin's Galaxy A10 guidance describes this device family as A-only/system-as-root, states stock AVB uses vbmeta digests for boot/recovery and other images, and documents recovery-partition boot semantics. This remains third-party operational guidance; it does not establish the target handset's installed build or authorize a partition choice.
+
 ## Boot, partitions, and recovery research
 
 - AOSP documents boot header v1 component size/address fields and says v1/v2 support recovery DTBO sections. Its generic description does not establish what SM-A105F boot ROM/bootloader accepts, Samsung footer handling, AVB state, or the correct ramdisk address for this handset.
