@@ -1,4 +1,4 @@
-# Current checkpoint — 2026-09-29 (A10 fixed memory reservations)
+# Current checkpoint — 2026-09-29 (A10 RTC/watchdog source mapping)
 
 This checkpoint records the A10 fixed-memory milestone committed to private `main` at `352253a68217d55d2c4d21ed9c72b7e074257b9f`; this status/journal checkpoint is committed immediately after that source milestone.
 
@@ -11,3 +11,6 @@ The direct validator still reports existing A10 root-compatible and `osc-clock` 
 The GPIO-key checkpoint suite remains as recorded previously: two focused root-selector tests and shell syntax checks passed in this workspace. The broader initramfs archive test remains blocked because this runtime lacks the verified ARM64 BusyBox and corrected cpio archive. The exact Samsung-built kernel, corrected initramfs and matched A10 DT/DTBO binaries remain unavailable here; no boot image was regenerated. No physical-device operation occurred.
 
 Next: trace the old A10 RTC/watchdog and poweroff paths against Linux 6.18, preserving unsupported semantics, then continue PMIC/regulator and artifact acquisition work independently. Phone remains untouched.
+
+
+Exact-source RTC/watchdog review was added in `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md`. Samsung 4.4 maps `samsung,exynos8-rtc` to a distinct driver variant at 0x11c90000 with three IRQs and no clock; current Linux 6.18 binding/driver lack that compatible. Samsung `samsung,exynos8-wdt` requires PMU bit 24 and the old WDT cluster1 gate clock, which the current Exynos7885 clock provider does not expose. No safe DTS-only mapping was made. Updated port matrix records these findings. Next: assess supportable upstream clock/PMU extension, and continue PMIC/regulator and artifact acquisition work. Phone remains untouched.
