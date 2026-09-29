@@ -60,5 +60,6 @@ Samsung's Knox technical note describes signature validation along the boot chai
 Sources:
 - TeamWin A10 device page, updated 2026-09-28: https://twrp.me/samsung/samsunggalaxya10.html
 - Samsung Knox boot-time protections technical note: https://kp-cdn.samsungknox.com/b9821c47b3ef1cce894325a61a6fcdac.pdf
-- AOSP boot header and DTBO format references: https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions\n- AOSP mkbootimg header-ID algorithm source, commit 808d42e197506319ee65eb078d3defd9602e2ac2: https://android.googlesource.com/platform/system/tools/mkbootimg/+/808d42e197506319ee65eb078d3defd9602e2ac2/mkbootimg.py\n- https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions
+- AOSP boot header and DTBO format references: https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions
+- AOSP mkbootimg header-ID algorithm source, commit 808d42e197506319ee65eb078d3defd9602e2ac2: https://android.googlesource.com/platform/system/tools/mkbootimg/+/808d42e197506319ee65eb078d3defd9602e2ac2/mkbootimg.py
 
