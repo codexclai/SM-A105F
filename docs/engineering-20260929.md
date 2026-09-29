@@ -77,3 +77,21 @@ Source: upstream systemd v257 README, versioned source: https://github.com/syste
 Added executable `scripts/audit_systemd_kernel_config.py` and six focused tests. It parses standard Linux `.config` enabled/unset records and audits them against upstream systemd v257's published config requirements: core required options, options expected disabled, service sandbox namespace gaps, recommended options, and a nonempty legacy hotplug helper. It exits nonzero for missing core requirements or incorrectly enabled required-off options, while reporting feature/recommended gaps separately. The audit logic is grounded in the versioned upstream `systemd v257 README` referenced above.
 
 The project Python suite now passes **29/29**, and `py_compile` passes for tracked scripts/tests. This session did not have the exact generated Samsung 4.4.177 `.config`, so the tool was tested using fixtures only; no conclusion about the actual kernel config has been made.
+
+## Component match audit against Linux 6.18.54
+
+Exact stable source inspected: `gregkh/linux` branch `linux-6.18.y` at `1b357ecb321392158d507b04672ffee57bfa071d`, whose commit message is `Linux 6.18.54` (2026-09-25).
+
+- eMMC has an upstreamable path: Exynos7885's SoC `mmc_0` node includes the `samsung,exynos7-dw-mshc-smu` fallback matched by `drivers/mmc/host/dw_mmc-exynos.c`. The 4.4.111 A10 mirror's `dwmmc_0` is the same 0x13500000 / IRQ 146 block. Keep tuning and regulators from the 4.4.177 source under review.
+- The downstream A10 SD host `dwmmc_2` (0x13550000 / IRQ 147) has no current Exynos7885 SoC node/pinctrl group. The driver supports related Exynos DW-MSHC variants, but address, clocks, SD2 pins, detect and voltage handling need explicit porting.
+- USB is not a simple DT enable: `dwc3-exynos.c` and `phy-exynos5-usbdrd.c` in v6.18.54 have no Exynos7885 compatible match, while the downstream A10 DTS uses Samsung `exynos-dwusb` and `exynos-usbdrd-phy` plus vendor PHY properties. New glue/PHY match data or a validated equivalent is required before USB gadget/USB networking can be claimed.
+- The Samsung `scsc_wifibt` mailbox/device node has no match in the inspected mainline wireless/Bluetooth drivers. The A10 tree depends on SCSC vendor WLAN/BT support and firmware; Wi-Fi/BT is not available by merely enabling an upstream generic interface.
+- Mainline ST accelerometer driver tables match `st,lis2ds12`; the A10 vendor DT uses `st,lis2ds`. Verify the actual sensor ID/binding before reusing the driver or changing the compatible. A10's `sec,sec_ts`, `sharp,gp2ap110s`, `codec,cod3035x`, and `siliconmitus,sma1301` likewise have no matching compatible in the inspected 6.18.54 tree. Mainline has SMA1303/1307 codec drivers, which are not proof of SMA1301 compatibility.
+- The Samsung modem board data declares `sec_modem,modem_pdata` and SIPC 5.0; no mainline compatible/driver path was found for this Exynos/S327AP integration. Treat cellular data and modem control as downstream-only pending a distinct modem protocol/driver port.
+- The gaps above are host source match findings, not proof that the physical devices are absent. No unsafe DT node has been copied or enabled.
+
+Pinned source paths:
+- https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/mmc/host/dw_mmc-exynos.c
+- https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/usb/dwc3/dwc3-exynos.c
+- https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/phy/samsung/phy-exynos5-usbdrd.c
+- https://github.com/gregkh/linux/blob/1b357ecb321392158d507b04672ffee57bfa071d/drivers/iio/accel/st_accel_i2c.c
