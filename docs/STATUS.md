@@ -1,3 +1,19 @@
+# Current checkpoint — 2026-09-29 (initramfs resolver fix and offline tests)
+
+Remote `main` was verified at `8e5cc3d8dc9c605286e57cbb17556223cb5f0fa6` before this checkpoint update. The initramfs `/init` previously called root resolver functions without sourcing staged `/lib/root-device.sh`; it now loads the helper before root selection. The archive test checks this source statement and requires extracted `/init` to match source. Review: `docs/reports/initramfs-root-helper-fix-20260929.md`.
+
+The current repository's offline Python tests were fetched from authorized GitHub `main` and run in a reconstructed workspace: 33/33 passed, including explicit eMMC root selection. Script Python compilation, Bash syntax, POSIX init/resolver syntax and the selector shell test passed. The artifact-dependent `tests/test_a105f_initramfs.sh` was not run: no verified ARM64 static BusyBox or corrected archive is available. No initramfs binary hash or bootability claim is made.
+
+Root discovery assessment recommends explicit `root=/dev/mmcblk0pN` rather than guessing UUID/PARTUUID or scanning partitions. A future discovery implementation would require a paired installation marker, eMMC-only read-only/no-journal probes, exact-one-match rule and fail-closed behavior; it is not implemented. See `docs/reports/root-device-discovery-assessment-20260929.md`.
+
+The subsystem matrix and exact-source reports cover fixed RAM reservations, GPIO keys, eMMC/UART, RTC/watchdog, S2MPU08/rails, USB DRD/PHY and battery/thermal. No unsafe DTS-only mappings were added for PMIC, RTC/watchdog or USB. A full-tree `dtbs_check` is still running in the pinned Linux 6.18.54 Colab checkout at last observation (17m18s); output remains buffered until it completes, so no real diagnostics have yet been captured. Previous focused A10 MMC/UART schema validations remain separate.
+
+Exact Samsung-built kernel, corrected initramfs binary and matching stock A10 DTB/DTBO binaries remain unavailable through audited local/Drive/GitHub routes. Do not regenerate Android boot-v1 until verified inputs are present. Ramdisk load address remains community-derived; bootloader acceptance, DTBO selector semantics, AVB/footer/rollback and exact partition capacities remain unresolved. Phone remains untouched.
+
+Next: capture full-tree check diagnostics if it completes, and keep advancing independent Linux 6.18 port work. No physical-device operation is authorized or performed.
+
+---
+
 # Current checkpoint — 2026-09-29 (initramfs resolver loading and root discovery assessment)
 
 Remote `main` was verified at `2075cbffba8868d0e449fed11abd1426e43819fb` before this status update. The initramfs `/init` previously called root resolver functions without sourcing staged `/lib/root-device.sh`; it now sources the helper before root selection. The archive test checks this source statement and requires extracted `/init` to match the source file. See `docs/reports/initramfs-root-helper-fix-20260929.md`.
