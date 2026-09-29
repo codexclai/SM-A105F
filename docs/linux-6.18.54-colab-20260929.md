@@ -4,11 +4,11 @@
 
 The active upstream source snapshot is Linux stable 6.18.54, commit 1b357ecb321392158d507b04672ffee57bfa071d, in the user's Colab runtime. The A10 SoC is Exynos7884B, in the Exynos7885 family. The modern jackpotlte board DTB is for Galaxy A8 (SM-A530F) and is reference-only.
 
-A public community downstream Exynos7885/A10 tree (geckyn, android_kernel_samsung_exynos7885, branch exelixis-2019-04-05_clang_lto) provided comparative legacy A10 configuration. It identifies removable SD controller address 0x13550000, IRQ 147, four-bit SD bus, card detect at GPIO GPA0 line 7, and CIU divider 3 with timing tuples SDR <3 0 2 0>, DDR <3 0 2 1>. This tree is comparative evidence, not the user's supplied exact Samsung source and not an independent upstream validation.
+A public community downstream Exynos7885/A10 tree (geckyn, android_kernel_samsung_exynos7885, branch exelixis-2019-04-05_clang_lto) provided comparative legacy A10 configuration. It identifies removable SD controller address 0x13550000, IRQ 147, four-bit SD bus, card detect at GPIO GPA0 line 7, and CIU divider 3 with legacy timing tuples SDR <3 0 2 0>, DDR <3 0 2 1>. The legacy driver defines the tuple order as divider, fine-drive, drive, sample, and reads four cells. This tree is comparative evidence, not the user's supplied exact Samsung source.
 
 ## Implemented fragment
 
-The Exynos7885 SoC include now describes the second DesignWare MMC host at 0x13550000 using upstream-compatible names and clock handles. It is disabled by default. Timing parameters satisfy the Linux samsung,exynos-dw-mshc.yaml binding requirements for samsung,exynos7-dw-mshc. Board pinctrl, card-detect polarity, supplies, slot, and status=okay remain out of the shared SoC include.
+A candidate Exynos7885 SoC fragment describes the second DesignWare MMC host at 0x13550000 using the upstream compatible, clock handles, and two-cell timing format. The four legacy timing values map to upstream timing order (sample, drive), while CIU divider is now a separate property: SDR <0 2>, DDR <1 2>, divider <3>. The current upstream binding requires two timing cells, and the current driver reads exactly two. This conversion is code-derived, not a direct electrical validation. The node remains disabled. IRQ 147 and the host's presence still rely on community A10/Exynos7885 evidence; exact Samsung source confirmation is outstanding. Board pinctrl, card-detect polarity, supplies, slot, and status=okay remain out of the shared SoC include.
 
 Patch: patches/linux-6.18.54/0001-arm64-dts-exynos-add-exynos7885-sd-host.patch
 
@@ -16,7 +16,7 @@ Patch: patches/linux-6.18.54/0001-arm64-dts-exynos-add-exynos7885-sd-host.patch
 
 - make -s -j2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs completed successfully after the fragment was applied.
 - git diff --check completed without output.
-- A targeted dtbs_check is running in the Colab runtime after installing dtschema; result pending.
+- A targeted dtbs_check was started in Colab against the first revision, before the two-cell conversion; it had not returned by the latest inspection. Re-run it after applying the corrected patch. The initial schema failure (if any) must not be reported as validation of this corrected candidate.
 - This is a DTB host build only. No A10 board DTB was built and no handset boot/device validation is claimed.
 
 ## Boot, partitions, and recovery research
@@ -37,7 +37,7 @@ AOSP documents dt_table_entry id/rev/custom fields as optional hardware IDs that
 ## Remaining engineering gates
 
 - Build a board-level SM-A105F/A10 DTS/DTBO against exact Samsung source, once board memory/reserved-memory, regulators, GPIOs and variant facts are mapped.
-- Confirm SD card-detect polarity, supply/voltage behavior and pinctrl with exact source; keep removable SD disabled until these are established.
+- Confirm the host register/IRQ mapping, SD card-detect polarity, supply/voltage behavior and pinctrl with the exact source; keep removable SD disabled until these are established.
 - Resolve first-boot eMMC root partition identity and bootloader DT/DTBO selector behavior from exact firmware and partition-table evidence.
 - Obtain current physical firmware/build and bootloader state only at the approved read-only/device gate. No physical operation has occurred.
 - Obtain the exact corrected initramfs/kernel artifacts in this runtime before regenerating the boot-v1 candidate; the Colab runtime currently holds only the Linux 6.18.54 source tree and no kernel Image/initramfs.
