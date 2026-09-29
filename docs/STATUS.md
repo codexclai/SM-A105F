@@ -1,3 +1,11 @@
+# Current checkpoint — 2026-09-29 (artifact stream boundary)
+
+Private `main` verified at `a574c56fe0181596ed4bc0c3b7ea3cae671eb5cc` after refreshing the subsystem matrix’s root handoff and latest A10 validation state. Drive recheck found no exact built Samsung kernel, corrected initramfs, or stock A10 DT/DTBO. The original three Samsung source ZIP chunks remain in Drive. A supported raw stream returned a reference for the 62,045,634-byte final chunk, but workspace transfer is rejected at the executor’s 32 MiB per-file limit; no partial file was created. Do not treat the source as active-workspace data until all chunks can be fetched and combined hash-verified in a larger existing environment. Details: `docs/reports/artifact-retrieval-audit-20260929.md`.
+
+A10 DTB build/schema results and full Exynos aggregate diagnostics are recorded above. One unfiltered fixed-clock diagnostic remains unresolved pending exact Samsung clock source; no Jackpot LTE frequency was copied. Phone remains untouched.
+
+---
+
 # Current checkpoint — 2026-09-29 (clean pinned rebuild and Exynos aggregate)
 
 Private `main` includes refreshed patch contexts for GPIO keys and fixed memory; the tracked A10 patch series now applies sequentially to clean Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d`. Patch application was verified in a clean worktree, with final A10 DTS and schema byte-identical to the validated build tree. The malformed Colab Makefile target and temporary shared-DTSI timing edits were discarded.
