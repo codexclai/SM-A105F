@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (pinned A10 DTB validation)
+
+Private `main` was at `9b3639a08620e5e2dfa6be0d2f8d791b28f262e3` after adding `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`. From clean upstream Linux v6.18.54 commit `1b357ecb321392158d507b04672ffee57bfa071d`, the recovered Colab edits were re-created with board timings kept in the board DTS, not the SoC DTSI. A10 DTB build and focused CHECK_DTBS/schema checks for MMC, UART, GPIO keys, and Samsung pinctrl returned 0; direct per-schema dt-validate was clean. DTB: 21,563 bytes, SHA-256 `3e059201353c87f4c310109f83f9bec8bbd4fcff3bcbb69057223d6031663549`.
+
+Full direct dt-validate reports the root legacy marketing string is not an accepted DT compatible and inherited `osc-clock` lacks required `clock-frequency`. The reserved-memory path in this tree is text documentation rather than a YAML schema; no reserved-memory diagnostic appeared. Do not guess or suppress these. First build invocation emitted Kconfig prompts before succeeding; rerun from a fresh pinned checkout with configuration stabilized for reproducible logs. Full-tree dtbs_check remains unresolved and separate.
+
+Drive contains original Samsung source ZIP parts, prior Eureka bundles, and a checkpoint, but no matching exact 4.4.177 output bundle. GitHub release metadata confirms a prior 12,118,381-byte host-only boot candidate (SHA-256 `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`); the available connector cannot retrieve its private binary bytes. No candidate extraction/regeneration was done, and no artifact was treated as verified from metadata alone. Continue via an approved binary-capable route and validate hashes before reuse.
+
+Phone untouched. No physical-device operation was performed or authorized.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 source milestone preserved; aggregate log unavailable)
 
 Private `main` was verified at `11c904b0d427111cabaeb8ca8f2ad963977fffc3` before this checkpoint update. The initramfs root resolver load defect is fixed and covered by source/archive assertions; fail-closed root discovery is documented. Reconstructed offline tests from remote main pass 33/33. Full archive/QEMU validation remains blocked on missing verified ARM64 BusyBox/archive binaries.
