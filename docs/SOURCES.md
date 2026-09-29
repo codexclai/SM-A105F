@@ -78,3 +78,7 @@ Inspected public repository [`topser9/kernel_samsung_universal7885`](https://git
 Upstream Linux repository torvalds/linux, branch snapshot fd179f8a05be3ccae366b9b96e176b51fbe54aab, contains arch/arm64/boot/dts/exynos/exynos7885.dtsi, exynos7885-pinctrl.dtsi, and exynos7885-jackpotlte.dts. The board file identifies the Galaxy A8 2018 / SM-A530F; the inspected Exynos DTS directory has no A10/A105F-named board file. This is upstream SoC and related-board reference material, not an SM-A105F device tree.
 
 The official Linux Kernel Archives (https://www.kernel.org/) snapshot read 2026-09-27 listed stable 7.2.8 dated 2026-09-25 and longterm 6.18.54 dated 2026-09-25. Keep the project's 6.18.54 tree as its current longterm modernization baseline while evaluating newer stable releases independently; no A10 boot support is implied.
+
+## Source archive availability update — 2026-09-29
+
+The three previously identified Drive chunks are now present in the active Work Mode workspace, reassembled in the recorded order and verified against the exact ZIP SHA-256. The source archive, embedded Kernel.tar.gz and Platform.tar.gz SHA-256 values and temporary workspace path are recorded in `docs/ARTIFACTS.md`. This resolves access to Samsung DTS/driver source for this work session; it does not provide the exact Samsung-built kernel image or firmware DT/DTBO binaries.
