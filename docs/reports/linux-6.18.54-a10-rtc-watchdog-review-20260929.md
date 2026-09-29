@@ -38,3 +38,16 @@ Linux 6.18.54 has no `samsung,exynos8-wdt` entry in the Samsung watchdog binding
 This is a source/binding review; no RTC or watchdog patch was produced because the required current driver/binding/clock path is not present. The Linux 6.18.54 A10 DTB status is unaffected. The exact Samsung source archive is user-supplied and hash-verified, not independently Samsung-signed. No physical device was accessed and no runtime RTC, reboot, or watchdog behavior is claimed.
 
 Next investigation: examine Linux 6.18 Exynos7885 clock-controller IDs/provider and PMU syscon bindings for a supportable watchdog extension; continue PMIC/regulator work, which also blocks RTC and charging integration.
+
+
+## Follow-up exact-source verification — 2026-09-29
+
+The three Drive chunks were reassembled in the Colab runtime. The ZIP size is 229,817,794 bytes and its SHA-256 exactly matches the recorded archive hash above. Samsung's extracted `drivers/watchdog/s3c2410_wdt.c` was independently hashed in that archive and matches `17a551e00394a25bb742a2cdddceee442e075da0ade4967c92764399514f31c1`.
+
+The Samsung 4.4.177 Exynos8 variant selects PMU disable register `0x0408`, PMU reset-mask register `0x040c`, reset status register `0x0404`, and bit 24 in all three. Its documented reset-status label is A53 WDTRESET. Its old-driver quirk flags are exactly PMU configuration and reset-status support; it does **not** select the old driver's WTCLRINT quirk. The watchdog MMIO block uses the S3C watchdog register layout: WTCON at `0x00`, WTDAT at `0x04`, WTCNT at `0x08`, and WTCLRINT at `0x0c`; the latter is not accessed for this Exynos8 variant by the old driver's quirk-gated clear path. This distinction matters: Linux 6.18's candidate variant should use `QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_RST_STAT` only. It must not copy Exynos7's WTCLRINT or automatic-disable flags. In 6.18, reset-mask bit set means mask/disable the watchdog reset request; reset-status bit 24 is read as `WDIOF_CARDRESET` boot status.
+
+The source-derived clock mapping is also concrete. Samsung 4.4 names the ordered clocks `OSCCLK` (`rate_watchdog`) and `GATE_WDT_CLUSTER1` (`gate_watchdog`). The old clock source identifies OSCCLK as a 26 MHz root. Linux 6.18's Exynos7885 clock provider exposes the WDT1 peripheral PCLK gate; the source clock should therefore map to the oscillator and the bus clock to WDT1 PCLK, while using modern driver order/names `watchdog` then `watchdog_src`. These old and new names are API translations, not evidence that the provider's numeric IDs are identical.
+
+The Samsung board file associates the watchdog with A53-class Exynos7884B/7885 and bit 24. Exynos7 bit 23 and Exynos850 cluster-indexed variants are not valid substitutes. The watchdog register and PMU mappings above apply to the source's `samsung,exynos8-wdt`; they are not inferred from nearby SoCs.
+
+This completes the source-side semantic check and supports a narrowly scoped Linux 6.18 Exynos8 driver/binding extension. No driver, binding, or DTS change has yet been made from this follow-up, and no WDT-specific schema/DTB or driver compile result is claimed. The earlier “no patch” status remains the current code state. Next execution must implement and validate the extension before enabling it in the A10 board DTS.
