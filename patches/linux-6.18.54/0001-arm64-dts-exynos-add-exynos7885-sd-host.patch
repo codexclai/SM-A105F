@@ -13,7 +13,6 @@ This is a host-tested porting fragment, not a bootable A10 board DTS.
  1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
-index 000000000000..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
 +++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
 @@ -310,6 +310,22 @@
