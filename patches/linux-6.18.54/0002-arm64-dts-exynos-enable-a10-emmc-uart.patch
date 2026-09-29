@@ -1,7 +1,11 @@
 From: SM-A105F Linux 6.18.54 board port
-Subject: [PATCH] arm64: dts: exynos: enable A10 eMMC and UART2
+Subject: [PATCH] arm64: dts: exynos: enable A10 eMMC, UART2 and oscclk
 
 Enable the existing Exynos7885 embedded MSHC and UART2 on the A10 board.
+
+Set the standard Exynos7885 fixed oscillator to the 26 MHz value specified by
+the exact Samsung A10 common overlay. This completes the inherited upstream
+fixed-clock node using its standard binding property.
 Use the exact Samsung 4.4 8-bit non-removable eMMC wiring and retain only
 the legacy base SDR/DDR CLKSEL sample/drive field values with the divider
 separate. Do not enable HS200/HS400 or voltage switching while the A10 PMIC
@@ -13,19 +17,20 @@ does not establish runtime console output.
 
 Validated against Linux 6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d
 in the existing Colab checkout after SD2 patch 0001. MMC and Samsung UART
-binding checks, targeted A10 DTB schema builds, and direct dt-validate passed.
-The resulting DTB SHA-256 is
-599938bfe2cbbc441bc0bb1220e56a44f3e17f96e4432151919803d0049b99d9.
+binding checks and targeted A10 DTB schema builds passed. After adding the
+source-backed oscillator frequency, focused and unfiltered direct dt-validate
+pass without diagnostics. Final DTB SHA-256:
+44a77aa2c6ce133def05a8a4986181328c32962a4e7c564fdb2e24e7d6358166.
 
 ---
- arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 23 +++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 33 +++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 index 000000000000..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-@@ -46,4 +46,32 @@
+@@ -46,4 +46,37 @@
  	samsung,dw-mshc-ddr-timing = <1 2>;
  	pinctrl-names = "default";
  	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &a10_sd_cd>;
@@ -57,4 +62,9 @@ index 000000000000..000000000000 100644
 +
 +&serial_2 {
 +	status = "okay";
++};
++
++/* Exact Samsung A10 overlay specifies a 26 MHz fixed oscillator. */
++&oscclk {
++	clock-frequency = <26000000>;
 +};
