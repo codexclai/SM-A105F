@@ -520,3 +520,11 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Compared upstream Linux 6.18 Exynos TMU driver match table: no `samsung,exynos7885-tmu` entry. Did not enable sensor or thermal zones.
 - Inspected the acquired Platform archive filename inventory; A10 Android battery/health/thermal/charger services and init configuration are not present. Exact service names remain unverified.
 - No DTS change or hardware test occurred. Phone remains untouched.
+
+
+## 2026-09-29 — Explicit root path and release artifact limitation
+
+- Tightened root selection to accept only a user-supplied measured `/dev/mmcblk0pN` path. UUID/PARTUUID are rejected until the initramfs has a real resolver; no device scan or automatic partition choice exists.
+- Two focused selector tests passed; shell syntax checks passed.
+- The private GitHub release page exposed the draft boot candidate asset name and digest but the browser download action was blocked by URL policy. No alternate browser route was attempted. The Actions API has zero workflow runs, and release binary content is unavailable through the GitHub connector.
+- Exact Samsung kernel/initramfs/DTB/DTBO remain unavailable, so no boot candidate was regenerated. Phone remains untouched.

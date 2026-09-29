@@ -35,7 +35,7 @@ resolve_root() {
   resolve_root_device "$ROOT"
 }
 [ -n "$ROOT" ] || emergency 'missing root= kernel parameter'
-root_spec_supported "$ROOT" || emergency 'unsupported root=; use a measured /dev/mmcblk0pN or UUID/PARTUUID value'
+root_spec_supported "$ROOT" || emergency 'unsupported root=; supply a measured /dev/mmcblk0pN path'
 ROOTDEV=
 n=0
 while [ "$n" -lt 30 ]; do
