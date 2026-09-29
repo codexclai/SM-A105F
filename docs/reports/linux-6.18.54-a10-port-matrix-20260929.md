@@ -70,3 +70,8 @@ Exact Samsung RTC/watchdog source semantics and the reasons neither node is curr
 ## S2MPU08 transport detail
 
 Exact-source transport, register-access, regulator and IRQ findings are documented in [`linux-6.18.54-a10-s2mpu08-transport-review-20260929.md`](linux-6.18.54-a10-s2mpu08-transport-review-20260929.md). The Samsung 4.4 core routes PMIC register access through Exynos ACPM, creates logical dummy I²C clients for four address spaces, and supplies S2MPU08-specific IRQ/MFD children. Linux 6.18 SEC I2C support covers neighboring SEC PMICs but does not contain this compatible or S2MPU08 register data; SEC ACPM support targets another PMIC family. The A10 S2MPU08 node and dependent regulator claims therefore remain excluded until transport availability, MFD/regmap/IRQ support, regulator semantics and safe voltage consumers are established.
+
+
+## USB DRD and PHY detail
+
+The exact Samsung-to-upstream review is in [`linux-6.18.54-a10-usb-drd-review-20260929.md`](linux-6.18.54-a10-usb-drd-review-20260929.md). Samsung's A10 parent uses `samsung,exynos-dwusb`, one `hsdrd` clock and nested DWC3, while its PHY uses `samsung,exynos-usbdrd-phy`, three register regions, five clocks, PMU offsets and custom revision/reference/tuning properties. The 4.4 PHY explicitly sets a 50 MHz reference clock for Exynos7885. Linux 6.18.54 has no matching glue/PHY compatible or Exynos7885 PHY data; its Exynos DWC3 binding requires supply wiring. No USB node was enabled, and no Exynos7870/850 compatible was copied.
