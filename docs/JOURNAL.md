@@ -653,3 +653,8 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 ## 2026-09-29 — A10 ABOX reservation cross-check
 
 Reassembled the three existing Drive source chunks by HTTP range and verified the complete user-supplied ZIP (229,817,794 bytes; SHA-256 `5c83be7c2452d644ccda1deb898d9a54f2b3d53d3a0e66a7a394dcbf14439931`) and embedded Kernel archive (SHA-256 `e05288db460f2d0a0f86c79beac819066f4ea3baa57cf5f26b46cdf4ec3d0af2`). Exact A10 DTS inspection confirms the A10 common overlay includes the 4 MiB ABOX fixed range and enables the ABOX block; the SoC tree's ABOX debug consumer references that range. This resolves a contradictory later review note: keep the existing generic reserved-memory reservation in patch 0004, but do not claim upstream audio support or infer no-map/reusable semantics. Updated the memory review and current checkpoint. Source archives remain in this Work scratch session and were not added to Git. Device remains untouched.
+
+
+## 2026-09-29 — Samsung source recovery method recorded
+
+The Drive connector's raw stream plus HTTP byte-range requests bypassed the workspace transfer limit without changing or duplicating Drive files. All three original chunks were recovered in verified ranges, concatenated, and checked against the exact recorded archive and embedded Kernel.tar.gz hashes. Updated artifact/source inventory with the durable chunk IDs and repeatable recovery procedure. The recovered work copy remains scratch-only. No Linux build was started because this environment lacks the cross toolchain/device-tree tools and the existing Codespace is out of budget.
