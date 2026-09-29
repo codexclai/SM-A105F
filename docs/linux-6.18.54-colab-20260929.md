@@ -19,20 +19,26 @@ Patch: patches/linux-6.18.54/0001-arm64-dts-exynos-add-exynos7885-sd-host.patch
 - A targeted dtbs_check is running in the Colab runtime after installing dtschema; result pending.
 - This is a DTB host build only. No A10 board DTB was built and no handset boot/device validation is claimed.
 
-## Boot/recovery research checkpoint
+## Boot, partitions, and recovery research
 
-- AOSP documents boot header v1's component size/address fields and says v1/v2 support recovery DTBO sections. Its generic description does not establish what SM-A105F boot ROM/bootloader accepts, Samsung footer handling, AVB state, or the correct ramdisk address for this handset.
-- AOSP describes DT table entry id/rev/custom selectors as optional hardware IDs which a bootloader may use; it does not prescribe this Samsung model's selection policy. The existing host-generated zero-selector table remains structural evidence only, and its selector match with stock is unknown.
-- TeamWin's current Galaxy A10 support page warns that its device workflow uses recovery partition semantics and that A10 stock AVB protects boot/recovery images through vbmeta; this is third-party A10-specific operational evidence, not proof of the exact installed SM-A105F firmware's state. Treat vbmeta and recovery as protected until exact AP package/partition table and installed build are verified.
-- A community service-forum post quotes an A105F PIT log with a 36 MiB BOOT entry. This is weak, variant/build-uncertain evidence and cannot establish this handset's current partition layout or writable capacity. Stock candidate boot file length is not a capacity measurement.
-- Samsung Knox documentation states loading a non-Knox kernel can irreversibly trip its warranty e-fuse and disable Knox-dependent services. This is a deployment consequence to include in a future informed physical-test gate.
-- Do not claim a safe boot-image restore/recovery path until a verified matching full stock package, exact model/region/build, partition map, download-mode path, and rollback steps are available. Phone remains untouched.
+- AOSP documents boot header v1 component size/address fields and says v1/v2 support recovery DTBO sections. Its generic description does not establish what SM-A105F boot ROM/bootloader accepts, Samsung footer handling, AVB state, or the correct ramdisk address for this handset.
+- The community twrpdtgen/android_device_samsung_a10 branch a10dd-user-11-RP1A.200720.012-A105FDDS9CWD2-release-keys has a BoardConfig that specifies header version 1, 2048-byte pages, base 0x10000000, ramdisk offset 0x01000000, tags offset 0x100, separate DTBO, AVB enabled, and 55,574,528-byte boot/recovery image partition-size variables. This is a generated third-party Android recovery configuration; those values are hypotheses/reference data, not proof of the target handset's partition capacity, current AVB metadata, acceptance rules, or suitability for Debian.
+- The same branch's recovery.fstab maps Android system root to /dev/block/by-name/system and userdata to /dev/block/by-name/userdata, lists boot, recovery, dtb, dtbo and vbmeta_samsung names, and maps removable SD to mmcblk0p1. It is useful Android layout evidence, not authorization or a recommendation to overwrite system/userdata. Exact current handset mapping and Debian root-device choice remain unverified.
+- A separate community service-forum post quotes an A105F PIT log with 36 MiB BOOT and 53 MiB RECOVERY entries. The values broadly align with the candidate stock boot length and the generated TWRP recovery-size variable, but the post does not establish firmware variant, handset identity, or current PIT; treat it as corroboration of low confidence only.
+- TeamWin's current Galaxy A10 support page warns that its device workflow uses recovery-partition semantics and that stock AVB protects boot/recovery images through vbmeta. This is third-party A10-specific operational evidence, not proof of the exact installed SM-A105F firmware state. Treat vbmeta and recovery as protected until exact AP package and installed build are verified.
+- Heimdall documents Samsung's Odin 3 protocol and supports PIT operations generically; this does not prove compatibility with SM-A105F's current Download Mode/protocol revision. Keep it as a possible recovery tool to qualify against a matching PIT and verified stock firmware, not a guaranteed rollback path.
+- Samsung Knox documentation states loading a non-Knox kernel can irreversibly trip its warranty e-fuse and disable Knox-dependent services. Include this consequence in any future informed physical-test gate.
+- No defensible first-flash or rollback procedure is established yet. Require a verified matching full stock package, exact model/region/build, current partition evidence, tested Download Mode transport compatibility, and a recovery sequence before any physical write. Phone remains untouched.
+
+## DTBO selector notes
+
+AOSP documents dt_table_entry id/rev/custom fields as optional hardware IDs that the bootloader may use; the bootloader may also inspect properties inside the FDT. It does not prescribe SM-A105F selection policy. The host-generated zero-selector table remains structural evidence only; selector matching with stock and overlay-selection behavior remain unknown.
 
 ## Remaining engineering gates
 
-- Build a board-level SM-A105F/A10 DTS/DTBO against exact Samsung source, once the board memory/reserved-memory, regulator, GPIO and variant facts are mapped.
-- Confirm card-detect polarity, SD supply/voltage behavior, and pinctrl with exact source; keep removable SD disabled until these are established.
-- Resolve first-boot eMMC root partition identity and bootloader DT/DTBO selector behavior from exact firmware and partition table evidence.
+- Build a board-level SM-A105F/A10 DTS/DTBO against exact Samsung source, once board memory/reserved-memory, regulators, GPIOs and variant facts are mapped.
+- Confirm SD card-detect polarity, supply/voltage behavior and pinctrl with exact source; keep removable SD disabled until these are established.
+- Resolve first-boot eMMC root partition identity and bootloader DT/DTBO selector behavior from exact firmware and partition-table evidence.
 - Obtain current physical firmware/build and bootloader state only at the approved read-only/device gate. No physical operation has occurred.
 - Obtain the exact corrected initramfs/kernel artifacts in this runtime before regenerating the boot-v1 candidate; the Colab runtime currently holds only the Linux 6.18.54 source tree and no kernel Image/initramfs.
 
