@@ -19,3 +19,8 @@ Exact-source RTC/watchdog review was added in `docs/reports/linux-6.18.54-a10-rt
 ## 2026-09-29 — S2MPU08 transport review
 
 Recorded the exact Samsung PMIC contract and upstream support gap in `docs/reports/linux-6.18.54-a10-s2mpu08-transport-review-20260929.md`. The vendor core uses Exynos ACPM register transactions, logical multi-address I2C clients, and a custom IRQ/MFD setup; the regulator driver has S2MPU08-specific workarounds. No DTS or regulator substitution was added. Exact source hashes are in the report. This research does not establish regulator or runtime behavior.
+
+
+## 2026-09-29 — Binary artifact retrieval audit
+
+The Drive folder's 24 direct children were enumerated; no exact Samsung-built kernel Image, corrected initramfs, or stock A10 DTB/DTBO set was present. The private GitHub API lists a draft host-only boot-candidate asset, but the available connector returns metadata only; its reported digest has not been checked against bytes. The previous browser release-asset attempt errored, so it was not repeated. Full route findings are in `docs/reports/artifact-retrieval-audit-20260929.md`. Do not regenerate the candidate until its required verified inputs are present.
