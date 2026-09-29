@@ -600,3 +600,10 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Read back both files from private `main`; POSIX and Bash syntax checks passed; explicit eMMC path selector tests passed and still reject UUID/PARTUUID guesses.
 - Full archive extraction/QEMU checks remain unrun because no verified ARM64 static BusyBox or corrected archive is available. No boot image was regenerated.
 - Full-tree Linux `dtbs_check` remains in progress in Colab at last observation (7m26s); no diagnostics have been captured yet. Phone remains untouched.
+
+## 2026-09-29 — Root selection and discovery assessment
+
+- Fixed the initramfs runtime defect where `/init` called resolver functions without sourcing the packaged `/lib/root-device.sh`; strengthened the archive test to catch both missing source code and stale archived `/init`.
+- Read back the files from private `main`. Shell syntax and explicit eMMC path selector tests pass. Full ARM64 archive/QEMU checks remain blocked on the verified BusyBox and corrected archive artifacts.
+- Assessed marker-based partition discovery. Only a paired installation marker, eMMC-only read-only/no-journal probes, exact-one-match requirement and fail-closed duplicate behavior could reduce dependency on a measured partition number without selecting an arbitrary device. The marker is not yet provisioned or tested, so discovery remains unimplemented; explicit measured `root=/dev/mmcblk0pN` remains the supported handoff. Details are in `docs/reports/root-device-discovery-assessment-20260929.md`.
+- Full-tree Linux `dtbs_check` in Colab remains in progress at last observation (13m28s); command output is captured only after completion. Phone remains untouched.
