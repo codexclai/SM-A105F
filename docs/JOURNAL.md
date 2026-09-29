@@ -537,3 +537,13 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Mapped bit 0 as standard `GPIO_ACTIVE_LOW`, Samsung EINT 0xf as `EXYNOS_PIN_FUNC_EINT`, and pull 0 as `EXYNOS_PIN_PULL_NONE`. Set `wakeup-source` only on the power key. Left drive-strength 0 and vendor flag bits 2/3 unmapped.
 - Patch 0003 passed `git apply --check` in the Linux 6.18.54 checkout and produced the validated DTS byte-for-byte. Targeted GPIO keys and pinctrl schema checks plus direct validation passed; A10 DTB SHA-256 `bb72f8b3769407d8aa2b61e2b057efc9a62328affea411ab9645174c9d208ab4`.
 - Published the patch, review report and port-matrix update as commit `eb310ccc33c56b2678b105685ae0a7ceddb6adc7`; this checkpoint/journal refresh is being committed directly after it. No phone operations occurred.
+
+
+## 2026-09-29 — A10 fixed memory reservations
+
+- Cross-checked exact Samsung 4.4.177 base and A10 DTSI memory declarations against populated A10 RAM banks. The two banks are 0x80000000–0xBDA00000 and 0xC0000000–0x100000000. Arithmetic confirmed that the top-level 13 MiB memreserve and nine fixed child intervals lie within the banks and do not overlap one another.
+- Added patch 0004: retained /memreserve/ 0xE0000000 0x00D00000 and declared nine fixed generic reserved-memory reg nodes. Dynamic allocator pools and vendor ION/security semantics were left out; no no-map or reusable behavior was inferred.
+- Linux 6.18.54 A10 DTB target built with CHECK_DTBS=y; reserved-memory dt_binding_check passed. fdtdump/fdtget read back the memreserve and all nine ranges. Resulting DTB SHA-256: ea5b3131cfa55e02472d6f74815082282f0e3b8940471311545e558d380905b7.
+- Direct validation still prints the unrelated A10 root compatible and osc-clock missing clock-frequency findings; no reserved-memory-specific warning appears. Full-tree validation was not run.
+- The first draft patch hunk did not match the A10 DTS line context. Rebuilt the hunk from a unified diff and verified git apply --check plus application in an isolated worktree; output DTS matched the built source byte-for-byte. Corrected patch/report and matrix are on main in 352253a68217d55d2c4d21ed9c72b7e074257b9f.
+- No hardware or phone was accessed.
