@@ -18,22 +18,25 @@ SHA-256 is ea5b3131cfa55e02472d6f74815082282f0e3b8940471311545e558d380905b7.
 This is host-side source/schema evidence only.
 
 ---
- arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 index 000000000000..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
 +++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
-@@ -3,5 +3,6 @@
-#include <dt-bindings/gpio/gpio.h>
-#include <dt-bindings/input/input.h>
+@@ -2,6 +2,7 @@
+ /dts-v1/;
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
 +/memreserve/ 0xe0000000 0xd00000;
-#include "exynos7885.dtsi"
-
-/ {
-@@ -13,1 +14,17 @@
--	aliases {
+ #include "exynos7885.dtsi"
+ 
+ / {
+@@ -9,6 +10,21 @@
+ 	compatible = "samsung,A10 SWA OPEN 00", "samsung,exynos7885";
+ 	memory@80000000 { device_type = "memory"; reg = <0x0 0x80000000 0x3da00000>; };
+ 	memory@c0000000 { device_type = "memory"; reg = <0x0 0xc0000000 0x40000000>; };
 +	reserved-memory {
 +		#address-cells = <2>;
 +		#size-cells = <1>;
@@ -50,4 +53,6 @@ index 000000000000..000000000000 100644
 +		gnss@ffc00000 { reg = <0x0 0xffc00000 0x400000>; };
 +	};
 +
-+	aliases {
+ 	aliases {
+ 		mmc0 = &mmc_0;
+ 		mmc1 = &mmc_2;

@@ -46,6 +46,7 @@ Patch: patches/linux-6.18.54/0004-arm64-dts-exynos-reserve-a10-fixed-memory.patc
 
 On Linux 6.18.54 source commit 1b357ecb321392158d507b04672ffee57bfa071d:
 
+- The generated unified patch passed `git apply --check` in an isolated worktree reconstructed from the pre-reservation A10 DTS; applying it produced a byte-identical DTS to the already-built source.
 - git diff --check exited 0.
 - make -s ARCH=arm64 dt_binding_check DT_SCHEMA_FILES=reserved-memory/reserved-memory.yaml exited 0. Kernel tooling noted optional yamllint was not installed.
 - make -s -j2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CHECK_DTBS=y exynos/exynos7885-a10.dtb exited 0.
