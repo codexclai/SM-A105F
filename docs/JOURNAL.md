@@ -503,3 +503,12 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Confirmed the upstream Exynos7885 DTSI has no RTC/watchdog nodes. Samsung 4.4 RTC/watchdog entries differ from available Exynos850 siblings in compatible, address/IRQ, clocks, and sequencing evidence, so neither was enabled.
 - Confirmed the initramfs UUID/PARTUUID symlink lookup has no symlink-populating utility in the committed builder. A safe source/test fix remains executable once the resolver contract is selected.
 - GitHub Actions returned zero workflow runs; exact kernel/initramfs/DTB/DTBO remain unrecovered. No phone operation occurred.
+
+
+## 2026-09-29 — Initramfs root selector correction
+
+- Extracted root-device resolution into `configs/initramfs/root-device.sh`, packaged it at `/lib/root-device.sh`, and updated `/init` to accept only an explicitly supplied eMMC partition path (`/dev/mmcblk0pN`) or a measured UUID/PARTUUID with an already existing symlink.
+- The explicit eMMC path is not a guessed partition: it must be supplied from measured target storage after authorized physical investigation. The selector contains no enumeration or first-match behavior.
+- Extended archive integrity tests to require the resolver library in the cpio archive and added focused Python/shell tests. Two focused unittest cases passed; POSIX shell and Bash syntax checks passed.
+- Corrected initramfs cpio generation and boot-v1 candidate parsing were not run because exact static ARM64 BusyBox and other verified boot artifacts are still unavailable. UUID/PARTUUID link creation remains a documented limitation.
+- No handset operation occurred.

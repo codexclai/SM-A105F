@@ -13,7 +13,7 @@ emergency() {
 if ! mount -t devtmpfs devtmpfs /dev; then
   [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
   [ -c /dev/null ] || busybox mknod -m 666 /dev/null c 1 3
-  [ -c /dev/console ] && [ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
+  [ -c /dev/console ] && exec </dev/console >/dev/console 2>&1
   emergency 'devtmpfs mount failed'
 fi
 [ -c /dev/console ] || busybox mknod -m 600 /dev/console c 5 1
@@ -32,12 +32,10 @@ for arg in $(cat /proc/cmdline); do
   esac
 done
 resolve_root() {
-  case "$ROOT" in
-    UUID=*) candidate="/dev/disk/by-uuid/${ROOT#UUID=}"; [ -b "$candidate" ] && echo "$candidate" ;;
-    PARTUUID=*) candidate="/dev/disk/by-partuuid/${ROOT#PARTUUID=}"; [ -b "$candidate" ] && echo "$candidate" ;;
-  esac
+  resolve_root_device "$ROOT"
 }
 [ -n "$ROOT" ] || emergency 'missing root= kernel parameter'
+root_spec_supported "$ROOT" || emergency 'unsupported root=; use a measured /dev/mmcblk0pN or UUID/PARTUUID value'
 ROOTDEV=
 n=0
 while [ "$n" -lt 30 ]; do

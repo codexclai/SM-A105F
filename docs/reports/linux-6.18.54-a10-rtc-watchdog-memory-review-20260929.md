@@ -27,3 +27,10 @@ GitHub Actions reports zero workflow runs for the private repository, so no exis
 The committed initramfs script accepts UUID/PARTUUID but only checks `/dev/disk/by-uuid` and `/dev/disk/by-partuuid`; the builder installs no udev, mdev, or other component that creates those symlinks. This is a confirmed source defect, separate from artifact availability. Next root-handoff change should either add and test a real identifier resolver or use an explicitly supplied measured `/dev/mmcblk0pN` device path; do not guess the partition or choose the first block device.
 
 No full-tree `dtbs_check` was run during this review. No A10 DTB was changed or rebuilt, no binaries were recovered, and no device operation occurred. The phone remains untouched.
+
+
+## Root-device handoff source fix — 2026-09-29
+
+The initramfs previously looked up UUID/PARTUUID only through `/dev/disk/by-*` symlinks, while the builder installed no utility to create those links. The selector is now a separate POSIX shell library included in the cpio image. It also accepts only an explicit `/dev/mmcblk0pN` path (matching the A10 `mmc0 = &mmc_0` alias) so a future measured eMMC partition can be supplied through the boot command line without inventing UUID/PARTUUID data. It never enumerates devices or chooses the first match. UUID/PARTUUID still require an existing symlink; resolver creation and BusyBox compatibility remain to be validated against the recovered exact static BusyBox.
+
+Focused verification in the active workspace passed 2 Python unittest cases, covering accepted/rejected root specs and shell syntax. Bash syntax checks passed for the builder and test script. The archive build/extract test and full repo suite were not run because the exact BusyBox/initramfs artifacts and full repository checkout are unavailable here.

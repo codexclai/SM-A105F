@@ -20,6 +20,8 @@ TMP=$(mktemp -d)
 trap 'rm -rf -- "$TMP"' EXIT
 gzip -dc -- "$ARCHIVE" | (cd "$TMP" && cpio -id --quiet --no-absolute-filenames)
 test -x "$TMP/bin/busybox"
+test -f "$TMP/lib/root-device.sh"
+cmp -- "$ROOT/configs/initramfs/root-device.sh" "$TMP/lib/root-device.sh"
 cmp -- "$BUSYBOX" "$TMP/bin/busybox"
 APPLET_LIST=$("$QEMU" "$BUSYBOX" --list)
 for applet in mount switch_root sleep mkdir cat head sh; do
@@ -28,7 +30,7 @@ for applet in mount switch_root sleep mkdir cat head sh; do
   test "$(readlink -- "$TMP/bin/$applet")" = busybox
 done
 ARCHIVE_ENTRIES=$(gzip -dc -- "$ARCHIVE" | cpio -it --quiet | sed 's#^\./##')
-for path in init bin/busybox bin/mount bin/switch_root bin/sleep bin/mkdir bin/cat bin/head bin/sh dev proc sys run newroot; do
+for path in init lib/root-device.sh bin/busybox bin/mount bin/switch_root bin/sleep bin/mkdir bin/cat bin/head bin/sh dev proc sys run newroot; do
   grep -Fxq "$path" <<<"$ARCHIVE_ENTRIES" || { echo "missing archive entry: $path" >&2; exit 1; }
 done
 echo 'initramfs archive extraction, BusyBox static ARM64 identity, applets, and init shell syntax validated'

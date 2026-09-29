@@ -15,12 +15,13 @@ OUT=${OUT:-$ROOT/work/initramfs/a105f-debian-initramfs.cpio.gz}
 mkdir -p "$ROOT/work/initramfs" "$(dirname -- "$OUT")"
 STAGE=$(mktemp -d "$ROOT/work/initramfs/stage.XXXXXX")
 trap 'rm -rf -- "$STAGE"' EXIT
-mkdir -p "$STAGE/bin" "$STAGE/dev" "$STAGE/proc" "$STAGE/sys" "$STAGE/run" "$STAGE/newroot"
+mkdir -p "$STAGE/bin" "$STAGE/lib" "$STAGE/dev" "$STAGE/proc" "$STAGE/sys" "$STAGE/run" "$STAGE/newroot"
 install -m 0755 -- "$BUSYBOX_STATIC" "$STAGE/bin/busybox"
 for applet in sh mount switch_root sleep mkdir cat head; do
   ln -s busybox "$STAGE/bin/$applet"
 done
 install -m 0755 -- "$ROOT/configs/initramfs/a105f-init" "$STAGE/init"
+install -m 0644 -- "$ROOT/configs/initramfs/root-device.sh" "$STAGE/lib/root-device.sh"
 
 (
   cd -- "$STAGE"

@@ -1,3 +1,15 @@
+# Current checkpoint — 2026-09-29 (explicit eMMC root selector)
+
+This checkpoint is based on private `main` at `7e9ef4cf4fc104652df34e00f624d7b4e8842dbc`. A source-level initramfs fix now accepts a measured explicit `/dev/mmcblk0pN` root path and rejects other device paths; it never scans or chooses a partition. UUID/PARTUUID remain accepted only when matching `/dev/disk` symlinks already exist; the initramfs builder still does not create those links, so use of those identifiers remains unresolved until a real resolver is added and verified. This does not guess a physical partition number.
+
+The new resolver, builder integration, and archive-content checks are recorded in `configs/initramfs/root-device.sh`, `scripts/build_a105f_initramfs.sh`, and tests. Focused tests passed: 2 Python unittest cases, including explicit allowed/rejected selector forms and POSIX shell parsing; Bash syntax checks for the builder and shell test also passed. The exact static ARM64 BusyBox and corrected initramfs archive are not available in the active environment, so the archive build/extraction test and Android boot-v1 regeneration were not run.
+
+Exact Samsung Image, corrected initramfs, boot DTB/DTBO remain unavailable; GitHub Actions contains zero workflow runs. No A10 DTS changes were made in this continuation. The earlier validated SD2/eMMC/UART2 DTB result is unchanged. No full-tree `dtbs_check` was run. The phone remains untouched.
+
+Next: recover the exact existing binaries with recorded hashes; where rootfs/boot candidate work remains blocked, continue exact Samsung battery/charging/TMU driver tracing against current Linux 6.18 APIs. Never invent a root partition identifier or treat Jackpot LTE validation as A10 boot evidence.
+
+---
+
 # Current checkpoint — 2026-09-29 (A10 subsystem evidence review)
 
 Verified private `main` starting point: `93286b7cd57cf4cf923887e99512be9b027edc25`. The last code-bearing A10 milestone is the validated SD2 + conservative eMMC/UART2 patch set; this continuation made no DTS changes because the exact Samsung RTC, watchdog, and ABOX reserved-memory semantics do not yet map safely to Linux 6.18. Findings and file-level provenance are in [the RTC/watchdog/memory review](reports/linux-6.18.54-a10-rtc-watchdog-memory-review-20260929.md).
