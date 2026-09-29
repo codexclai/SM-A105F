@@ -592,3 +592,11 @@ Rootfs release readback completed 2026-09-28: downloaded private draft asset com
 - Kept the 0x11000000 ramdisk address labelled as a community BoardConfig hypothesis because stock ramdisk_size/address are both zero.
 - Marked the earlier host boot-v1 package as stale for current use: its embedded initramfs predates the explicit eMMC path-only resolver correction. Corrected initramfs regeneration remains gated by unavailable verified BusyBox and exact binary inputs.
 - Recorded unresolved Samsung footer/signature, AVB, rollback, partition capacity/layout, recovery and Download Mode questions in `docs/BOOT_PACKAGING.md`. No flash/deployment or device operation occurred.
+
+## 2026-09-29 — Initramfs root resolver loading defect
+
+- Found that `configs/initramfs/a105f-init` invoked the root resolver functions but never sourced `/lib/root-device.sh`, which the builder already packages. Without the source statement, root selection could not execute.
+- Added a guarded source statement before root selection and strengthened `tests/test_a105f_initramfs.sh` to check that statement and compare extracted `/init` byte-for-byte with the source.
+- Read back both files from private `main`; POSIX and Bash syntax checks passed; explicit eMMC path selector tests passed and still reject UUID/PARTUUID guesses.
+- Full archive extraction/QEMU checks remain unrun because no verified ARM64 static BusyBox or corrected archive is available. No boot image was regenerated.
+- Full-tree Linux `dtbs_check` remains in progress in Colab at last observation (7m26s); no diagnostics have been captured yet. Phone remains untouched.
