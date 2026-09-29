@@ -57,7 +57,9 @@ class BootSectionExtractionTests(unittest.TestCase):
             ramdisk.write_bytes(b"RAMDISK")
             result = subprocess.run(
                 [sys.executable, str(tool), str(boot), str(output),
-                 "--expected-kernel", str(kernel), "--expected-ramdisk", str(ramdisk)],
+                 "--expected-kernel", str(kernel), "--expected-ramdisk", str(ramdisk),
+                 "--expect-page-size", "2048", "--expect-kernel-address", "0x10008000",
+                 "--expect-ramdisk-address", "0x11000000", "--expect-tags-address", "0x10000100"],
                 check=True, capture_output=True, text=True)
             self.assertEqual((output / "kernel.bin").read_bytes(), kernel.read_bytes())
             self.assertEqual((output / "ramdisk.bin").read_bytes(), ramdisk.read_bytes())
@@ -65,6 +67,20 @@ class BootSectionExtractionTests(unittest.TestCase):
             self.assertEqual(manifest["sections"]["kernel"]["sha256"],
                              hashlib.sha256(kernel.read_bytes()).hexdigest())
             self.assertEqual(json.loads(result.stdout), manifest)
+
+    def test_cli_rejects_unmatched_load_address(self):
+        root = Path(__file__).resolve().parents[1]
+        tool = root / "scripts" / "extract_android_boot_sections.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            boot = tmp / "boot.img"
+            boot.write_bytes(make_v1())
+            result = subprocess.run(
+                [sys.executable, str(tool), str(boot), str(tmp / "out"),
+                 "--expect-kernel-address", "0x10000000"],
+                capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("kernel_load_address is", result.stderr)
 
 
 if __name__ == "__main__":
