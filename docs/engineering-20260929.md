@@ -63,3 +63,11 @@ Sources:
 - AOSP boot header and DTBO format references: https://source.android.com/docs/core/architecture/bootloader/boot-image-header and https://source.android.com/docs/core/architecture/dto/partitions
 - AOSP mkbootimg header-ID algorithm source, commit 808d42e197506319ee65eb078d3defd9602e2ac2: https://android.googlesource.com/platform/system/tools/mkbootimg/+/808d42e197506319ee65eb078d3defd9602e2ac2/mkbootimg.py
 
+
+## Debian Trixie systemd versus Samsung 4.4.177
+
+The Debian rootfs records systemd 257.13. The upstream v257 README lists Linux 3.15 as its hard baseline but recommends 5.4 or newer; versions below 5.4 have significant feature gaps and taint the manager as `old-kernel`. Thus Linux 4.4.177 is not categorically below systemd's hard minimum, but it is well below the recommended baseline and is not an equivalent long-term security/support choice to the Linux 6.x track.
+
+For v257, upstream lists `CONFIG_DEVTMPFS`, `CONFIG_CGROUPS`, `CONFIG_INOTIFY_USER`, `CONFIG_SIGNALFD`, `CONFIG_TIMERFD`, `CONFIG_EPOLL`, `CONFIG_UNIX`, `CONFIG_SYSFS`, `CONFIG_PROC_FS`, and `CONFIG_FHANDLE` as kernel config requirements; `CONFIG_NET_NS` and `CONFIG_USER_NS` are needed by common `PrivateNetwork=` and `PrivateUsers=` service settings. Optional but recommended items include IPv6, tmpfs/ext4 ACL and xattr support, seccomp/filter and kcmp. The exact successful Samsung 4.4.177 generated config is not present in this Work filesystem, so no option is asserted present/absent here. Run a config audit against the exact generated config and systemd's own requirements after restoring the Codespace; then host-test representative Debian service units under QEMU. Avoid enabling security-sensitive kernel features blindly.
+
+Source: upstream systemd v257 README, versioned source: https://github.com/systemd/systemd/blob/v257/README
