@@ -10,12 +10,23 @@ A public community downstream Exynos7885/A10 tree (geckyn, android_kernel_samsun
 
 The Exynos7885 SoC include now describes the second DesignWare MMC host at 0x13550000 using upstream-compatible names and clock handles. It is disabled by default. Timing parameters satisfy the Linux samsung,exynos-dw-mshc.yaml binding requirements for samsung,exynos7-dw-mshc. Board pinctrl, card-detect polarity, supplies, slot, and status=okay remain out of the shared SoC include.
 
+Patch: patches/linux-6.18.54/0001-arm64-dts-exynos-add-exynos7885-sd-host.patch
+
 ## Verification performed
 
 - make -s -j2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs completed successfully after the fragment was applied.
 - git diff --check completed without output.
-- No dtbs_check run yet; the Colab runtime does not currently have the dtschema validator confirmed installed.
+- A targeted dtbs_check is running in the Colab runtime after installing dtschema; result pending.
 - This is a DTB host build only. No A10 board DTB was built and no handset boot/device validation is claimed.
+
+## Boot/recovery research checkpoint
+
+- AOSP documents boot header v1's component size/address fields and says v1/v2 support recovery DTBO sections. Its generic description does not establish what SM-A105F boot ROM/bootloader accepts, Samsung footer handling, AVB state, or the correct ramdisk address for this handset.
+- AOSP describes DT table entry id/rev/custom selectors as optional hardware IDs which a bootloader may use; it does not prescribe this Samsung model's selection policy. The existing host-generated zero-selector table remains structural evidence only, and its selector match with stock is unknown.
+- TeamWin's current Galaxy A10 support page warns that its device workflow uses recovery partition semantics and that A10 stock AVB protects boot/recovery images through vbmeta; this is third-party A10-specific operational evidence, not proof of the exact installed SM-A105F firmware's state. Treat vbmeta and recovery as protected until exact AP package/partition table and installed build are verified.
+- A community service-forum post quotes an A105F PIT log with a 36 MiB BOOT entry. This is weak, variant/build-uncertain evidence and cannot establish this handset's current partition layout or writable capacity. Stock candidate boot file length is not a capacity measurement.
+- Samsung Knox documentation states loading a non-Knox kernel can irreversibly trip its warranty e-fuse and disable Knox-dependent services. This is a deployment consequence to include in a future informed physical-test gate.
+- Do not claim a safe boot-image restore/recovery path until a verified matching full stock package, exact model/region/build, partition map, download-mode path, and rollback steps are available. Phone remains untouched.
 
 ## Remaining engineering gates
 
