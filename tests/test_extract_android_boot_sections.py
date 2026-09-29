@@ -1,6 +1,11 @@
 import hashlib
+import json
 import struct
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts.extract_android_boot_sections import extract
 
@@ -39,6 +44,27 @@ class BootSectionExtractionTests(unittest.TestCase):
         struct.pack_into("<I", data, 8 + 8 * 4, 0)
         with self.assertRaisesRegex(ValueError, "only Android boot header v1"):
             extract(bytes(data))
+
+    def test_cli_writes_round_trip_payloads_and_hash_manifest(self):
+        root = Path(__file__).resolve().parents[1]
+        tool = root / "scripts" / "extract_android_boot_sections.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            boot, kernel, ramdisk, output = (tmp / "boot.img", tmp / "Image",
+                                              tmp / "initramfs.cpio.gz", tmp / "out")
+            boot.write_bytes(make_v1())
+            kernel.write_bytes(b"KERNEL!")
+            ramdisk.write_bytes(b"RAMDISK")
+            result = subprocess.run(
+                [sys.executable, str(tool), str(boot), str(output),
+                 "--expected-kernel", str(kernel), "--expected-ramdisk", str(ramdisk)],
+                check=True, capture_output=True, text=True)
+            self.assertEqual((output / "kernel.bin").read_bytes(), kernel.read_bytes())
+            self.assertEqual((output / "ramdisk.bin").read_bytes(), ramdisk.read_bytes())
+            manifest = json.loads((output / "manifest.json").read_text())
+            self.assertEqual(manifest["sections"]["kernel"]["sha256"],
+                             hashlib.sha256(kernel.read_bytes()).hexdigest())
+            self.assertEqual(json.loads(result.stdout), manifest)
 
 
 if __name__ == "__main__":
