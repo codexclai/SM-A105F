@@ -1,25 +1,42 @@
 From: SM-A105F Linux 6.18.54 board port
-Subject: [PATCH] arm64: dts: exynos: describe Exynos7885 removable SD host
+Subject: [PATCH] arm64: dts: exynos: add Galaxy A10 SD host
 
-Describe the disabled second DesignWare MMC host at the community-reported
-A10 Exynos7885 address/IRQ, using upstream clock handles and current binding
-shape. The legacy four-cell Samsung timing tuples are converted to upstream
-(sample, drive) two-cell tuples: legacy fields are divider, fine-drive,
-drive, sample. The divider is represented separately as required upstream.
+Describe the Exynos7885 removable SD host in the SoC DTS, keeping it
+disabled there. Add the SM-A105F board DTS with its verified SD2 wiring,
+card detect, and base SDR/DDR timing values translated using the legacy
+driver field semantics and Linux 6.18 binding shape.
 
-The host stays disabled because exact Samsung-source confirmation, board
-pinctrl, card detect, supplies, and physical validation are still pending.
+Do not enable UHS modes yet: Samsung's separate SDR50/SDR104 timing
+properties have no Linux 6.18 equivalent, and the A10 vqmmc regulator
+path is not mapped.
+
 ---
- arch/arm64/boot/dts/exynos/exynos7885.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/boot/dts/exynos/Makefile          |  1 +
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi   | 14 +++++
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts | 39 +++++++++++++
+ 3 files changed, 54 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
+index bcca63136557..000000000000 100644
+--- a/arch/arm64/boot/dts/exynos/Makefile
++++ b/arch/arm64/boot/dts/exynos/Makefile
+@@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
+ 	exynos7870-a2corelte.dtb\t\\
+ 	exynos7870-j6lte.dtb\t\t\\
+ 	exynos7870-on7xelte.dtb\t\t\\
+ 	exynos7885-jackpotlte.dtb\t\\
++	exynos7885-a10.dtb\t\t\\
+ 	exynos850-e850-96.dtb\t\t\\
+ 	exynos8895-dreamlte.dtb\t\t\\
+ 	exynos9810-starlte.dtb\t\t\\
 diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+index 008228fb319a..000000000000 100644
 --- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
 +++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
-@@ -310,6 +310,22 @@
+@@ -310,6 +310,20 @@
  			status = "disabled";
  		};
-
+ 
 +		/* Optional removable SD host; board DTS supplies pins and slot details. */
 +		mmc_2: mmc@13550000 {
 +			compatible = "samsung,exynos7-dw-mshc";
@@ -31,10 +48,64 @@ diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/ex
 +				 <&cmu_fsys CLK_GOUT_MMC_CARD_SDCLKIN>;
 +			clock-names = "biu", "ciu";
 +			fifo-depth = <0x40>;
-+			samsung,dw-mshc-ciu-div = <3>;
-+			samsung,dw-mshc-sdr-timing = <0 2>;
-+			samsung,dw-mshc-ddr-timing = <1 2>;
 +			status = "disabled";
 +		};
-
++
  		serial_0: serial@13800000 {
+ 			compatible = "samsung,exynos7885-uart",
+ 				     "samsung,exynos5433-uart";
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+new file mode 100644
+index 000000000000..000000000000
+--- /dev/null
++++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include "exynos7885.dtsi"
++
++/ {
++	model = "Samsung Galaxy A10 (SM-A105F)";
++	compatible = "samsung,A10 SWA OPEN 00", "samsung,exynos7885";
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0x3da00000>;
++	};
++
++	memory@c0000000 {
++		device_type = "memory";
++		reg = <0x0 0xc0000000 0x40000000>;
++	};
++};
++
++&pinctrl_alive {
++	a10_sd_cd: a10-sd-card-detect-pins {
++		samsung,pins = "gpa0-7";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
++	};
++};
++
++&mmc_2 {
++	status = "okay";
++	bus-width = <4>;
++	cap-sd-highspeed;
++	/*
++	 * Leave UHS modes unadvertised. Samsung's per-mode SDR50/SDR104 timing
++	 * tuples have no Linux 6.18 property, and vqmmc is not mapped upstream.
++	 */
++	disable-wp;
++	cd-gpios = <&gpa0 7 GPIO_ACTIVE_LOW>;
++	/*
++	 * Samsung 4.4 tuple: (divider, fine-drive, drive, sample). Linux 6.18
++	 * takes (sample, drive) and the CIU divider separately; fine-drive has
++	 * no binding property. This maps the base SDR and DDR tuples only.
++	 */
++	samsung,dw-mshc-ciu-div = <3>;
++	samsung,dw-mshc-sdr-timing = <0 2>;
++	samsung,dw-mshc-ddr-timing = <1 2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus4 &a10_sd_cd>;
++};
