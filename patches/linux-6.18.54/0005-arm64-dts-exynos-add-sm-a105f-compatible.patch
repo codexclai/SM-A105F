@@ -1,15 +1,15 @@
 From: SM-A105F Linux 6.18.54 board port
 Subject: [PATCH] arm64: dts: exynos: register SM-A105F board compatible
 
-Register the model-specific compatible introduced by the A10 board DTS
-in the Exynos7885 board schema. Keep samsung,exynos7885 as the SoC
-fallback. The board model string retains the human-readable product name.
+Register the A10 board compatible in the Samsung Exynos7885 board schema.
+The board DTS retains the user-facing product name while using a valid
+model-specific compatible and the existing SoC-compatible fallback.
 
 Validated against Linux v6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d:
 Samsung board-schema dt_binding_check, A10 CHECK_DTBS build, and focused
 and full direct dt-validate. The compatible diagnostics are cleared. The
 remaining full-validator finding is the inherited osc-clock missing
-clock-frequency; no frequency is inferred here.
+clock-frequency; no value is inferred here.
 
 ---
  Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml | 1 +
@@ -18,10 +18,11 @@ clock-frequency; no frequency is inferred here.
 diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
 --- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
 +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-@@ -223,5 +223,6 @@
-       - description: Exynos7885 based boards
+@@ -224,6 +224,7 @@
          items:
            - enum:
                - samsung,jackpotlte              # Samsung Galaxy A8 (2018)
 +              - samsung,sm-a105f                # Samsung Galaxy A10 (SM-A105F)
            - const: samsung,exynos7885
+
+      - description: Exynos850 based boards
