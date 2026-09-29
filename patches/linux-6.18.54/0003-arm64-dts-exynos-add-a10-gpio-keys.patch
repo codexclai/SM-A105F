@@ -1,0 +1,54 @@
+From: SM-A105F Linux 6.18.54 board port
+Subject: [PATCH] arm64: dts: exynos: add A10 GPIO keys
+
+--- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /dts-v1/;
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
+ #include "exynos7885.dtsi"
+ 
+ / {
+@@ -16,12 +17,41 @@
+ 	chosen {
+ 		stdout-path = &serial_2;
+ 	};
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&a10_keys_pins>;
++
++		button-volume-down {
++			label = "Volume Down";
++			linux,code = <KEY_VOLUMEDOWN>;
++			gpios = <&gpa1 6 GPIO_ACTIVE_LOW>;
++		};
++
++		button-volume-up {
++			label = "Volume Up";
++			linux,code = <KEY_VOLUMEUP>;
++			gpios = <&gpa1 5 GPIO_ACTIVE_LOW>;
++		};
++
++		button-power {
++			label = "Power";
++			linux,code = <KEY_POWER>;
++			gpios = <&gpa1 7 GPIO_ACTIVE_LOW>;
++			wakeup-source;
++		};
++	};
+ };
+ 
+ &pinctrl_alive {
+ 	a10_sd_cd: a10-sd-cd-pins {
+ 		samsung,pins = "gpa0-7";
+ 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
++	};
++	a10_keys_pins: a10-keys-pins {
++		samsung,pins = "gpa1-5", "gpa1-6", "gpa1-7";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+ 	};
+ };
