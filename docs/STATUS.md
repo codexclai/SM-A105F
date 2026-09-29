@@ -14,3 +14,8 @@ Next: trace the old A10 RTC/watchdog and poweroff paths against Linux 6.18, pres
 
 
 Exact-source RTC/watchdog review was added in `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md`. Samsung 4.4 maps `samsung,exynos8-rtc` to a distinct driver variant at 0x11c90000 with three IRQs and no clock; current Linux 6.18 binding/driver lack that compatible. Samsung `samsung,exynos8-wdt` requires PMU bit 24 and the old WDT cluster1 gate clock, which the current Exynos7885 clock provider does not expose. No safe DTS-only mapping was made. Updated port matrix records these findings. Next: assess supportable upstream clock/PMU extension, and continue PMIC/regulator and artifact acquisition work. Phone remains untouched.
+
+
+## 2026-09-29 — S2MPU08 transport review
+
+Recorded the exact Samsung PMIC contract and upstream support gap in `docs/reports/linux-6.18.54-a10-s2mpu08-transport-review-20260929.md`. The vendor core uses Exynos ACPM register transactions, logical multi-address I2C clients, and a custom IRQ/MFD setup; the regulator driver has S2MPU08-specific workarounds. No DTS or regulator substitution was added. Exact source hashes are in the report. This research does not establish regulator or runtime behavior.
