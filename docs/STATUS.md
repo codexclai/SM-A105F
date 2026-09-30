@@ -1,3 +1,13 @@
+## A10 eMMC and console host validation (2026-09-30)
+
+The latest pinned Linux 6.18.54 A10 DTB was rebuilt and inspected. Host-side checks passed for the focused MMC binding, direct `dt-validate` (exit 0), and `dw_mmc-exynos.o` compilation. The DTB is 21,838 bytes with SHA-256 `655c29627e97c447b58ecbe66ac06d365a085e0147096c1d52293f99f727c52e`.
+
+The compiled tree maps `mmc0` to `/soc@0/mmc@13500000`; that controller is enabled, non-removable, eight-bit, and carries the established conservative timing properties. The A10 `stdout-path` compiles to `/soc@0/serial@13820000`, whose UART node is enabled. This is host/build evidence and does not claim runtime console output.
+
+The MMC alias establishes the controller index, not the handset's partition table. No measured root partition, root UUID/PARTUUID, or root kernel argument is available; root selection remains unresolved and must not be inferred from the eMMC controller. No physical-device operation occurred.
+
+---
+
 ## Current continuation — fail-closed root selector (2026-09-30)
 
 The committed resolver now rejects partition zero and leading-zero partition spellings such as `/dev/mmcblk0p0` and `/dev/mmcblk0p03`; these are not canonical Linux MMC partition device names. The committed selector regression covers both. The actual handset partition identity remains unmeasured and is not selected.
