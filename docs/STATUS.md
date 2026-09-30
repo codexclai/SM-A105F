@@ -1,3 +1,11 @@
+## Current continuation — 2026-09-30 (root-storage configuration)
+
+Added a reusable Linux 6.18.54 A10 root-storage configuration fragment at `configs/linux/6.18.54/a10-root-storage.config`. In a clean worktree at pinned commit `1b357ecb321392158d507b04672ffee57bfa071d`, `defconfig` + `merge_config.sh` + `olddefconfig` resolved initramfs, devtmpfs, ext4, MMC block, DesignWare Exynos MMC, DOS/MBR and EFI/GPT parsing to enabled. The MMC controller objects and `fs/ext4/super.o` compiled for ARM64. This is configuration/object validation only; no full kernel link, handset root partition identity, mount, or boot was established. In particular, no `/dev/mmcblk0pN` is selected.
+
+The ACPM/PMIC source trace found that pinned Linux ACPM/mailbox support assumes GS101 resources and a firmware-populated shared-memory ABI, while the ACPM PMIC MFD is S2MPG10-specific. A10's recorded S2MPU08 channel 2 is insufficient to prove resource, firmware, or wire-protocol compatibility. No PMIC support was added. Next: run initramfs archive/readback tests with verified test-only tooling where available. See `docs/reports/linux-6.18.54-a10-root-storage-config-20260930.md`.
+
+---
+
 ## Current continuation — 2026-09-30 (Exynos7885 A10 watchdog)
 
 Implemented Linux 6.18.54 support for the Exynos8 WDT1 using the evidence in `docs/reports/linux-6.18.54-a10-rtc-watchdog-review-20260929.md`. The new `patches/linux-6.18.54/0006-arm64-dts-exynos-add-a10-watchdog.patch` adds the Exynos8 compatible/variant, requires both clocks in the binding, adds a disabled shared Exynos7885 WDT1 node, and enables it only in the A10 DTS. It records PMU offsets 0x0408/0x040c/0x0404 and bit 24, but activates only PMU mask-reset and reset-status quirks; auto-disable and Exynos850/Exynos7 behavior are not enabled. Clock order is WDT1 PCLK then 26 MHz oscclk. Samsung IRQ <0 233 0> remains unspecified as IRQ_TYPE_NONE.

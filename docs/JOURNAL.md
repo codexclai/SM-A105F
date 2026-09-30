@@ -1,3 +1,12 @@
+## 2026-09-30 — A10 root-storage configuration and ACPM evidence boundary
+
+- Added `configs/linux/6.18.54/a10-root-storage.config` as a merge fragment for initramfs/devtmpfs, ext4, MMC block, DesignWare Exynos host support, and both common partition parsers. This deliberately does not select a root device or partition number.
+- On a clean detached tree at Linux commit `1b357ecb321392158d507b04672ffee57bfa071d`, defconfig/fragment merge/olddefconfig resolved the requested features; `dw_mmc.o`, `dw_mmc-pltfm.o`, `dw_mmc-exynos.o`, and `fs/ext4/super.o` compiled with the ARM64 cross compiler. This is object-level validation, not a full image or boot test.
+- Read-only ACPM review confirms upstream ACPM and mailbox resources are GS101-specific and rely on firmware-populated shared SRAM descriptors. The PMIC client is S2MPG10-specific. Recorded Samsung S2MPU08 channel 2 evidence does not establish A10 mailbox/SRAM resources, firmware handoff, completion mode, or command/register ABI; no PMIC DTS/driver mapping was added.
+- Next engineering step: initramfs archive/readback testing with package-authenticated ARM64 test tooling where available; root identity remains unknown.
+- Report: `docs/reports/linux-6.18.54-a10-root-storage-config-20260930.md`.
+
+
 ## 2026-09-29 — A10 compatible schema correction
 
 - Replaced the downstream root compatible containing spaces with `samsung,sm-a105f`, preserving `samsung,exynos7885` fallback and model text. Added the model to the existing Exynos7885 board enum.
