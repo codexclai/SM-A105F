@@ -1,3 +1,11 @@
+## Current continuation — Colab validation access and RTC gap (2026-09-30)
+
+The specified Colab notebook URL redirected to Google's sign-in endpoint and returned `502 Bad Gateway` with `[Errno 111] Connection refused`. One reload returned the same error; no shell command ran in the Colab runtime, so the interrupted broad `dtbs_check` remains incomplete and has no new exit status or diagnostics. This is a browser/runtime access failure, not a kernel validation result.
+
+The RTC review now records the pinned Linux 6.18.54 driver and binding mismatch in `docs/reports/linux-6.18.54-a10-rtc-watchdog-memory-review-20260929.md`. Private `main` was advanced to `24e02c6b451a74315765f68ee5f57c81cd2dd6f2`; the Exynos8 RTC remains unimplemented. When Colab access is restored, first capture the Exynos-scoped aggregate `dtbs_check` output, then confirm exact Samsung RTC IRQ/tick semantics from the recovered archive before deciding whether the 6.18 clockless RTC variant can preserve required functionality. Root partition selection remains unresolved. No physical-device operation occurred.
+
+---
+
 ## A10 eMMC and console host validation (2026-09-30)
 
 The latest pinned Linux 6.18.54 A10 DTB was rebuilt and inspected. Host-side checks passed for the focused MMC binding, direct `dt-validate` (exit 0), and `dw_mmc-exynos.o` compilation. The DTB is 21,838 bytes with SHA-256 `655c29627e97c447b58ecbe66ac06d365a085e0147096c1d52293f99f727c52e`.
