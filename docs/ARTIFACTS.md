@@ -116,7 +116,7 @@ Configuration audit output: `.config` 145,302-byte Samsung A10 config generated 
 
 ### Debian 13.7 ARM64 rootfs with deterministic hostname (2026-09-28)
 
-- Archive: work/artifacts/debian13-trixie-minbase-arm64-20260928-hostname.tar, 196,298,240 bytes, SHA-256 29d42b57730c4976b9c3c599b79cd9ecdf33c7017033cdb50d107bfb4323cc.
+- Archive: work/artifacts/debian13-trixie-minbase-arm64-20260928-hostname.tar, 196,298,240 bytes, SHA-256 29d42b5773e0c4976b9c3c599b79cd9edcbf33c7017033cdb50d107bfb4323cc. This value comes from the GitHub release asset metadata; it corrects the prior 62-hex-character transcription, and was not freshly recomputed from the TAR bytes in this session.
 - Private draft GitHub release tag: rootfs-trixie-arm64-hostname-20260928. Assets: archive, checksum sidecar and build log. Host validation only; no phone boot.
 - Verified hostname a10; fstab remains the unconfigured base-system placeholder. Archive and systemd userspace checks passed. The prior 15acec8d rootfs archive is historical; this corrected archive supersedes it for future host packaging.
 
