@@ -1,0 +1,174 @@
+From: SM-A105F Linux 6.18.54 board port
+Subject: [PATCH] watchdog: add Exynos8 WDT support for A10
+
+Add the Exynos8 watchdog variant and binding support, describe WDT1 with
+the Exynos7885 clocks in the shared SoC DTS, and enable it only in the A10
+board DTS. The variant uses the verified PMU mask-reset and reset-status
+quirks, each at bit 24; it does not enable auto-disable or inherit adjacent
+Exynos variant behavior.
+
+Validated against Linux v6.18.54 commit 1b357ecb321392158d507b04672ffee57bfa071d:
+driver object build, watchdog binding schema, target A10 CHECK_DTBS, direct
+dt-validate, decompiled DTB property inspection, and patch round-trip. The
+compiled DTB is 21,838 bytes with SHA-256
+655c29627e97c447b58ecbe66ac06d365a085e0147096c1d52293f99f727c52e.
+The changes received an independent CodexCLI review. No device test occurred.
+
+---
+ Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml | 39 +++++++++++++++++++---
+ arch/arm64/boot/dts/exynos/exynos7885-a10.dts               |  6 ++++
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi                  | 10 ++++++
+ drivers/watchdog/s3c2410_wdt.c                              | 11 ++++++
+ 4 files changed, 61 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+index 53fc64f5b..37b26bca9 100644
+--- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+@@ -24,6 +24,7 @@ properties:
+           - samsung,exynos5250-wdt                # for Exynos5250
+           - samsung,exynos5420-wdt                # for Exynos5420
+           - samsung,exynos7-wdt                   # for Exynos7
++          - samsung,exynos8-wdt                   # for Exynos8
+           - samsung,exynos850-wdt                 # for Exynos850
+           - samsung,exynos990-wdt                 # for Exynos990
+           - samsung,exynosautov9-wdt              # for Exynosautov9
+@@ -57,7 +58,7 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+       Phandle to the PMU system controller node (in case of Exynos5250,
+-      Exynos5420, Exynos7, Exynos850, Exynos990 and gs101).
++      Exynos5420, Exynos7, Exynos8, Exynos850, Exynos990 and gs101).
+ 
+ required:
+   - compatible
+@@ -77,6 +78,7 @@ allOf:
+               - samsung,exynos5250-wdt
+               - samsung,exynos5420-wdt
+               - samsung,exynos7-wdt
++              - samsung,exynos8-wdt
+               - samsung,exynos850-wdt
+               - samsung,exynos990-wdt
+               - samsung,exynosautov9-wdt
+@@ -90,6 +92,7 @@ allOf:
+           contains:
+             enum:
+               - google,gs101-wdt
++              - samsung,exynos8-wdt
+               - samsung,exynos850-wdt
+               - samsung,exynos990-wdt
+               - samsung,exynosautov9-wdt
+@@ -104,10 +107,6 @@ allOf:
+           items:
+             - const: watchdog
+             - const: watchdog_src
+-        samsung,cluster-index:
+-          enum: [0, 1, 2]
+-      required:
+-        - samsung,cluster-index
+     else:
+       properties:
+         clocks:
+@@ -116,8 +115,38 @@ properties:
+         clock-names:
+           items:
+             - const: watchdog
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - google,gs101-wdt
++              - samsung,exynos850-wdt
++              - samsung,exynos990-wdt
++              - samsung,exynosautov9-wdt
++              - samsung,exynosautov920-wdt
++    then:
++      properties:
++        samsung,cluster-index:
++          enum: [0, 1, 2]
++      required:
++        - samsung,cluster-index
++    else:
++      properties:
+         samsung,cluster-index: false
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: samsung,exynos8-wdt
++    then:
++      properties:
++        clocks:
++          minItems: 2
++        clock-names:
++          minItems: 2
++
+ unevaluatedProperties: false
+ 
+ examples:
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+index 6b394722b..622aab17d 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7885-a10.dts
+@@ -126,3 +126,9 @@ &serial_2 {
+ &oscclk {
+ 	clock-frequency = <26000000>;
+ };
++
++/* WDT1 uses the SoC-defined Exynos7885 clocks and PMU behavior. */
++&watchdog {
++	status = "okay";
++	timeout-sec = <30>;
++};
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+index 2be509064..944785b96 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+@@ -324,6 +324,16 @@ mmc_2: mmc@13550000 {
+ 			status = "disabled";
+ 		};
+ 
++		watchdog: watchdog@10060000 {
++			compatible = "samsung,exynos8-wdt";
++			reg = <0x10060000 0x100>;
++			interrupts = <GIC_SPI 233 IRQ_TYPE_NONE>;
++			clocks = <&cmu_peri CLK_GOUT_WDT1_PCLK>, <&oscclk>;
++			clock-names = "watchdog", "watchdog_src";
++			samsung,syscon-phandle = <&pmu_system_controller>;
++			status = "disabled";
++		};
++
+ 		serial_0: serial@13800000 {
+ 			compatible = "samsung,exynos7885-uart",
+ 				     "samsung,exynos5433-uart";
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index b77447719..29a4c06f3 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -247,6 +247,15 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
+ 		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
+ };
+ 
++static const struct s3c2410_wdt_variant drv_data_exynos8 = {
++	.disable_reg = 0x0408,
++	.mask_reset_reg = 0x040c,
++	.mask_bit = 24,
++	.rst_stat_reg = 0x0404,
++	.rst_stat_bit = 24,
++	.quirks = QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_RST_STAT,
++};
++
+ static const struct s3c2410_wdt_variant drv_data_exynos850_cl0 = {
+ 	.mask_reset_reg = EXYNOS850_CLUSTER0_NONCPU_INT_EN,
+ 	.mask_bit = 2,
+@@ -388,6 +397,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+ 	  .data = &drv_data_exynos5420 },
+ 	{ .compatible = "samsung,exynos7-wdt",
+ 	  .data = &drv_data_exynos7 },
++	{ .compatible = "samsung,exynos8-wdt",
++	  .data = &drv_data_exynos8 },
+ 	{ .compatible = "samsung,exynos850-wdt",
+ 	  .data = &drv_data_exynos850_cl0 },
+ 	{ .compatible = "samsung,exynos990-wdt",
