@@ -1,3 +1,10 @@
+## 2026-09-30 — Initramfs validation boundary
+
+- Replayed the committed fail-closed root-selector assertions in a temporary Colab harness with shell syntax checks; explicit measured path acceptance and unsupported/malformed path rejection passed.
+- This focused harness is not the project-wide suite and does not validate the generated initramfs archive. The runtime contains only the Linux source checkout; Drive is not mounted and `cpio`, `qemu-aarch64-static`, the initramfs artifact, and ARM64 BusyBox are absent.
+- Archive extraction/readback and ARM64 BusyBox shell checks remain outstanding until those reproducible inputs/tools are available. No root partition identity was selected.
+
+
 ## 2026-09-30 — A10 root-storage configuration and ACPM evidence boundary
 
 - Added `configs/linux/6.18.54/a10-root-storage.config` as a merge fragment for initramfs/devtmpfs, ext4, MMC block, DesignWare Exynos host support, and both common partition parsers. This deliberately does not select a root device or partition number.

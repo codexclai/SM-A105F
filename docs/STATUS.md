@@ -1,3 +1,9 @@
+## Follow-up — initramfs/root-selector checks (2026-09-30)
+
+Replayed the committed root-selector assertions in a temporary Colab harness and checked resolver/test shell syntax; the explicit selection and rejected-path cases passed. This is a focused smoke check, not the full project regression suite. The Colab project directory contains only the Linux checkout; Drive is not mounted, and the runtime has no `cpio`, `qemu-aarch64-static`, initramfs archive, or ARM64 BusyBox. Therefore archive extraction/readback and ARM64 BusyBox checks remain unrun. No root partition was inferred.
+
+---
+
 ## Current continuation — 2026-09-30 (root-storage configuration)
 
 Added a reusable Linux 6.18.54 A10 root-storage configuration fragment at `configs/linux/6.18.54/a10-root-storage.config`. In a clean worktree at pinned commit `1b357ecb321392158d507b04672ffee57bfa071d`, `defconfig` + `merge_config.sh` + `olddefconfig` resolved initramfs, devtmpfs, ext4, MMC block, DesignWare Exynos MMC, DOS/MBR and EFI/GPT parsing to enabled. The MMC controller objects and `fs/ext4/super.o` compiled for ARM64. This is configuration/object validation only; no full kernel link, handset root partition identity, mount, or boot was established. In particular, no `/dev/mmcblk0pN` is selected.

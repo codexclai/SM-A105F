@@ -33,3 +33,8 @@ The read-only review of the recorded Samsung S2MPU08 evidence against pinned Lin
 ## Next validation
 
 Run the project initramfs regression suite and validate its generated gzip/newc archive with a package-authenticated test-only ARM64 BusyBox if the verified package and QEMU-user environment are available. Such archive/readback checks are host validation, not a device boot test. Keep any observed root path unresolved until handset partition evidence is available.
+
+
+## Additional root-selector check
+
+A focused Colab harness replayed the committed root-selector acceptance/rejection assertions and shell syntax checks successfully. It is not the full project test suite. The archive extraction/readback test could not be run: this runtime has no `cpio`, `qemu-aarch64-static`, ARM64 BusyBox, or project initramfs archive; Drive is not mounted. No device or boot claim follows from the smoke check.
