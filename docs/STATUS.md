@@ -1,3 +1,9 @@
+## Regression replay from verified `main` (2026-09-30)
+
+At source commit `dff28217beef5910218a6b2f62fb7c758542aed2`, the tracked Python unit suite and required project scripts/configuration were fetched through the authorized GitHub connector into a temporary Work scratch reconstruction. `python3 -m unittest discover -s tests -v` passed 33/33. `bash -n` on the rootfs/initramfs/test scripts, `sh -n` on both POSIX initramfs scripts, and `python3 -m py_compile scripts/*.py tests/*.py` also passed. This did not use the Colab terminal or constitute a full checkout/build; no artifact-dependent initramfs archive/QEMU test was run. The current Colab backend is fresh and has no project tree. Its retained broad-check cell failed because the expected directory/Makefile target was absent, so it is not a `dtbs_check` result. The existing Exynos-scoped check remains the validated DT result; architecture-wide `dtbs_check` remains incomplete. No physical-device operation occurred.
+
+---
+
 ## Current continuation — Exynos-scoped DT validation and RTC research (2026-09-30)
 
 Colab access is restored. The interrupted architecture-wide arm64 `dtbs_check` log shows all 21 Exynos-subtree DTBs, including A10, reached the `DTC [C]` schema-check stage before the process was terminated while compiling unrelated Freescale, MediaTek, Qualcomm, and Renesas targets. That broad run did not complete and has no successful aggregate exit status.
