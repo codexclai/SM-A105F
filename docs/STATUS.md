@@ -1,3 +1,9 @@
+## Existing reboot and poweroff description (2026-09-30)
+
+Pinned Linux `1b357ecb321392158d507b04672ffee57bfa071d` already supplies the Exynos7885 SoC-level path: `arch/arm64/boot/dts/exynos/exynos7885.dtsi` includes `arch/arm/boot/dts/samsung/exynos-syscon-restart.dtsi`. That shared fragment adds `syscon-reboot` at PMU offset `0x0400` with legacy mask-only value `0x1`, and `syscon-poweroff` at offset `0x330c` (PS_HOLD_CONTROL) with legacy mask-only value `0x5200`. In the pinned `syscon-reboot.c` and `syscon-poweroff.c`, mask-only form is treated as the full-register value for compatibility; it is not converted into a bit mask. The A10 board tree inherits this existing SoC description, so no duplicate A10 node or patch was added. The fresh runtime had no kernel checkout for a new DTB/decompile check; these paths are upstream-source-mapped only and neither reboot nor poweroff has been physically validated on the phone.
+
+---
+
 ## Regression replay from verified `main` (2026-09-30)
 
 At source commit `dff28217beef5910218a6b2f62fb7c758542aed2`, the tracked Python unit suite and required project scripts/configuration were fetched through the authorized GitHub connector into a temporary Work scratch reconstruction. `python3 -m unittest discover -s tests -v` passed 33/33. `bash -n` on the rootfs/initramfs/test scripts, `sh -n` on both POSIX initramfs scripts, and `python3 -m py_compile scripts/*.py tests/*.py` also passed. This did not use the Colab terminal or constitute a full checkout/build; no artifact-dependent initramfs archive/QEMU test was run. The current Colab backend is fresh and has no project tree. Its retained broad-check cell failed because the expected directory/Makefile target was absent, so it is not a `dtbs_check` result. The existing Exynos-scoped check remains the validated DT result; architecture-wide `dtbs_check` remains incomplete. No physical-device operation occurred.
