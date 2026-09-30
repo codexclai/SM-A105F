@@ -1,9 +1,12 @@
-## Current continuation — Colab validation access and RTC gap (2026-09-30)
+## Current continuation — Exynos-scoped DT validation and RTC research (2026-09-30)
 
-The specified Colab notebook URL redirected to Google's sign-in endpoint and returned `502 Bad Gateway` with `[Errno 111] Connection refused`. One reload returned the same error; no shell command ran in the Colab runtime, so the interrupted broad `dtbs_check` remains incomplete and has no new exit status or diagnostics. This is a browser/runtime access failure, not a kernel validation result.
+Colab access is restored. The interrupted architecture-wide arm64 `dtbs_check` log shows all 21 Exynos-subtree DTBs, including A10, reached the `DTC [C]` schema-check stage before the process was terminated while compiling unrelated Freescale, MediaTek, Qualcomm, and Renesas targets. That broad run did not complete and has no successful aggregate exit status.
 
-The RTC review now records the pinned Linux 6.18.54 driver and binding mismatch in `docs/reports/linux-6.18.54-a10-rtc-watchdog-memory-review-20260929.md`. Private `main` was advanced to `24e02c6b451a74315765f68ee5f57c81cd2dd6f2`; the Exynos8 RTC remains unimplemented. When Colab access is restored, first capture the Exynos-scoped aggregate `dtbs_check` output, then confirm exact Samsung RTC IRQ/tick semantics from the recovered archive before deciding whether the 6.18 clockless RTC variant can preserve required functionality. Root partition selection remains unresolved. No physical-device operation occurred.
+A fresh Exynos-scoped check on the pinned 6.18.54 tree (base `1b357ecb321392158d507b04672ffee57bfa071d`, watchdog patch 0006 applied; `.config` has `CONFIG_ARCH_EXYNOS=y`) rebuilt and checked all 21 Exynos DTBs with `CHECK_DTBS=1`. It exited 0 with no schema or dt-validate diagnostics. The exact target list and command are in `docs/reports/linux-6.18.54-a10-dtb-validation-20260929.md`. This closes the Exynos-wide validation gap but does not claim the full arm64 aggregate passed.
 
+Two discarded setup retries were invocation issues only: `make -B` triggered a Kconfig “.config not found” failure, and an initial target list incorrectly included the DTS-tree prefix twice. The corrected relative target list passed; neither retry reported an A10 source or binding failure.
+
+The pinned Linux 6.18 RTC binding/driver do not directly express the verified A10 clockless Exynos8 RTC contract. Continue exact-source RTC tracing and resolve the clock/IRQ/tick differences before proposing code. Root partition selection remains unresolved. No physical-device operation occurred.
 ---
 
 ## A10 eMMC and console host validation (2026-09-30)
