@@ -132,3 +132,8 @@ The exact Samsung-built Image, corrected initramfs bytes, A10 base DTB/DTBO set,
 ## 2026-09-29 binary artifact retrieval audit
 
 The authorized Drive folder currently lists 24 direct children, with no next-page token. It contains the already hash-verified exact Samsung source ZIP chunks and historical Git/third-party Eureka bundles, but no exact Samsung-built kernel Image, corrected initramfs binary, or stock A10 DTB/DTBO set. The connected private GitHub release API exposes a draft host-only candidate archive by metadata (12,118,381 bytes; reported digest `f28d6a293695ae6075123a4ed9af0a9c5f19b0f7fe6c125c98a71e87cfd98ae5`); that digest has not been verified against downloaded bytes or its contents. The available connector cannot retrieve binary release assets, and the prior browser route ended in a download error, so it was not repeated. Full retrieval outcome and safe next route: `docs/reports/artifact-retrieval-audit-20260929.md`.
+
+
+## 2026-09-30 Drive readback confirmation
+
+Fetched the existing private Eureka R24U host-build archive `SM-A105F-eureka-r24u-fw-loader-off-20260926.tar.gz` (Drive file ID `12CSS7Seyot5N3t7xPCkW9CERX8j_8OJY`) through the Drive connector. The readback is 25,951,399 bytes, SHA-256 `603c5aee649e2cfddaa21101e9fe6efdd770cdb5f946155f9fedc5b6757cb086`, matching the existing inventory. A read-only tar check found 26 members, no absolute or parent-traversal paths, and all 19 entries in the internal `SHA256SUMS` verified. This only reconfirms availability/integrity of the existing third-party Linux 4.4.302 host artifact; it is not stock Samsung output, a Debian boot candidate, or physical validation. The transient readback was not added to Git or copied into the Colab build tree.
