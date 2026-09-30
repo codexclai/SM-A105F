@@ -658,3 +658,10 @@ Reassembled the three existing Drive source chunks by HTTP range and verified th
 ## 2026-09-29 — Samsung source recovery method recorded
 
 The Drive connector's raw stream plus HTTP byte-range requests bypassed the workspace transfer limit without changing or duplicating Drive files. All three original chunks were recovered in verified ranges, concatenated, and checked against the exact recorded archive and embedded Kernel.tar.gz hashes. Updated artifact/source inventory with the durable chunk IDs and repeatable recovery procedure. The recovered work copy remains scratch-only. No Linux build was started because this environment lacks the cross toolchain/device-tree tools and the existing Codespace is out of budget.
+
+
+## 2026-09-30 — Exynos7885 A10 watchdog implementation
+
+Implemented and recorded Linux v6.18.54 Exynos8 WDT1 support in patch 0006. The driver object and target A10 DTB build succeeded; watchdog binding docs/schema, target CHECK_DTBS, direct DT validation, decompiled-node inspection, and patch reversal/reapplication checks passed. DTB SHA-256: `655c29627e97c447b58ecbe66ac06d365a085e0147096c1d52293f99f727c52e`. CodexCLI (GPT-6 Luna High) and a separate reviewer reported no substantive issue. The project-wide test suite was not available in the Linux-only checkout; no phone test or physical modification occurred.
+
+Next boot-critical port is blocked at the exact ACPM/S2MPU08 handoff. Linux upstream support is GS101-specific, while the A10 source references the legacy ACPM provider/channel 2. Continue by inspecting the exact Samsung Kernel archive's transport, shared-memory/channel layout, and normal boot-chain firmware handoff. Until compatibility is established, do not add an ACPM DT node or PMIC rails.
