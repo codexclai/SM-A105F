@@ -46,3 +46,16 @@ A re-read of the verified source resolves the earlier uncertainty in the table a
 - Neither region description declares `no-map` or `reusable`.
 
 This supports the existing Linux 6.18 patch's generic, non-reusable fixed `reserved-memory` entry for 0xE9400000–0xE9800000. It prevents ordinary Linux allocations from overlapping memory assigned by the A10 description while avoiding unsupported Samsung ABOX compatibles or fabricated no-map/reusable semantics. It does **not** provide an upstream ABOX/audio driver or make audio operational; those remain unported. The earlier suggestion to leave this fixed range out is superseded by this exact overlay evidence. No change to patch 0004's range or semantics is warranted.
+
+
+## Linux 6.18.54 RTC probe and binding cross-check — 2026-09-30
+
+The pinned upstream files at commit `1b357ecb321392158d507b04672ffee57bfa071d` narrow the port gap:
+
+- `Documentation/devicetree/bindings/rtc/s3c-rtc.yaml` lists S3C6410, Exynos7/Exynos850 plus S3C6410 fallback, and deprecated Exynos3250 compatibles. It constrains RTC interrupts to exactly two entries. Clocks are permitted but not required by the schema, with names `rtc` and `rtc_src`.
+- `drivers/rtc/rtc-s3c.c` does not match Exynos8, unconditionally acquires/enables the `rtc` clock during probe, and requests only interrupt index 0 as the alarm IRQ. It does not request the additional tick IRQs described by the exact A10 DTS.
+- `drivers/clk/samsung/clk-exynos7885.c` has no RTC gate/clock output. The Exynos7885 provider's WDT1 PCLK is not an RTC clock and cannot fill this gap; the Exynos850 RTC clock description is not transferable evidence.
+
+The already hash-verified Samsung source report establishes the A10 node has three IRQs, no clock properties, and an Exynos8 variant with `clock_ctrl_disable`. Thus adding only the compatible would still fail at runtime in the 6.18 driver, despite being schema-permitted without clocks. A 6.18 port must add an explicit clockless Exynos8 variant path (including no-op clock enable/disable and cleanup handling) and decide whether exposing the third IRQ is required. The mainline driver presently supplies alarm handling only; the source report does not yet document whether losing Samsung's periodic tick IRQ functionality is acceptable. No RTC binding, driver, or DTS change is claimed.
+
+The public `topser9/kernel_samsung_universal7885` 4.4.177 mirror at `ae3bd5aef8fd81bff8c8807fa9a16ef47970b9c3` shows its RTC driver consumes IRQ indices 0/1/2 as alarm/tick0/tick1 and applies the same clock-control-disabled Exynos8 data. This is secondary comparison evidence, not a substitute for the hash-verified A10 archive. Before implementation, confirm the exact Samsung 4.4.177 IRQ request/tick behavior from the existing recovered source in a working build environment, then decide whether upstream should preserve the extra periodic IRQs or document their omission. The handset remains untouched.
