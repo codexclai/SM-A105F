@@ -7,7 +7,7 @@ root_spec_supported() {
 	/dev/mmcblk0p*)
 		partition=${1#/dev/mmcblk0p}
 		case "$partition" in
-		''|*[!0-9]*) return 1 ;;
+		''|*[!0-9]*|0*) return 1 ;;
 		esac
 		return 0
 		;;

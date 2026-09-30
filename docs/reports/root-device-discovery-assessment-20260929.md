@@ -26,3 +26,8 @@ Do not implement discovery yet. The current rootfs artifact is an unprovisioned 
 When the physical storage layout and root partition are measured through an authorized future procedure, supply the exact eMMC partition path as `root=`. Revisit discovery only if avoiding that measured value is still needed and the paired marker, read-only probe and duplicate-match failure behavior can be fully host-tested.
 
 No device operation occurred.
+
+
+## Selector grammar clarification — 2026-09-30
+
+The resolver accepts explicit `/dev/mmcblk0pN` paths only when `N` is positive and written without leading zeros. `mmcblk0p0` is not a valid partition node (the whole device is `/dev/mmcblk0`), and kernel device names do not use leading-zero partition suffixes. Regression cases reject both forms. This constrains syntax only; it does not establish which partition on a handset contains Debian.

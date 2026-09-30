@@ -1,6 +1,12 @@
+## Current continuation — fail-closed root selector (2026-09-30)
+
+The committed resolver now rejects partition zero and leading-zero partition spellings such as `/dev/mmcblk0p0` and `/dev/mmcblk0p03`; these are not canonical Linux MMC partition device names. The committed selector regression covers both. The actual handset partition identity remains unmeasured and is not selected.
+
+---
+
 ## Follow-up — initramfs/root-selector checks (2026-09-30)
 
-Replayed the committed root-selector assertions in a temporary Colab harness and checked resolver/test shell syntax; the explicit selection and rejected-path cases passed. This is a focused smoke check, not the full project regression suite. The Colab project directory contains only the Linux checkout; Drive is not mounted, and the runtime has no `cpio`, `qemu-aarch64-static`, initramfs archive, or ARM64 BusyBox. Therefore archive extraction/readback and ARM64 BusyBox checks remain unrun. No root partition was inferred.
+Replayed root-selector acceptance/rejection cases in a temporary Colab harness with a resolver shim and checked shell syntax; the explicit path and rejected-path cases passed. This was a focused smoke check, not execution of the full project regression suite. The Colab project directory contains only the Linux checkout; Drive is not mounted, and the runtime has no `cpio`, `qemu-aarch64-static`, initramfs archive, or ARM64 BusyBox. Therefore archive extraction/readback and ARM64 BusyBox checks remain unrun. No root partition was inferred.
 
 ---
 

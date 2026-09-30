@@ -16,6 +16,8 @@ expect_rejected() {
 	fi
 }
 expect_supported /dev/mmcblk0p3
+expect_rejected /dev/mmcblk0p0
+expect_rejected /dev/mmcblk0p03
 expect_rejected /dev/mmcblk1p3
 expect_rejected /dev/mmcblk0
 expect_rejected /dev/mmcblk0p3/../../sda1

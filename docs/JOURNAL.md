@@ -1,3 +1,9 @@
+## 2026-09-30 — Reject invalid MMC partition suffixes
+
+- Tightened `root_spec_supported` so partition suffixes must be positive canonical decimal numbers; partition zero and leading-zero forms are rejected.
+- Added regression cases for `/dev/mmcblk0p0` and `/dev/mmcblk0p03`. The resolver still accepts only explicit A10 eMMC partition paths and does not infer a handset root partition.
+- The existing Colab smoke check predates this change and is not evidence for the new cases; rerun the committed test against the updated files. The full initramfs archive/QEMU test remains unavailable without its archive and ARM64 static BusyBox.
+
 ## 2026-09-30 — Initramfs validation boundary
 
 - Replayed the committed fail-closed root-selector assertions in a temporary Colab harness with shell syntax checks; explicit measured path acceptance and unsupported/malformed path rejection passed.
