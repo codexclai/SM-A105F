@@ -67,3 +67,20 @@ After this change, the five-schema A10 `CHECK_DTBS=y` build, focused direct `dt-
 
 
 Final binding documentation checks after oscillator mapping: `dt_binding_check` over the five selected schemas, `dt-doc-validate`, and `yamllint` all returned 0 with empty diagnostics. This supplements the final clean focused and unfiltered DTB validation above.
+
+
+## Post-watchdog Exynos-scoped DTBS validation — 2026-09-30
+
+The earlier architecture-wide arm64 check was interrupted after its log showed all 21 targets in the Exynos subtree compiled with the `[C]` schema-check marker. The process was later terminated while compiling unrelated Freescale, MediaTek, Qualcomm, and Renesas DTBs; it did not finish the full arm64 aggregate and therefore has no successful aggregate exit status. No A10 or Exynos diagnostic appears in that interrupted log.
+
+To close the relevant Exynos gap, the pinned Linux 6.18.54 working tree (base `1b357ecb321392158d507b04672ffee57bfa071d`, with project patch 0006 applied) was checked with `.config` containing `CONFIG_ARCH_EXYNOS=y`. Exact scoped command form:
+
+```sh
+cd /content/SM-A105F-colab/linux-6.18
+targets=$(find arch/arm64/boot/dts/exynos -type f -name '*.dtb' -printf '%p\\n' | sed 's#^arch/arm64/boot/dts/##' | tr '\\n' ' ')
+make -j2 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CHECK_DTBS=1 $targets
+```
+
+All 21 Exynos-subtree DTBs, including `exynos/exynos7885-a10.dtb`, were rebuilt/checked. The command exited 0. The captured output contained the 21 `DTC [C]` target lines and no dt-validate, schema, compiler-warning, or error diagnostics. This is the relevant Exynos-wide check; the full architecture-wide arm64 `dtbs_check` remains incomplete and is not represented as passed.
+
+Two setup retries were discarded: one forced make rebuild failed during Kconfig handling with “Configuration file .config not found”; another passed absolute DTB paths that Kbuild prefixed a second time. Neither reached a source/schema failure. The corrected relative-to-DTS-tree command above completed successfully. No source was modified by this validation step.
