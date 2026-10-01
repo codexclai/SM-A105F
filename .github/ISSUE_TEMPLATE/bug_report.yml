@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible problem in project code, tooling, documentation, or validation
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the SM-A105F Linux bring-up. Do not upload proprietary firmware, credentials, IMEI/serial numbers, or other private device data.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: revision
+    attributes:
+      label: Revision and environment
+      description: Include the project commit, kernel/source revision, host OS, toolchain, and relevant configuration.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Give the smallest reproducible command sequence.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include relevant logs or validation output, with private/proprietary information removed.
+  - type: dropdown
+    id: evidence_level
+    attributes:
+      label: Highest evidence level reached
+      options:
+        - Proposed / not run
+        - Implemented
+        - Compiled
+        - Host-tested
+        - Emulated
+        - Device-detected
+        - Device-tested
+        - Operationally validated
+    validations:
+      required: true
