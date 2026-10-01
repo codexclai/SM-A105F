@@ -1,3 +1,13 @@
+## Current continuation — Exynos8 A10 RTC implementation (2026-10-01)
+
+Added patch 0007, implementing the exact Samsung clockless Exynos8 RTC contract: a disabled shared Exynos7885 node with Samsung’s three IRQs, enabled only in the A10 DTS, plus a dedicated no-clock Linux 6.18 driver variant and compatible-specific binding constraints. Linux 6.18 uses the alarm IRQ only; periodic tick support is not claimed.
+
+The RTC object compiled; binding check, dt-doc-validate, YAML parse, targeted A10 CHECK_DTBS, direct RTC-compatible dt-validate, and patch apply check passed. Decompiled output shows the expected compatible/reg/three IRQs/enabled status and no clocks. DTB is 21,982 bytes, SHA-256 `b021620dc042547ab3855c86e8e0f0b9598d8389f88e52787a1895482cd2998d`. See `docs/reports/linux-6.18.54-a10-rtc-implementation-20261001.md`.
+
+The architecture-wide arm64 dtbs_check remains running with unrelated Rockchip/Qualcomm diagnostics and no final status; do not treat it as passed. The project Python regression suite has not been run in the Linux-only Colab runtime. No phone operation occurred.
+
+---
+
 ## Existing reboot and poweroff description (2026-09-30)
 
 Pinned Linux `1b357ecb321392158d507b04672ffee57bfa071d` already supplies the Exynos7885 SoC-level path: `arch/arm64/boot/dts/exynos/exynos7885.dtsi` includes `arch/arm/boot/dts/samsung/exynos-syscon-restart.dtsi`. That shared fragment adds `syscon-reboot` at PMU offset `0x0400` with legacy mask-only value `0x1`, and `syscon-poweroff` at offset `0x330c` (PS_HOLD_CONTROL) with legacy mask-only value `0x5200`. In the pinned `syscon-reboot.c` and `syscon-poweroff.c`, mask-only form is treated as the full-register value for compatibility; it is not converted into a bit mask. The A10 board tree inherits this existing SoC description, so no duplicate A10 node or patch was added. The fresh runtime had no kernel checkout for a new DTB/decompile check; these paths are upstream-source-mapped only and neither reboot nor poweroff has been physically validated on the phone.
