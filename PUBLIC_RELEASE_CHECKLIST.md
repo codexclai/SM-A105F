@@ -4,17 +4,18 @@ This repository is being prepared for an eventual public open-source release. Do
 
 ## Required before public release
 
-- [ ] Select and add an OSI-approved license for original project material.
+- [x] Select and add an OSI-approved license for original project material — GPL-2.0-only.
 - [ ] Audit every tracked file and Git history for credentials, tokens, private URLs, personal information, and account-specific identifiers.
-- [ ] Remove or generalize private Google Drive folder links and private draft-release URLs from public documentation.
-- [ ] Review Prompt.md and continuity documents for private account/workflow details that are not useful to public contributors.
+- [x] Remove or generalize private Google Drive folder links and private draft-release URLs from the current public-facing documentation.
+- [x] Replace Prompt.md and the main continuation/start documents with public engineering guidance.
 - [ ] Confirm that no Samsung firmware, proprietary vendor archive, or other redistributability-restricted binary is tracked.
 - [ ] Keep large firmware/source archives and build outputs outside Git unless redistribution terms clearly permit publication.
 - [ ] Review third-party patches and copied material individually and preserve their original licensing and attribution.
 - [ ] Rewrite README.md for public contributors with project scope, current status, build/test boundaries, roadmap, and contribution instructions.
-- [ ] Add CONTRIBUTING.md and a security/reporting policy.
+- [x] Add CONTRIBUTING.md and a security/reporting policy.
 - [ ] Re-run tests and documentation checks from a clean checkout.
 - [ ] Verify the public-facing repository contains no claim that the port boots or works on hardware unless that has actually been tested.
+- [ ] Audit and, if necessary, rewrite historical Git objects before changing repository visibility. Current-tree cleanup does not remove sensitive references from older commits.
 - [ ] Only then change repository visibility to public.
 
 ## Current safety boundary
