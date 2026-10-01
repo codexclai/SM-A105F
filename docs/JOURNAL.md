@@ -1,3 +1,9 @@
+## 2026-10-01 — Exynos reset/poweroff compilation and broad DT validation
+
+Compiled the pinned Linux 6.18.54 generic syscon reboot and poweroff objects in the seven-patch A10 worktree. Kconfig asked for defaults for new ARM64 symbols; blank responses accepted the defaults, retained the configuration SHA and the required boot-critical driver selections. Both objects are AArch64 relocatables; exact hashes and command are in the linked reset/poweroff report. `git diff --check` passed with a clean source worktree. No handset operation or runtime reset test occurred.
+
+The full arm64 schema sweep is active using `CHECK_DTBS=1 dtbs` (equivalent target rules to `dtbs_check` in this kernel). Its log includes the A10 DTB and no A10-specific schema diagnostic so far; diagnostics currently observed are from other upstream platforms. The command has not completed and no aggregate status is claimed. A cached no-op and a `-B` Kconfig failure were excluded from the result.
+
 ## 2026-09-30 — Reject invalid MMC partition suffixes
 
 - Tightened `root_spec_supported` so partition suffixes must be positive canonical decimal numbers; partition zero and leading-zero forms are rejected.
