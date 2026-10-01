@@ -1,3 +1,12 @@
+## 2026-10-01 — Reopened Colab and resumed validation
+
+- Closed the open Colab tab, reset the browser-control session, and reopened the same notebook. The notebook reattached to the existing Python 3 runtime; its integrated terminal still showed the broad Linux DT build alive, so no runtime reset or source loss occurred.
+- The forced arm64 `CHECK_DTBS=1 dtbs` run remains in progress in `/content/work/linux-6.18`, with output in `/content/work/arm64-dtbs-check-complete.log`. At 02:09 UTC it had compiled 1,017 DTBs; no exit marker was present, so there is no aggregate result yet. Observed schema messages include unrelated Qualcomm/other-platform findings; classification remains pending. The A10 target had appeared earlier without an A10 diagnostic.
+- Reconstructed the committed offline test inputs, including their two required shell scripts, and ran `PYTHONPATH=. python3 -m unittest discover -s tests -v`: 33 tests passed in 0.387 s. This excludes artifact-dependent initramfs archive/readback and QEMU tests.
+- The previously reported browser 502 is resolved for this re-entry. Root partition identity remains unknown and unchanged.
+
+---
+
 ## 2026-10-01 — Root-selector regression replay and Colab re-entry
 
 - Replayed the current private `main` root-selector tests after the 2026-09-30 partition-suffix hardening. The two focused unittest cases passed, covering canonical positive eMMC paths, malformed/noncanonical paths and POSIX syntax for `a105f-init`/the resolver. Sources were read from private `main` (test blob `51e39a3635201ffe86b53512bc2184059255b5ac`; shell test `b7e5268a58d2d245ad3a944b3103c2cac6209153`; resolver `0beacf3904e17bb648b13aa43971a00898883451`; init `14e00fb69e9b5a6230f285904a1df7f190b01ddd`). This was a focused host test, not the full project suite or archive/QEMU validation. No root partition was selected.
