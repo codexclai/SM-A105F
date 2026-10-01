@@ -1,26 +1,30 @@
-# Resume this project
+# Start here
 
-This is the cross-session entry point for the Samsung Galaxy A10 **SM-A105F** effort. The objective is a genuine native **Debian 13 Trixie ARM64** system with a minimal, headless, CLI-only userspace and the maximum useful hardware support that can be verified safely. The phone has not been modified. See the [2026-09-29 engineering checkpoint](docs/engineering-20260929.md) for the latest boot-extraction tooling, current candidate limitations, A10-to-upstream mappings, and next exact tasks.
+This is the entry point for the Samsung Galaxy A10 **SM-A105F** native Linux/Debian bring-up project.
 
-## Fresh-session procedure
+## Resume engineering work
 
-1. Use the canonical private repository: [thamindudenuwarajayasinghe/SM-A105F](https://github.com/thamindudenuwarajayasinghe/SM-A105F), default branch `main`. Obtain authorized GitHub access, then read the actual repository visibility, default branch, remote commit, and tree before editing. Do not rely on this file's last-known SHA as the current ref.
-2. Read the full [master project prompt](Prompt.md), [project instructions](AGENTS.md), [Work continuation instructions](docs/WORK_SESSION_CONTINUATION.md), this guide, [current checkpoint](docs/STATUS.md), and [engineering journal](docs/JOURNAL.md). Then read the relevant technical references: [architecture](docs/ARCHITECTURE.md), [verified facts](docs/FACTS.md), [sources and provenance](docs/SOURCES.md), [build procedures](docs/BUILD.md), and [artifact manifest](docs/ARTIFACTS.md).
-3. Inspect `git status`, the current branch and commit, recent changes, and outstanding processes. Reconcile the remote source tree against the local workspace. The local pre-GitHub commit ancestry differs from the remote Git-data import ancestry; do not force-push, reset, or assume they can be joined without review.
-4. Confirm every artifact needed for the next task by its manifest entry. Reconnect the authorized Drive account only if a referenced bundle or artifact is needed; verify filename, size, SHA-256, access, and retrieval before use. The historic Drive bundles preserve local pre-GitHub history; they are not a substitute for the current remote source tree.
-5. Re-run relevant host checks and classify evidence accurately: planned, implemented, built, host-tested, emulated, device-detected, device-tested, or operationally validated. A kernel config, compilation, or emulated boot is not evidence that this phone boots or operates safely.
-6. Follow the exact next engineering action in `docs/STATUS.md`. Current known gates include exact Samsung source and stock-firmware evidence, kernel/boot/partition compatibility, and a provisioned ARM64 rootfs build environment. Do not repeat completed source/config checks without a specific reason.
-7. Work only on the exact **SM-A105F** variant. Never flash, wipe, repartition, modify bootloader/recovery, or alter critical partitions without the user's specific informed approval for that operation and a verified recovery plan. The user's general autonomy instruction is not physical-device authorization.
-8. Keep large inputs and outputs outside Git unless their licenses and size make Git appropriate. Record provenance, revision, terms, size, SHA-256, build procedure, tests, storage location, access, and status in `docs/SOURCES.md` or `docs/ARTIFACTS.md`.
-9. For each coherent change, inspect the diff and new files for credentials, private data, unsuitable third-party material, and generated files; run relevant checks; update affected docs, journal, and checkpoint; commit locally; publish only through an authorized non-forced GitHub workflow; then reread the remote branch, commit, tree, file contents, and private visibility. A local commit or attempted push is not proof of remote synchronization.
-10. Record failed approaches, blockers, approvals, unsynchronized work, and the next exact task in the durable project files. Do not assume a new chat has this chat's memory, credentials, connections, phone access, or temporary filesystem.
+1. Read `Prompt.md`, `AGENTS.md`, `docs/STATUS.md`, `docs/JOURNAL.md`, `docs/SOURCES.md`, `docs/ARTIFACTS.md`, `docs/ARCHITECTURE.md`, and `docs/BUILD.md`.
+2. Inspect the current branch, commit, tree, and recent changes before editing.
+3. Follow the next verified engineering action in `docs/STATUS.md`; do not repeat completed checks without a reason.
+4. Verify required external artifacts by filename, size, SHA-256, provenance, and redistribution status.
+5. Keep evidence levels precise. A build or emulation result is not physical-device validation.
+6. Keep large, proprietary, private, or redistribution-restricted inputs outside Git.
+7. Run relevant tests, inspect changes for secrets/private data, update the engineering journal/status, and make coherent commits.
 
-## Account-side project organization
+## Target
 
-The account-owned ChatGPT Project `SM-A105F` is the intended place for new project conversations. Chat is the default; use Work only when its separate environment, stronger model, or delegated work materially helps. The Project was observed empty after cleanup. Do not move unrelated conversations into it. The previous session disabled memory and record-history reference, deleted saved memories, and removed the empty unrelated projects `Havenerr` and `Rkc`; see `docs/STATUS.md` for the verification and the unresolved Library cleanup limitation.
+- Device: Samsung Galaxy A10 SM-A105F
+- Architecture: ARM64/AArch64
+- Userspace goal: Debian 13 Trixie
+- Initial interface: minimal/headless
+- Modern kernel track: Linux 6.18.x A10/Exynos bring-up
+- Compatibility/reference track: exact-device Samsung 4.4.177 evidence
 
-## Persistent recovery
+## Safety
 
-The [private SM-A105F Drive folder](https://drive.google.com/drive/folders/1azGQb-dRNXhy6fNAEKrwNOok4A2KiJYS) has previously held verified Git bundles for the local pre-GitHub history. Each new session must verify its own Drive connection and recheck the selected bundle against `docs/ARTIFACTS.md`. If this workspace is gone, first clone the current GitHub `main`. Use a verified bundle only to recover its documented local-history snapshot; inspect `git bundle list-heads` and explicitly choose `main` when cloning. Never treat the bundle's temporary `origin` as the canonical GitHub remote.
+The physical phone is not modified merely by working on this repository. Do not flash, wipe, repartition, alter bootloader/recovery, or write critical partitions without an exact compatibility review, a credible recovery route, and explicit approval for that operation.
 
-The continuity readiness review for this revision checked the canonical private remote, `main`, current remote commit/tree, presence of this entry point and linked checkpoint/instructions, and the exact `Prompt.md` SHA-256 (`136b903c10a5ea24e30fa94d05aab6903371208878f51ef0901dbba167b7cb15`). Account-side Library access could not be verified or changed within the session's permitted file access. This is a repository-based resumption check, not a real separate-chat test.
+## Contributing
+
+Read `CONTRIBUTING.md` before submitting changes. Original project material is GPL-2.0-only unless stated otherwise; third-party material retains its original licensing.
