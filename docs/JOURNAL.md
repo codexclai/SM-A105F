@@ -1,3 +1,11 @@
+## 2026-10-01 — Root-selector regression replay and Colab re-entry
+
+- Replayed the current private `main` root-selector tests after the 2026-09-30 partition-suffix hardening. The two focused unittest cases passed, covering canonical positive eMMC paths, malformed/noncanonical paths and POSIX syntax for `a105f-init`/the resolver. Sources were read from private `main` (test blob `51e39a3635201ffe86b53512bc2184059255b5ac`; shell test `b7e5268a58d2d245ad3a944b3103c2cac6209153`; resolver `0beacf3904e17bb648b13aa43971a00898883451`; init `14e00fb69e9b5a6230f285904a1df7f190b01ddd`). This was a focused host test, not the full project suite or archive/QEMU validation. No root partition was selected.
+- Verified all 19 payload hashes in the supplied Eureka R24U firmware-helper-off archive against its internal `SHA256SUMS`; this reconfirms package integrity only and adds no stock-Samsung or phone-support evidence.
+- Colab was reopened after the prior broad arm64 schema sweep had last shown 458 DTB compiles including A10 and no A10 diagnostic. The browser redirected to Google account login and returned HTTP 502 / connection refused; one reload produced the same result. Therefore the sweep’s completion, final exit status and remaining diagnostics are unknown. The earlier in-runtime observation remains the last valid build evidence; no aggregate pass is claimed.
+
+---
+
 ## 2026-10-01 — Exynos reset/poweroff compilation and broad DT validation
 
 Compiled the pinned Linux 6.18.54 generic syscon reboot and poweroff objects in the seven-patch A10 worktree. Kconfig asked for defaults for new ARM64 symbols; blank responses accepted the defaults, retained the configuration SHA and the required boot-critical driver selections. Both objects are AArch64 relocatables; exact hashes and command are in the linked reset/poweroff report. `git diff --check` passed with a clean source worktree. No handset operation or runtime reset test occurred.
